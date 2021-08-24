@@ -2,8 +2,10 @@
 
 
 int solve_square_equasion(double a, double b, double c)
-{
-    if (a == 0)
+{   
+    assert(a and b and c);
+    
+    if (abs(a) < epsilon)
     {
         fprintf(stderr, "File: %s\nLine: %d\nCurrent function: %s()\nFailed function: %s()\nError message: %s", \
                 __FILE__, __LINE__, __func__, "solve_square_equasion", "x^2 coefficient should not be zero\n");
@@ -21,7 +23,7 @@ int solve_square_equasion(double a, double b, double c)
     double x1 = (-b + sqrt (D)) / (2 * a);
     double x2 = (-b - sqrt (D)) / (2 * a);
 
-    if (D == 0)
+    if (abs(D) < epsilon)
     {
         printf("The only solution is %lf\n", x1);
         return 0;
