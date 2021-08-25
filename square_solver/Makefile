@@ -1,5 +1,5 @@
 CC=g++
-CFLAGS=-Wall
+CFLAGS=-Wall -Wextra
 SOURCES=solver.c main.c
 EXECUTABLE=solver
 
