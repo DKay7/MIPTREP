@@ -1,0 +1,24 @@
+var NAVTREEINDEX0 =
+{
+"files.html":[0,0],
+"globals.html":[0,1,0],
+"globals_defs.html":[0,1,4],
+"globals_enum.html":[0,1,2],
+"globals_eval.html":[0,1,3],
+"globals_func.html":[0,1,1],
+"index.html":[],
+"pages.html":[],
+"square__solver_8h.html":[0,0,0],
+"square__solver_8h.html#a002b2f4894492820fe708b1b7e7c5e70":[0,0,0,0],
+"square__solver_8h.html#a02eaa5bfd32a4891e591129c8f344e26":[0,0,0,5],
+"square__solver_8h.html#a1b3edb67d9332ce71aeeb015018c77a0":[0,0,0,6],
+"square__solver_8h.html#a1bc66a6775cb590c468af77080dee299":[0,0,0,4],
+"square__solver_8h.html#a1bcf09ab89b3f221583aba5b27642bec":[0,0,0,2],
+"square__solver_8h.html#a51a0e724033f3e4937c5a13e83c03e10":[0,0,0,3],
+"square__solver_8h.html#aaca7161d951febc512af343029761de1":[0,0,0,1],
+"square__solver_8h.html#aaca7161d951febc512af343029761de1a0451cd6d5aa789cdc383e452dd2c0bd7":[0,0,0,1,2],
+"square__solver_8h.html#aaca7161d951febc512af343029761de1a317c7773fa430c40a0dd1b25ef58be0a":[0,0,0,1,0],
+"square__solver_8h.html#aaca7161d951febc512af343029761de1a7b4b3bca57d544a80aaed928315a1c75":[0,0,0,1,3],
+"square__solver_8h.html#aaca7161d951febc512af343029761de1aa913171633110aa3c71625270b580d1c":[0,0,0,1,1],
+"square__solver_8h_source.html":[0,0,0]
+};

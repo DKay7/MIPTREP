@@ -1,0 +1,4 @@
+<map id="solve_square_equasion" name="solve_square_equasion">
+<area shape="rect" id="node1" title="Решает квадратное уравнение вида ax^2 + bx + c = 0." alt="" coords="132,5,307,32"/>
+<area shape="rect" id="node2" href="$square__solver_8h.html#a1b3edb67d9332ce71aeeb015018c77a0" title="Функция для проведения юнит&#45;тестов" alt="" coords="5,5,84,32"/>
+</map>

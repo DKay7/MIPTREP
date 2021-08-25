@@ -1,14 +1,15 @@
 #include "square_solver.h"
 
-int main()
-{   
+int main(int argc, char* argv[])
+{
+    if (argc != 2)
+    {
+        fprintf(stderr, "File: %s\nLine: %d\nCurrent function: %s() \
+                 \nFailed function: %s() \nError message: %s", \
+                 __FILE__, __LINE__, __func__, "main", "Incorrect input!\n");
 
-    double a = NAN, b = NAN, c = NAN, x1 = NAN, x2 = NAN;
-    int result_code = 0;
+        return -1;
+    }
 
-    printf("Enter coefficients: a, b, c\n");
-    scanf("%lf\n%lf\n%lf", &a, &b, &c);
-
-    result_code = solve_square_equasion(a, b, c, &x1, &x2);
-    print_solutions(result_code, x1, x2);
+    unit_test(argv[1]);
 }
