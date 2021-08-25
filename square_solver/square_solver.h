@@ -23,6 +23,7 @@
 */
 enum solver_return_codes
 {
+    SOLVER_DEFAULT = -2, ///< Значение по умолчанию
     INFINITY_NUMBER_OF_SOLUTIONS = -1, ///< Бескончно много решений (x - любое)
     NO_REAL_SOLUTIONS = 0, ///< Нет действительных решений
     ONE_SOLUTION = 1,  ///< Одно действительное решение
@@ -31,10 +32,11 @@ enum solver_return_codes
 
 /// Перечисление кодов, которые возвращает функция \link process_test \endlink 
 enum test_return_codes
-{
+{   
+    TEST_DEFAULT = -12, ///< Значение по умолчанию
     INPUT_ERROR = -11, ///< Ошибка входных данных
     TEST_PASSED = 10, ///<  Тест пройден
-    TEST_FAILED = 11,  ///< Тест не пройден
+    TEST_FAILED = 11  ///< Тест не пройден
 };
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
@@ -50,7 +52,7 @@ enum test_return_codes
 
 \return Один из кодов \link solver_return_codes \endlink
 */
-int solve_linear_equasion(double a, double b, double* x);
+int solve_linear_equasion (double a, double b, double* x);
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
@@ -63,7 +65,7 @@ int solve_linear_equasion(double a, double b, double* x);
 
 \return Один из кодов \link solver_return_codes \endlink
 */
-int solve_square_equasion(double a, double b, double c, double* x1, double* x2);
+int solve_square_equasion (double a, double b, double c, double* x1, double* x2);
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
@@ -77,7 +79,7 @@ int solve_square_equasion(double a, double b, double c, double* x1, double* x2);
 
 \param[in] x1, x2 Решения уравнения, полученные функцией \link solve_square_equasion \endlink
 */
-void print_solutions(int result_code, double x1, double x2);
+void print_solutions (int result_code, double x1, double x2);
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
@@ -95,8 +97,8 @@ void print_solutions(int result_code, double x1, double x2);
 
 \return 0 -- если решения не совпадают, 1 -- если совпадают 
 */
-int check_result(int result_code, double x1, double x2,  
-                 int correct_result_code,  double correct_x1, double correct_x2);
+int check_result (int result_code, double x1, double x2,  
+                  int correct_result_code,  double correct_x1, double correct_x2);
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
@@ -137,4 +139,4 @@ int process_test (FILE* unit_test_file, int* solver_result_code, double* x1, dou
 
 \param[in] path Путь к файлу с тестами
 */
-void unit_test(const char* path);
+void unit_test (const char* path);
