@@ -1,0 +1,17 @@
+CC=g++
+CFLAGS=-Wall
+SOURCES=solver.c main.c
+EXECUTABLE=solver
+
+all: $(EXECUTABLE)
+
+run: $(SOURCES) $(EXECUTABLE)
+	./$(EXECUTABLE)
+
+debug: $(SOURCES)
+	$(CC) $(SOURCES) $(CFLAGS) -o $(EXECUTABLE) -D_DEBUG
+	./$(EXECUTABLE)
+	
+$(EXECUTABLE):
+	$(CC) $(SOURCES) $(CFLAGS) -o $(EXECUTABLE)
+

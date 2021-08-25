@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['two_5fsolutions_10',['TWO_SOLUTIONS',['../square__solver_8h.html#aaca7161d951febc512af343029761de1a7b4b3bca57d544a80aaed928315a1c75',1,'square_solver.h']]]
+  ['unit_5ftest_16',['unit_test',['../square__solver_8h.html#a1637b3cea0ef47be5be49c26b1ea5505',1,'solver.c']]]
 ];

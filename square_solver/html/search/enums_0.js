@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['return_5fcodes_18',['return_codes',['../square__solver_8h.html#aaca7161d951febc512af343029761de1',1,'square_solver.h']]]
+  ['solver_5freturn_5fcodes_24',['solver_return_codes',['../square__solver_8h.html#aa58cad30e8a5e6c106996b83fbec9014',1,'square_solver.h']]]
 ];

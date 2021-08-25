@@ -3,7 +3,8 @@
 int solve_linear_equasion(double a, double b, double* x)
 {   assert(isfinite(a));
     assert(isfinite(b));
-    
+    assert(x);
+
     if (fabs(a) < EPSILON)
     {
         if (fabs(b) < EPSILON)
@@ -25,6 +26,9 @@ int solve_square_equasion(double a, double b, double c, double* x1, double* x2)
     assert(isfinite(a));
     assert(isfinite(b));
     assert(isfinite(c));
+    assert(x1);
+    assert(x2);
+    assert(x1 != x2);
 
     if (fabs(a) < EPSILON)
     {
@@ -34,14 +38,14 @@ int solve_square_equasion(double a, double b, double c, double* x1, double* x2)
     if (fabs(b) < EPSILON)
     {   
         double div = -c / a;
-        if (div >= 0)
+        if (div >= -EPSILON)
         {   
             if (fabs(c) < EPSILON)
             {
                 *x1 = 0;
                 return ONE_SOLUTION;
             }
-            
+
             *x1 = sqrt(div);
             *x2 = -(*x1);
 
@@ -53,7 +57,6 @@ int solve_square_equasion(double a, double b, double c, double* x1, double* x2)
 
     if (fabs(c) < EPSILON)
     {   
-
         solve_linear_equasion(a, b, x1);
         *x2 = 0;
         return TWO_SOLUTIONS; 
@@ -63,7 +66,7 @@ int solve_square_equasion(double a, double b, double c, double* x1, double* x2)
 
     if (fabs(D) < EPSILON)
     {   
-        *x1 = *x2 = -b / (2 * a);
+        *x1 = -b / (2 * a);
         return ONE_SOLUTION;
     }
 
@@ -85,12 +88,10 @@ int solve_square_equasion(double a, double b, double c, double* x1, double* x2)
 
 void print_solutions(int result_code, double x1, double x2)
 {   
-    assert(isfinite(x1) || isfinite(x2));
-
     switch (result_code)
     {
         case INFINITY_NUMBER_OF_SOLUTIONS:
-            printf("There're infinity number of solutions\n\n");
+            printf("There're infinity solutions\n\n");
             break;
         
         case NO_REAL_SOLUTIONS:
@@ -115,8 +116,14 @@ void print_solutions(int result_code, double x1, double x2)
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
-int check_result(int result_code, double x1, double x2, double correct_x1, double correct_x2)
-{
+int check_result(int result_code, double x1, double x2,  
+                 int correct_result_code,  double correct_x1, double correct_x2)
+{   
+    if (correct_result_code != result_code)
+    {
+        return 0;
+    }
+
     switch (result_code)
     {
         case INFINITY_NUMBER_OF_SOLUTIONS:
@@ -130,7 +137,7 @@ int check_result(int result_code, double x1, double x2, double correct_x1, doubl
             
         case TWO_SOLUTIONS:
             return (fabs(x1 - correct_x1) < EPSILON && fabs(x2 - correct_x2) < EPSILON) || \
-                    (fabs(x2 - correct_x1) < EPSILON && fabs(x1 - correct_x2) < EPSILON);
+                   (fabs(x2 - correct_x1) < EPSILON && fabs(x1 - correct_x2) < EPSILON);
         
         default:
             fprintf(stderr, "File: %s\nLine: %d\nCurrent function: %s() \
@@ -142,51 +149,94 @@ int check_result(int result_code, double x1, double x2, double correct_x1, doubl
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
-void unit_test(char* path)
+int process_test (FILE* unit_test_file, int* solver_result_code, double* x1, double* x2)
 {   
-    int result_code = 0, num_of_tests = 0, k = 0, i = 0;
-    double a = NAN, b = NAN, c = NAN;
-    double correct_x1 = NAN, correct_x2 = NAN, x1 = NAN, x2 = NAN;
-    
-    FILE* unit_test_file = fopen(path, "r");
     assert (unit_test_file);
+    assert(solver_result_code);
+    assert(x1);
+    assert(x2);
+    
+
+    int correct_result_code = 0, k = 0;
+    double a = NAN, b = NAN, c = NAN;
+    double correct_x1 = NAN, correct_x2 = NAN;
+
+    k = fscanf (unit_test_file, "%lg %lg %lg %d %lg %lg", &a, &b, &c, 
+                &correct_result_code, &correct_x1, &correct_x2);
+
+    if (k != 6)
+    {
+        fprintf (stderr, "File: %s\nLine: %d\nCurrent function: %s()\
+                \nFailed function: %s()\nError message: %s", \
+                __FILE__, __LINE__, __func__, "unit_test", "Incorrect input!\n");
+        
+        return INPUT_ERROR;
+    }
+    
+    printf ("a=%lf, b=%lf, c=%lf\ncorrect: x1=%lf, x2=%lf\n",
+           a, b, c, correct_x1, correct_x2);
+    
+    *solver_result_code = solve_square_equasion (a, b, c, x1, x2);
+    
+    if (check_result (*solver_result_code, *x1, *x2, correct_result_code, correct_x1, correct_x2))
+    {
+       return TEST_PASSED;
+    }
+
+    return TEST_FAILED;
+}
+
+//flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+void unit_test (const char* path)
+{   
+    int i = 0, num_of_tests = 0, test_result_code = 0, solver_result_code = 0;
+    double solved_x1 = NAN, solved_x2 = NAN;
+    FILE* unit_test_file = fopen (path, "r");
+
+    if (!unit_test_file)
+    {
+        fprintf(stderr, "File: %s\nLine: %d\nCurrent function: %s()\
+                \nFailed function: %s()\nError message: %s",
+                __FILE__, __LINE__, __func__, "unit_test", "Can't open file with tests\n");
+        return;
+    }
 
     fscanf (unit_test_file, "%d", &num_of_tests);
 
     for (i = 0; i < num_of_tests; i++)
     {   
-        printf("\n-------------------------------\n");
-        printf("Test number: %d\n", i);
+        printf ("\n-------------------------------\n");
+        printf ("Test number: %d\n", i);
 
-        k = fscanf(unit_test_file, "%lg %lg %lg %lg %lg", &a, &b, &c, &correct_x1, &correct_x2);
+        test_result_code = process_test(unit_test_file, &solver_result_code,  &solved_x1, &solved_x2);
 
-        if (k != 5)
+        switch (test_result_code)
         {
-            fprintf(stderr, "File: %s\nLine: %d\nCurrent function: %s()\
-                    \nFailed function: %s()\nError message: %s", \
-                    __FILE__, __LINE__, __func__, "unit_test", "Incorrect input!\n");
-            
-            continue;
-        }
-        
-        printf("a=%lf, b=%lf, c=%lf\ncorrect: x1=%lf, x2=%lf\n", \
-                a, b, c, correct_x1, correct_x2);
-        
-        result_code = solve_square_equasion(a, b, c, &x1, &x2);
-        
-        if (check_result(result_code, x1, x2, correct_x1, correct_x2))
-        {
-            printf("\n\033[92mTEST PASSED\033[0m\n");
+            case INPUT_ERROR:
+                continue;
+                break;
+
+            case TEST_FAILED:
+                printf("\n\033[91mTEST FAILED. Actual solutions:\033[0m\n");
+                print_solutions(solver_result_code, solved_x1, solved_x2);
+                break;
+
+            case TEST_PASSED:
+                printf("\n\033[92mTEST PASSED\033[0m\n");
+                break;
+
+            default:
+                fprintf(stderr, "File: %s\nLine: %d\nCurrent function: %s() \
+                        \nFailed function: %s() \nError message: %s", \
+                        __FILE__, __LINE__, __func__, "process_test", 
+                        "Incorrect result code");
+                continue;
+                break;
         }
 
-        else
-        {   
-            printf("\n\033[91mTEST FAILED. Actual solutions:\033[0m\n");
-            print_solutions(result_code, x1, x2);
-        }
-        
-        x1 = NAN;
-        x2 = NAN;
+        solved_x1 = NAN;
+        solved_x2 = NAN;
     }
 
     fclose(unit_test_file);
