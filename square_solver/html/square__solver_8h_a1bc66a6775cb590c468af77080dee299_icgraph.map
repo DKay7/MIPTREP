@@ -1,6 +1,0 @@
-<map id="solve_linear_equasion" name="solve_linear_equasion">
-<area shape="rect" id="node1" title="Решает линейное уравнение вида ax + b = 0 Данная функция необходима, поскольку в некоторых случаях кв..." alt="" coords="507,5,673,32"/>
-<area shape="rect" id="node2" href="$square__solver_8h.html#a02eaa5bfd32a4891e591129c8f344e26" title="Решает квадратное уравнение вида ax^2 + bx + c = 0." alt="" coords="284,5,459,32"/>
-<area shape="rect" id="node3" href="$square__solver_8h.html#a4c51a995a08f30a2782d7ce088c3967f" title="Функция для проведения одного теста" alt="" coords="132,5,236,32"/>
-<area shape="rect" id="node4" href="$square__solver_8h.html#a1637b3cea0ef47be5be49c26b1ea5505" title="Функция для проведения юнит&#45;тестов" alt="" coords="5,5,84,32"/>
-</map>

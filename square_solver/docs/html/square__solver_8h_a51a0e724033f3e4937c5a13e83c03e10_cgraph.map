@@ -1,0 +1,4 @@
+<map id="print_solutions" name="print_solutions">
+<area shape="rect" id="node1" title="Распечатывает решение уравнения Данная процедура печатает в stdout решения квадратного уравнения,..." alt="" coords="5,5,124,32"/>
+<area shape="rect" id="node2" href="$square__solver_8h.html#af95c07f99a268bf3c5aca2d77cd8f41b" title="Печатает ошибку в stderr." alt="" coords="172,5,263,32"/>
+</map>

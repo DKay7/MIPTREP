@@ -1,0 +1,7 @@
+<map id="print_error" name="print_error">
+<area shape="rect" id="node1" title="Печатает ошибку в stderr." alt="" coords="451,81,541,108"/>
+<area shape="rect" id="node2" href="$unit__test_8h.html#a7961d00673d7fd63b8cffcdc6a312c1d" title="Сверяет корни уравнения с эталонами Данная функция необходима для проверки на правильность полученных..." alt="" coords="299,5,403,32"/>
+<area shape="rect" id="node3" href="$unit__test_8h.html#a4c51a995a08f30a2782d7ce088c3967f" title="Функция для проведения одного теста" alt="" coords="139,56,243,83"/>
+<area shape="rect" id="node4" href="$unit__test_8h.html#a1637b3cea0ef47be5be49c26b1ea5505" title="Функция для проведения юнит&#45;тестов" alt="" coords="5,107,84,133"/>
+<area shape="rect" id="node5" href="$square__solver_8h.html#a51a0e724033f3e4937c5a13e83c03e10" title="Распечатывает решение уравнения Данная процедура печатает в stdout решения квадратного уравнения,..." alt="" coords="132,157,251,184"/>
+</map>

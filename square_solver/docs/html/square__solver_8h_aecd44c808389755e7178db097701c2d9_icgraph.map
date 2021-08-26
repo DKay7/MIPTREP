@@ -1,0 +1,8 @@
+<map id="is_double_zero" name="is_double_zero">
+<area shape="rect" id="node1" title="Проверяет, является ли число с плавающей точкой нулем" alt="" coords="721,56,840,83"/>
+<area shape="rect" id="node2" href="$unit__test_8h.html#a7961d00673d7fd63b8cffcdc6a312c1d" title="Сверяет корни уравнения с эталонами Данная функция необходима для проверки на правильность полученных..." alt="" coords="319,5,423,32"/>
+<area shape="rect" id="node5" href="$square__solver_8h.html#a1bc66a6775cb590c468af77080dee299" title="Решает линейное уравнение вида ax + b = 0 Данная функция необходима, поскольку в некоторых случаях кв..." alt="" coords="507,56,673,83"/>
+<area shape="rect" id="node6" href="$square__solver_8h.html#a02eaa5bfd32a4891e591129c8f344e26" title="Решает квадратное уравнение вида ax^2 + bx + c = 0." alt="" coords="284,56,459,83"/>
+<area shape="rect" id="node3" href="$unit__test_8h.html#a4c51a995a08f30a2782d7ce088c3967f" title="Функция для проведения одного теста" alt="" coords="132,31,236,57"/>
+<area shape="rect" id="node4" href="$unit__test_8h.html#a1637b3cea0ef47be5be49c26b1ea5505" title="Функция для проведения юнит&#45;тестов" alt="" coords="5,31,84,57"/>
+</map>

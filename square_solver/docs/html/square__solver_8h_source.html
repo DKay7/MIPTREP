@@ -1,0 +1,164 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.8.17"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Квадратка: Исходный файл square_solver.h</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">Квадратка
+   </div>
+   <div id="projectbrief">Проект предназначен для решения квадратного уравнения вида ax^2 + bx + c = 0</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Создано системой Doxygen 1.8.17 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+var searchBox = new SearchBox("searchBox", "search",false,'Поиск');
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',true,false,'search.php','Поиск');
+  $(document).ready(function() { init_search(); });
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('square__solver_8h_source.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<iframe src="javascript:void(0)" frameborder="0" 
+        name="MSearchResults" id="MSearchResults">
+</iframe>
+</div>
+
+<div class="header">
+  <div class="headertitle">
+<div class="title">square_solver.h</div>  </div>
+</div><!--header-->
+<div class="contents">
+<a href="square__solver_8h.html">См. документацию.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160; </div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="preprocessor">#define print_error(failed_function, error_text) print_error_func(__FILE__, __LINE__, __FUNCTION__, failed_function, error_text)</span></div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160; </div>
+<div class="line"><a name="l00017"></a><span class="lineno"><a class="line" href="square__solver_8h.html#aa58cad30e8a5e6c106996b83fbec9014">   17</a></span>&#160;<span class="keyword">enum</span> <a class="code" href="square__solver_8h.html#aa58cad30e8a5e6c106996b83fbec9014">solver_return_codes</a></div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;{   </div>
+<div class="line"><a name="l00019"></a><span class="lineno"><a class="line" href="square__solver_8h.html#aa58cad30e8a5e6c106996b83fbec9014aaf57bad025586ce3531dc6816dbd4c5a">   19</a></span>&#160;    <a class="code" href="square__solver_8h.html#aa58cad30e8a5e6c106996b83fbec9014aaf57bad025586ce3531dc6816dbd4c5a">INFINITY_VALUE_ERROR</a> = -3, </div>
+<div class="line"><a name="l00020"></a><span class="lineno"><a class="line" href="square__solver_8h.html#aa58cad30e8a5e6c106996b83fbec9014a495bd685a65983988d8e57226a16a898">   20</a></span>&#160;    <a class="code" href="square__solver_8h.html#aa58cad30e8a5e6c106996b83fbec9014a495bd685a65983988d8e57226a16a898">SOLVER_DEFAULT</a> = -2, </div>
+<div class="line"><a name="l00021"></a><span class="lineno"><a class="line" href="square__solver_8h.html#aa58cad30e8a5e6c106996b83fbec9014a317c7773fa430c40a0dd1b25ef58be0a">   21</a></span>&#160;    <a class="code" href="square__solver_8h.html#aa58cad30e8a5e6c106996b83fbec9014a317c7773fa430c40a0dd1b25ef58be0a">INFINITY_NUMBER_OF_SOLUTIONS</a> = -1, </div>
+<div class="line"><a name="l00022"></a><span class="lineno"><a class="line" href="square__solver_8h.html#aa58cad30e8a5e6c106996b83fbec9014aa913171633110aa3c71625270b580d1c">   22</a></span>&#160;    <a class="code" href="square__solver_8h.html#aa58cad30e8a5e6c106996b83fbec9014aa913171633110aa3c71625270b580d1c">NO_REAL_SOLUTIONS</a> = 0, </div>
+<div class="line"><a name="l00023"></a><span class="lineno"><a class="line" href="square__solver_8h.html#aa58cad30e8a5e6c106996b83fbec9014a0451cd6d5aa789cdc383e452dd2c0bd7">   23</a></span>&#160;    <a class="code" href="square__solver_8h.html#aa58cad30e8a5e6c106996b83fbec9014a0451cd6d5aa789cdc383e452dd2c0bd7">ONE_SOLUTION</a> = 1,  </div>
+<div class="line"><a name="l00024"></a><span class="lineno"><a class="line" href="square__solver_8h.html#aa58cad30e8a5e6c106996b83fbec9014a7b4b3bca57d544a80aaed928315a1c75">   24</a></span>&#160;    <a class="code" href="square__solver_8h.html#aa58cad30e8a5e6c106996b83fbec9014a7b4b3bca57d544a80aaed928315a1c75">TWO_SOLUTIONS</a> = 2 </div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;};</div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160; </div>
+<div class="line"><a name="l00028"></a><span class="lineno"><a class="line" href="square__solver_8h.html#a3081c65dccb11cfa46e15bb71959dc05">   28</a></span>&#160;<span class="keyword">enum</span> <a class="code" href="square__solver_8h.html#a3081c65dccb11cfa46e15bb71959dc05">test_return_codes</a></div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;{   </div>
+<div class="line"><a name="l00030"></a><span class="lineno"><a class="line" href="square__solver_8h.html#a3081c65dccb11cfa46e15bb71959dc05a15d1b002f472c7b6406c00e83ad99954">   30</a></span>&#160;    <a class="code" href="square__solver_8h.html#a3081c65dccb11cfa46e15bb71959dc05a15d1b002f472c7b6406c00e83ad99954">TEST_DEFAULT</a> = -12, </div>
+<div class="line"><a name="l00031"></a><span class="lineno"><a class="line" href="square__solver_8h.html#a3081c65dccb11cfa46e15bb71959dc05aec1024879d398de584d1722ebbe0a5c9">   31</a></span>&#160;    <a class="code" href="square__solver_8h.html#a3081c65dccb11cfa46e15bb71959dc05aec1024879d398de584d1722ebbe0a5c9">INPUT_ERROR</a> = -11, </div>
+<div class="line"><a name="l00032"></a><span class="lineno"><a class="line" href="square__solver_8h.html#a3081c65dccb11cfa46e15bb71959dc05ab0b7c38c4ec19a4cf3be3d851e6724c0">   32</a></span>&#160;    <a class="code" href="square__solver_8h.html#a3081c65dccb11cfa46e15bb71959dc05ab0b7c38c4ec19a4cf3be3d851e6724c0">TEST_PASSED</a> = 10, </div>
+<div class="line"><a name="l00033"></a><span class="lineno"><a class="line" href="square__solver_8h.html#a3081c65dccb11cfa46e15bb71959dc05a983ad813fec232f9af0d26f1bb43caa5">   33</a></span>&#160;    <a class="code" href="square__solver_8h.html#a3081c65dccb11cfa46e15bb71959dc05a983ad813fec232f9af0d26f1bb43caa5">TEST_FAILED</a> = 11  </div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;};</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160; </div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;<span class="comment">//flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</span></div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160; </div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;<span class="keywordtype">int</span> <a class="code" href="square__solver_8h.html#aecd44c808389755e7178db097701c2d9">is_double_zero</a>(<span class="keywordtype">double</span> var);</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160; </div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;<span class="comment">//flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</span></div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160; </div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;<span class="keywordtype">void</span> <a class="code" href="square__solver_8h.html#ad8965da74f980266a69d5aaa0ea35a47">print_error_func</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* file, <span class="keyword">const</span> <span class="keywordtype">int</span> line, <span class="keyword">const</span> <span class="keywordtype">char</span>* current_function, </div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;                       <span class="keyword">const</span> <span class="keywordtype">char</span>* failed_function, <span class="keyword">const</span> <span class="keywordtype">char</span>* error_text);</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160; </div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160; </div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;<span class="comment">//flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</span></div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160; </div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;<span class="keywordtype">int</span> <a class="code" href="square__solver_8h.html#a1bc66a6775cb590c468af77080dee299">solve_linear_equasion</a> (<span class="keywordtype">double</span> a, <span class="keywordtype">double</span> b, <span class="keywordtype">double</span>* x);</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160; </div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;<span class="comment">//flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</span></div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160; </div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;<span class="keywordtype">int</span> <a class="code" href="square__solver_8h.html#a02eaa5bfd32a4891e591129c8f344e26">solve_square_equasion</a> (<span class="keywordtype">double</span> a, <span class="keywordtype">double</span> b, <span class="keywordtype">double</span> c, <span class="keywordtype">double</span>* x1, <span class="keywordtype">double</span>* x2);</div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160; </div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;<span class="comment">//flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</span></div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160; </div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;<span class="keywordtype">void</span> <a class="code" href="square__solver_8h.html#a51a0e724033f3e4937c5a13e83c03e10">print_solutions</a> (<span class="keywordtype">int</span> result_code, <span class="keywordtype">double</span> x1, <span class="keywordtype">double</span> x2);</div>
+</div><!-- fragment --></div><!-- contents -->
+</div><!-- doc-content -->
+<div class="ttc" id="asquare__solver_8h_html_a1bc66a6775cb590c468af77080dee299"><div class="ttname"><a href="square__solver_8h.html#a1bc66a6775cb590c468af77080dee299">solve_linear_equasion</a></div><div class="ttdeci">int solve_linear_equasion(double a, double b, double *x)</div><div class="ttdoc">Решает линейное уравнение вида ax + b = 0 Данная функция необходима, поскольку в некоторых случаях кв...</div><div class="ttdef"><b>Definition:</b> solver.c:32</div></div>
+<div class="ttc" id="asquare__solver_8h_html_aa58cad30e8a5e6c106996b83fbec9014aa913171633110aa3c71625270b580d1c"><div class="ttname"><a href="square__solver_8h.html#aa58cad30e8a5e6c106996b83fbec9014aa913171633110aa3c71625270b580d1c">NO_REAL_SOLUTIONS</a></div><div class="ttdeci">@ NO_REAL_SOLUTIONS</div><div class="ttdoc">Нет действительных решений</div><div class="ttdef"><b>Definition:</b> square_solver.h:22</div></div>
+<div class="ttc" id="asquare__solver_8h_html_ad8965da74f980266a69d5aaa0ea35a47"><div class="ttname"><a href="square__solver_8h.html#ad8965da74f980266a69d5aaa0ea35a47">print_error_func</a></div><div class="ttdeci">void print_error_func(const char *file, const int line, const char *current_function, const char *failed_function, const char *error_text)</div><div class="ttdoc">Печатает ошибку в stderr.</div><div class="ttdef"><b>Definition:</b> solver.c:14</div></div>
+<div class="ttc" id="asquare__solver_8h_html_abe7ee30554e731ae61a2dc6fbfcb5dab"><div class="ttname"><a href="square__solver_8h.html#abe7ee30554e731ae61a2dc6fbfcb5dab">print_error</a></div><div class="ttdeci">#define print_error(failed_function, error_text)</div><div class="ttdef"><b>Definition:</b> square_solver.h:11</div></div>
+<div class="ttc" id="asquare__solver_8h_html_aa58cad30e8a5e6c106996b83fbec9014a7b4b3bca57d544a80aaed928315a1c75"><div class="ttname"><a href="square__solver_8h.html#aa58cad30e8a5e6c106996b83fbec9014a7b4b3bca57d544a80aaed928315a1c75">TWO_SOLUTIONS</a></div><div class="ttdeci">@ TWO_SOLUTIONS</div><div class="ttdoc">Два действительных решения</div><div class="ttdef"><b>Definition:</b> square_solver.h:24</div></div>
+<div class="ttc" id="asquare__solver_8h_html_aa58cad30e8a5e6c106996b83fbec9014a495bd685a65983988d8e57226a16a898"><div class="ttname"><a href="square__solver_8h.html#aa58cad30e8a5e6c106996b83fbec9014a495bd685a65983988d8e57226a16a898">SOLVER_DEFAULT</a></div><div class="ttdeci">@ SOLVER_DEFAULT</div><div class="ttdoc">Значение по умолчанию</div><div class="ttdef"><b>Definition:</b> square_solver.h:20</div></div>
+<div class="ttc" id="asquare__solver_8h_html"><div class="ttname"><a href="square__solver_8h.html">square_solver.h</a></div><div class="ttdoc">Заголовочный файл с прототипами функций для решения квадратного уравнения</div></div>
+<div class="ttc" id="asquare__solver_8h_html_aa58cad30e8a5e6c106996b83fbec9014aaf57bad025586ce3531dc6816dbd4c5a"><div class="ttname"><a href="square__solver_8h.html#aa58cad30e8a5e6c106996b83fbec9014aaf57bad025586ce3531dc6816dbd4c5a">INFINITY_VALUE_ERROR</a></div><div class="ttdeci">@ INFINITY_VALUE_ERROR</div><div class="ttdoc">Ошибка, при которой одна из переменных приняла значение INFINITY.</div><div class="ttdef"><b>Definition:</b> square_solver.h:19</div></div>
+<div class="ttc" id="asquare__solver_8h_html_aecd44c808389755e7178db097701c2d9"><div class="ttname"><a href="square__solver_8h.html#aecd44c808389755e7178db097701c2d9">is_double_zero</a></div><div class="ttdeci">int is_double_zero(double var)</div><div class="ttdoc">Проверяет, является ли число с плавающей точкой нулем</div><div class="ttdef"><b>Definition:</b> solver.c:6</div></div>
+<div class="ttc" id="asquare__solver_8h_html_a3081c65dccb11cfa46e15bb71959dc05a983ad813fec232f9af0d26f1bb43caa5"><div class="ttname"><a href="square__solver_8h.html#a3081c65dccb11cfa46e15bb71959dc05a983ad813fec232f9af0d26f1bb43caa5">TEST_FAILED</a></div><div class="ttdeci">@ TEST_FAILED</div><div class="ttdoc">Тест не пройден</div><div class="ttdef"><b>Definition:</b> square_solver.h:33</div></div>
+<div class="ttc" id="asquare__solver_8h_html_a3081c65dccb11cfa46e15bb71959dc05aec1024879d398de584d1722ebbe0a5c9"><div class="ttname"><a href="square__solver_8h.html#a3081c65dccb11cfa46e15bb71959dc05aec1024879d398de584d1722ebbe0a5c9">INPUT_ERROR</a></div><div class="ttdeci">@ INPUT_ERROR</div><div class="ttdoc">Ошибка входных данных</div><div class="ttdef"><b>Definition:</b> square_solver.h:31</div></div>
+<div class="ttc" id="asquare__solver_8h_html_aa58cad30e8a5e6c106996b83fbec9014"><div class="ttname"><a href="square__solver_8h.html#aa58cad30e8a5e6c106996b83fbec9014">solver_return_codes</a></div><div class="ttdeci">solver_return_codes</div><div class="ttdef"><b>Definition:</b> square_solver.h:17</div></div>
+<div class="ttc" id="aunit__test_8h_html_a1637b3cea0ef47be5be49c26b1ea5505"><div class="ttname"><a href="unit__test_8h.html#a1637b3cea0ef47be5be49c26b1ea5505">unit_test</a></div><div class="ttdeci">void unit_test(const char *path)</div><div class="ttdoc">Функция для проведения юнит-тестов</div><div class="ttdef"><b>Definition:</b> unit_test.c:80</div></div>
+<div class="ttc" id="asquare__solver_8h_html_a3081c65dccb11cfa46e15bb71959dc05"><div class="ttname"><a href="square__solver_8h.html#a3081c65dccb11cfa46e15bb71959dc05">test_return_codes</a></div><div class="ttdeci">test_return_codes</div><div class="ttdoc">Перечисление кодов, которые возвращает функция process_test.</div><div class="ttdef"><b>Definition:</b> square_solver.h:28</div></div>
+<div class="ttc" id="aunit__test_8h_html"><div class="ttname"><a href="unit__test_8h.html">unit_test.h</a></div><div class="ttdoc">Заголовочный файл с прототипами функций для проведения тестов</div></div>
+<div class="ttc" id="asquare__solver_8h_html_a3081c65dccb11cfa46e15bb71959dc05a15d1b002f472c7b6406c00e83ad99954"><div class="ttname"><a href="square__solver_8h.html#a3081c65dccb11cfa46e15bb71959dc05a15d1b002f472c7b6406c00e83ad99954">TEST_DEFAULT</a></div><div class="ttdeci">@ TEST_DEFAULT</div><div class="ttdoc">Значение по умолчанию</div><div class="ttdef"><b>Definition:</b> square_solver.h:30</div></div>
+<div class="ttc" id="asquare__solver_8h_html_a3081c65dccb11cfa46e15bb71959dc05ab0b7c38c4ec19a4cf3be3d851e6724c0"><div class="ttname"><a href="square__solver_8h.html#a3081c65dccb11cfa46e15bb71959dc05ab0b7c38c4ec19a4cf3be3d851e6724c0">TEST_PASSED</a></div><div class="ttdeci">@ TEST_PASSED</div><div class="ttdoc">Тест пройден</div><div class="ttdef"><b>Definition:</b> square_solver.h:32</div></div>
+<div class="ttc" id="asquare__solver_8h_html_aa58cad30e8a5e6c106996b83fbec9014a0451cd6d5aa789cdc383e452dd2c0bd7"><div class="ttname"><a href="square__solver_8h.html#aa58cad30e8a5e6c106996b83fbec9014a0451cd6d5aa789cdc383e452dd2c0bd7">ONE_SOLUTION</a></div><div class="ttdeci">@ ONE_SOLUTION</div><div class="ttdoc">Одно действительное решение</div><div class="ttdef"><b>Definition:</b> square_solver.h:23</div></div>
+<div class="ttc" id="asquare__solver_8h_html_a02eaa5bfd32a4891e591129c8f344e26"><div class="ttname"><a href="square__solver_8h.html#a02eaa5bfd32a4891e591129c8f344e26">solve_square_equasion</a></div><div class="ttdeci">int solve_square_equasion(double a, double b, double c, double *x1, double *x2)</div><div class="ttdoc">Решает квадратное уравнение вида ax^2 + bx + c = 0.</div><div class="ttdef"><b>Definition:</b> solver.c:54</div></div>
+<div class="ttc" id="asquare__solver_8h_html_a51a0e724033f3e4937c5a13e83c03e10"><div class="ttname"><a href="square__solver_8h.html#a51a0e724033f3e4937c5a13e83c03e10">print_solutions</a></div><div class="ttdeci">void print_solutions(int result_code, double x1, double x2)</div><div class="ttdoc">Распечатывает решение уравнения Данная процедура печатает в stdout решения квадратного уравнения,...</div><div class="ttdef"><b>Definition:</b> solver.c:129</div></div>
+<div class="ttc" id="asquare__solver_8h_html_aa58cad30e8a5e6c106996b83fbec9014a317c7773fa430c40a0dd1b25ef58be0a"><div class="ttname"><a href="square__solver_8h.html#aa58cad30e8a5e6c106996b83fbec9014a317c7773fa430c40a0dd1b25ef58be0a">INFINITY_NUMBER_OF_SOLUTIONS</a></div><div class="ttdeci">@ INFINITY_NUMBER_OF_SOLUTIONS</div><div class="ttdoc">Бескончно много решений (x - любое)</div><div class="ttdef"><b>Definition:</b> square_solver.h:21</div></div>
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a class="el" href="square__solver_8h.html">square_solver.h</a></li>
+    <li class="footer">Документация по Квадратка. Последние изменения: Чт 26 Авг 2021 20:05:09. Создано системой
+    <a href="http://www.doxygen.org/index.html">
+    <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
+  </ul>
+</div>
+</body>
+</html>
