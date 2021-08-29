@@ -16,6 +16,18 @@
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
+
+/// Перечисление кодов, которые возвращает функция \link process_test \endlink 
+enum test_return_codes
+{   
+    TEST_DEFAULT = -12, ///< Значение по умолчанию
+    INPUT_ERROR = -11, ///< Ошибка входных данных
+    TEST_PASSED = 10, ///<  Тест пройден
+    TEST_FAILED = 11  ///< Тест не пройден
+};
+
+//flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
 /*!
 \brief Сверяет корни уравнения с эталонами
 Данная функция необходима для проверки на правильность полученных корней уравнения

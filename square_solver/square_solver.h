@@ -24,15 +24,6 @@ enum solver_return_codes
     TWO_SOLUTIONS = 2 ///< Два действительных решения
 };
 
-/// Перечисление кодов, которые возвращает функция \link process_test \endlink 
-enum test_return_codes
-{   
-    TEST_DEFAULT = -12, ///< Значение по умолчанию
-    INPUT_ERROR = -11, ///< Ошибка входных данных
-    TEST_PASSED = 10, ///<  Тест пройден
-    TEST_FAILED = 11  ///< Тест не пройден
-};
-
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
 /*!
@@ -58,8 +49,8 @@ int is_double_zero(double var);
 
 \return 1, если число равно 0, иначе -- 0. 
 */
-void print_error_func (const char* file, const int line, const char* current_function, 
-                       const char* failed_function, const char* error_text);
+void print_error_func (char * const file, const int line, char * const current_function, 
+                       char * const failed_function, char * const error_text);
 
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
