@@ -1,0 +1,4 @@
+<map id="strcpy" name="strcpy">
+<area shape="rect" id="node1" title="Функция выводит длину строки без учета символа конца строки" alt="" coords="116,5,179,32"/>
+<area shape="rect" id="node2" href="$onegin_8h.html#a86e0df1bf9e434074f958434e0af7581" title="Функция strdup дублирует строку, на которую указывает аргумент str. Память под дубликат строки выделя..." alt="" coords="5,5,68,32"/>
+</map>

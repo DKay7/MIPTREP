@@ -1,17 +1,13 @@
-// Реализовать функции (порядок важен):
-// puts+, strchr+, strlen+, strcpy+, strncpy+, strcat+, strncat+, fgets+, strdup+, getline
+/**
+* @file
+* @brief Данный файл содержит в себе прототипы функций работы со строкаи, реализованных в проекте
+*/
 
 #include <stdio.h>
 
 /// Макрос для print_error_func, который автоматически подставляет
 /// Файл и строку в сообщение об ошибке
 #define print_error(failed_function, error_text) print_error_func(__FILE__, __LINE__, __FUNCTION__, failed_function, error_text)
-
-/// Возвращаемые коды функций
-enum onegin_codes
-{
-    EOF_REACHED_ERROR ///< Ошибка
-};
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 

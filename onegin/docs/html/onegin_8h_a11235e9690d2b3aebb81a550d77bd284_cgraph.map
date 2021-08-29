@@ -1,0 +1,4 @@
+<map id="strncat" name="strncat">
+<area shape="rect" id="node1" title="Функция добавляет первые num символов строки srcptr к концу строки destptr." alt="" coords="5,5,72,32"/>
+<area shape="rect" id="node2" href="$onegin_8h.html#ab06529fec46bc0ce6b7ab4b04e4dfc93" title="Функция выводит длину строки без учета символа конца строки" alt="" coords="120,5,179,32"/>
+</map>

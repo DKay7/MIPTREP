@@ -1,0 +1,725 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.8.17"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Функции работы со строками из stdlib: Файл onegin.h</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">Функции работы со строками из stdlib
+   </div>
+   <div id="projectbrief">Проект реализует некоторые функции для работы со строками из stdlib</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Создано системой Doxygen 1.8.17 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+var searchBox = new SearchBox("searchBox", "search",false,'Поиск');
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',true,false,'search.php','Поиск');
+  $(document).ready(function() { init_search(); });
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('onegin_8h.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<iframe src="javascript:void(0)" frameborder="0" 
+        name="MSearchResults" id="MSearchResults">
+</iframe>
+</div>
+
+<div class="header">
+  <div class="summary">
+<a href="#define-members">Макросы</a> &#124;
+<a href="#func-members">Функции</a>  </div>
+  <div class="headertitle">
+<div class="title">Файл onegin.h</div>  </div>
+</div><!--header-->
+<div class="contents">
+
+<p>Данный файл содержит в себе прототипы функций работы со строкаи, реализованных в проекте  
+<a href="#details">Подробнее...</a></p>
+<div class="textblock"><code>#include &lt;stdio.h&gt;</code><br />
+</div><div class="textblock"><div id="dynsection-0" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
+  <img id="dynsection-0-trigger" src="closed.png" alt="+"/> Граф включаемых заголовочных файлов для onegin.h:</div>
+<div id="dynsection-0-summary" class="dynsummary" style="display:block;">
+</div>
+<div id="dynsection-0-content" class="dyncontent" style="display:none;">
+<div class="center"><img src="onegin_8h__incl.png" border="0" usemap="#onegin_8h" alt=""/></div>
+<map name="onegin_8h" id="onegin_8h">
+<area shape="rect" title="Данный файл содержит в себе прототипы функций работы со строкаи, реализованных в проекте" alt="" coords="5,5,84,32"/>
+<area shape="rect" title=" " alt="" coords="11,80,78,107"/>
+</map>
+</div>
+</div>
+<p><a href="onegin_8h_source.html">См. исходные тексты.</a></p>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
+Макросы</h2></td></tr>
+<tr class="memitem:abe7ee30554e731ae61a2dc6fbfcb5dab"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="onegin_8h.html#abe7ee30554e731ae61a2dc6fbfcb5dab">print_error</a>(failed_function,  error_text)&#160;&#160;&#160;<a class="el" href="onegin_8h.html#ad8965da74f980266a69d5aaa0ea35a47">print_error_func</a>(__FILE__, __LINE__, __FUNCTION__, failed_function, error_text)</td></tr>
+<tr class="separator:abe7ee30554e731ae61a2dc6fbfcb5dab"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
+Функции</h2></td></tr>
+<tr class="memitem:af17f2f3fda696ddc3b7c1bac995edaf8"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="onegin_8h.html#af17f2f3fda696ddc3b7c1bac995edaf8">puts</a> (const char *string)</td></tr>
+<tr class="memdesc:af17f2f3fda696ddc3b7c1bac995edaf8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Функция выводит строку в stdout и добавляет символ новой строки  <a href="onegin_8h.html#af17f2f3fda696ddc3b7c1bac995edaf8">Подробнее...</a><br /></td></tr>
+<tr class="separator:af17f2f3fda696ddc3b7c1bac995edaf8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0d562abf19efddddc396e64a459c39f6"><td class="memItemLeft" align="right" valign="top">char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="onegin_8h.html#a0d562abf19efddddc396e64a459c39f6">strchr</a> (char *string, int symbol)</td></tr>
+<tr class="memdesc:a0d562abf19efddddc396e64a459c39f6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Функция выводит строку в stdout и добавляет символ новой строки  <a href="onegin_8h.html#a0d562abf19efddddc396e64a459c39f6">Подробнее...</a><br /></td></tr>
+<tr class="separator:a0d562abf19efddddc396e64a459c39f6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab06529fec46bc0ce6b7ab4b04e4dfc93"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="onegin_8h.html#ab06529fec46bc0ce6b7ab4b04e4dfc93">strlen</a> (char *string)</td></tr>
+<tr class="memdesc:ab06529fec46bc0ce6b7ab4b04e4dfc93"><td class="mdescLeft">&#160;</td><td class="mdescRight">Функция выводит длину строки без учета символа конца строки  <a href="onegin_8h.html#ab06529fec46bc0ce6b7ab4b04e4dfc93">Подробнее...</a><br /></td></tr>
+<tr class="separator:ab06529fec46bc0ce6b7ab4b04e4dfc93"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a025ec7e4795be0c02e5e915cd4cb856b"><td class="memItemLeft" align="right" valign="top">char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="onegin_8h.html#a025ec7e4795be0c02e5e915cd4cb856b">strcpy</a> (char *destptr, const char *srcptr)</td></tr>
+<tr class="memdesc:a025ec7e4795be0c02e5e915cd4cb856b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Функция выводит длину строки без учета символа конца строки  <a href="onegin_8h.html#a025ec7e4795be0c02e5e915cd4cb856b">Подробнее...</a><br /></td></tr>
+<tr class="separator:a025ec7e4795be0c02e5e915cd4cb856b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a19f64fa2ae87dd8993a85535d3ee1de5"><td class="memItemLeft" align="right" valign="top">char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="onegin_8h.html#a19f64fa2ae87dd8993a85535d3ee1de5">strncpy</a> (char *destptr, const char *srcptr, size_t num)</td></tr>
+<tr class="memdesc:a19f64fa2ae87dd8993a85535d3ee1de5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Функция копирует первые num символов из строки srcptr в строку destptr.  <a href="onegin_8h.html#a19f64fa2ae87dd8993a85535d3ee1de5">Подробнее...</a><br /></td></tr>
+<tr class="separator:a19f64fa2ae87dd8993a85535d3ee1de5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a519b17729ce1d5a92b6ffe800dd49b88"><td class="memItemLeft" align="right" valign="top">char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="onegin_8h.html#a519b17729ce1d5a92b6ffe800dd49b88">strcat</a> (char *destptr, const char *srcptr)</td></tr>
+<tr class="memdesc:a519b17729ce1d5a92b6ffe800dd49b88"><td class="mdescLeft">&#160;</td><td class="mdescRight">Функция добавляет копию строки srcptr в конец строки destptr.  <a href="onegin_8h.html#a519b17729ce1d5a92b6ffe800dd49b88">Подробнее...</a><br /></td></tr>
+<tr class="separator:a519b17729ce1d5a92b6ffe800dd49b88"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a11235e9690d2b3aebb81a550d77bd284"><td class="memItemLeft" align="right" valign="top">char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="onegin_8h.html#a11235e9690d2b3aebb81a550d77bd284">strncat</a> (char *destptr, const char *srcptr, size_t num)</td></tr>
+<tr class="memdesc:a11235e9690d2b3aebb81a550d77bd284"><td class="mdescLeft">&#160;</td><td class="mdescRight">Функция добавляет первые num символов строки srcptr к концу строки destptr.  <a href="onegin_8h.html#a11235e9690d2b3aebb81a550d77bd284">Подробнее...</a><br /></td></tr>
+<tr class="separator:a11235e9690d2b3aebb81a550d77bd284"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a440f1f43809a47271ee3ab544a9eb68b"><td class="memItemLeft" align="right" valign="top">char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="onegin_8h.html#a440f1f43809a47271ee3ab544a9eb68b">fgets</a> (char *string, size_t num, FILE *filestream)</td></tr>
+<tr class="memdesc:a440f1f43809a47271ee3ab544a9eb68b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Функция fgets считывает символы из потока и сохраняет их в виде строки в параметр string до тех пор пока не наступит конец строки или пока не будет достигнут конец файла.  <a href="onegin_8h.html#a440f1f43809a47271ee3ab544a9eb68b">Подробнее...</a><br /></td></tr>
+<tr class="separator:a440f1f43809a47271ee3ab544a9eb68b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a86e0df1bf9e434074f958434e0af7581"><td class="memItemLeft" align="right" valign="top">char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="onegin_8h.html#a86e0df1bf9e434074f958434e0af7581">strdup</a> (const char *string)</td></tr>
+<tr class="memdesc:a86e0df1bf9e434074f958434e0af7581"><td class="mdescLeft">&#160;</td><td class="mdescRight">Функция strdup дублирует строку, на которую указывает аргумент str. Память под дубликат строки выделяется с помощью функции malloc, и по окончанию работы с дубликатом должна быть очищена с помощью функции free.  <a href="onegin_8h.html#a86e0df1bf9e434074f958434e0af7581">Подробнее...</a><br /></td></tr>
+<tr class="separator:a86e0df1bf9e434074f958434e0af7581"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afbe0f6088732259cab829274f9c96859"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="onegin_8h.html#afbe0f6088732259cab829274f9c96859">getline</a> (char **lineptr, size_t *n, FILE *streanm)</td></tr>
+<tr class="memdesc:afbe0f6088732259cab829274f9c96859"><td class="mdescLeft">&#160;</td><td class="mdescRight">Функция считывает целую строку, сохраняя адрес буфера, содержащего текст, в *lineptr.  <a href="onegin_8h.html#afbe0f6088732259cab829274f9c96859">Подробнее...</a><br /></td></tr>
+<tr class="separator:afbe0f6088732259cab829274f9c96859"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad8965da74f980266a69d5aaa0ea35a47"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="onegin_8h.html#ad8965da74f980266a69d5aaa0ea35a47">print_error_func</a> (const char *file, const int line, const char *current_function, const char *failed_function, const char *error_text)</td></tr>
+<tr class="memdesc:ad8965da74f980266a69d5aaa0ea35a47"><td class="mdescLeft">&#160;</td><td class="mdescRight">Функция выводит информацию об ошибке в stderr.  <a href="onegin_8h.html#ad8965da74f980266a69d5aaa0ea35a47">Подробнее...</a><br /></td></tr>
+<tr class="separator:ad8965da74f980266a69d5aaa0ea35a47"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">Подробное описание</h2>
+<div class="textblock"><p>Данный файл содержит в себе прототипы функций работы со строкаи, реализованных в проекте </p>
+</div><h2 class="groupheader">Макросы</h2>
+<a id="abe7ee30554e731ae61a2dc6fbfcb5dab"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abe7ee30554e731ae61a2dc6fbfcb5dab">&#9670;&nbsp;</a></span>print_error</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define print_error</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">failed_function, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">error_text&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td>&#160;&#160;&#160;<a class="el" href="onegin_8h.html#ad8965da74f980266a69d5aaa0ea35a47">print_error_func</a>(__FILE__, __LINE__, __FUNCTION__, failed_function, error_text)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Макрос для print_error_func, который автоматически подставляет Файл и строку в сообщение об ошибке </p>
+
+</div>
+</div>
+<h2 class="groupheader">Функции</h2>
+<a id="a440f1f43809a47271ee3ab544a9eb68b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a440f1f43809a47271ee3ab544a9eb68b">&#9670;&nbsp;</a></span>fgets()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">char* fgets </td>
+          <td>(</td>
+          <td class="paramtype">char *&#160;</td>
+          <td class="paramname"><em>string</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>num</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">FILE *&#160;</td>
+          <td class="paramname"><em>filestream</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Функция fgets считывает символы из потока и сохраняет их в виде строки в параметр string до тех пор пока не наступит конец строки или пока не будет достигнут конец файла. </p>
+<dl class="params"><dt>Аргументы</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">string</td><td>Указатель на строку назначения, в которую сохраняются считанные символы. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">num</td><td>Максимальное количество символов для чтения, включая нулевой символ. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">filestream</td><td>Указатель на объект типа FILE, который идентифицирует поток, из которого считываются символы. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Возвращает</dt><dd>В случае успеха, функция возвращает указатель на строку назначения. Если конец файла был достигнут и ни один символ не был прочитан, возвращается нулевой указатель. Если происходит ошибка, возвращается нулевой указатель. </dd></dl>
+<div id="dynsection-1" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
+  <img id="dynsection-1-trigger" src="closed.png" alt="+"/> Граф вызовов:</div>
+<div id="dynsection-1-summary" class="dynsummary" style="display:block;">
+</div>
+<div id="dynsection-1-content" class="dyncontent" style="display:none;">
+<div class="center"><img src="onegin_8h_a440f1f43809a47271ee3ab544a9eb68b_cgraph.png" border="0" usemap="#onegin_8h_a440f1f43809a47271ee3ab544a9eb68b_cgraph" alt=""/></div>
+<map name="onegin_8h_a440f1f43809a47271ee3ab544a9eb68b_cgraph" id="onegin_8h_a440f1f43809a47271ee3ab544a9eb68b_cgraph">
+<area shape="rect" title="Функция fgets считывает символы из потока и сохраняет их в виде строки в параметр string до тех пор п..." alt="" coords="5,5,60,32"/>
+<area shape="rect" href="onegin_8h.html#a519b17729ce1d5a92b6ffe800dd49b88" title="Функция добавляет копию строки srcptr в конец строки destptr." alt="" coords="108,5,167,32"/>
+<area shape="rect" href="onegin_8h.html#ab06529fec46bc0ce6b7ab4b04e4dfc93" title="Функция выводит длину строки без учета символа конца строки" alt="" coords="215,5,273,32"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="afbe0f6088732259cab829274f9c96859"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afbe0f6088732259cab829274f9c96859">&#9670;&nbsp;</a></span>getline()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int getline </td>
+          <td>(</td>
+          <td class="paramtype">char **&#160;</td>
+          <td class="paramname"><em>lineptr</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t *&#160;</td>
+          <td class="paramname"><em>n</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">FILE *&#160;</td>
+          <td class="paramname"><em>streanm</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Функция считывает целую строку, сохраняя адрес буфера, содержащего текст, в *lineptr. </p>
+<dl class="params"><dt>Аргументы</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">lineptr</td><td>Указатель на буффер для считаваемой строки. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">n</td><td>Указатель на размер буффера. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">streanm</td><td>Указатель на файл для чтения </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Возвращает</dt><dd>При нормальном завершении работы функция возвращают количество считанных символов </dd></dl>
+<div id="dynsection-2" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
+  <img id="dynsection-2-trigger" src="closed.png" alt="+"/> Граф вызовов:</div>
+<div id="dynsection-2-summary" class="dynsummary" style="display:block;">
+</div>
+<div id="dynsection-2-content" class="dyncontent" style="display:none;">
+<div class="center"><img src="onegin_8h_afbe0f6088732259cab829274f9c96859_cgraph.png" border="0" usemap="#onegin_8h_afbe0f6088732259cab829274f9c96859_cgraph" alt=""/></div>
+<map name="onegin_8h_afbe0f6088732259cab829274f9c96859_cgraph" id="onegin_8h_afbe0f6088732259cab829274f9c96859_cgraph">
+<area shape="rect" title="Функция считывает целую строку, сохраняя адрес буфера, содержащего текст, в *lineptr." alt="" coords="5,5,72,32"/>
+<area shape="rect" href="onegin_8h.html#a519b17729ce1d5a92b6ffe800dd49b88" title="Функция добавляет копию строки srcptr в конец строки destptr." alt="" coords="120,5,179,32"/>
+<area shape="rect" href="onegin_8h.html#ab06529fec46bc0ce6b7ab4b04e4dfc93" title="Функция выводит длину строки без учета символа конца строки" alt="" coords="227,5,285,32"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="ad8965da74f980266a69d5aaa0ea35a47"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad8965da74f980266a69d5aaa0ea35a47">&#9670;&nbsp;</a></span>print_error_func()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void print_error_func </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>file</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int&#160;</td>
+          <td class="paramname"><em>line</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>current_function</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>failed_function</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>error_text</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Функция выводит информацию об ошибке в stderr. </p>
+<dl class="params"><dt>Аргументы</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">file</td><td>Файл, в котором произошла ошибка </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">line</td><td>Строка в которой произошла ошибка </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">current_function</td><td>Имя функции, из которой была вызвана <a class="el" href="onegin_8h.html#ad8965da74f980266a69d5aaa0ea35a47">print_error_func</a> </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">failed_function</td><td>Имя функции, в которой возникла ошибка </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">error_text</td><td>Текст ошибки </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Возвращает</dt><dd>Указатель на символ в данной строке </dd></dl>
+
+</div>
+</div>
+<a id="af17f2f3fda696ddc3b7c1bac995edaf8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af17f2f3fda696ddc3b7c1bac995edaf8">&#9670;&nbsp;</a></span>puts()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int puts </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>string</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Функция выводит строку в stdout и добавляет символ новой строки </p>
+<dl class="params"><dt>Аргументы</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">string</td><td>Строка для вывода </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a519b17729ce1d5a92b6ffe800dd49b88"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a519b17729ce1d5a92b6ffe800dd49b88">&#9670;&nbsp;</a></span>strcat()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">char* strcat </td>
+          <td>(</td>
+          <td class="paramtype">char *&#160;</td>
+          <td class="paramname"><em>destptr</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>srcptr</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Функция добавляет копию строки srcptr в конец строки destptr. </p>
+<dl class="params"><dt>Аргументы</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">destptr</td><td>Указатель на строку назначения, к которой добавятся символы строки srcptr. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">srcptr</td><td>Строка, которая добавляется в конец строки destptr. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Возвращает</dt><dd>Указатель на строку назначения. </dd></dl>
+<div id="dynsection-3" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
+  <img id="dynsection-3-trigger" src="closed.png" alt="+"/> Граф вызовов:</div>
+<div id="dynsection-3-summary" class="dynsummary" style="display:block;">
+</div>
+<div id="dynsection-3-content" class="dyncontent" style="display:none;">
+<div class="center"><img src="onegin_8h_a519b17729ce1d5a92b6ffe800dd49b88_cgraph.png" border="0" usemap="#onegin_8h_a519b17729ce1d5a92b6ffe800dd49b88_cgraph" alt=""/></div>
+<map name="onegin_8h_a519b17729ce1d5a92b6ffe800dd49b88_cgraph" id="onegin_8h_a519b17729ce1d5a92b6ffe800dd49b88_cgraph">
+<area shape="rect" title="Функция добавляет копию строки srcptr в конец строки destptr." alt="" coords="5,5,64,32"/>
+<area shape="rect" href="onegin_8h.html#ab06529fec46bc0ce6b7ab4b04e4dfc93" title="Функция выводит длину строки без учета символа конца строки" alt="" coords="112,5,171,32"/>
+</map>
+</div>
+<div id="dynsection-4" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
+  <img id="dynsection-4-trigger" src="closed.png" alt="+"/> Граф вызова функции:</div>
+<div id="dynsection-4-summary" class="dynsummary" style="display:block;">
+</div>
+<div id="dynsection-4-content" class="dyncontent" style="display:none;">
+<div class="center"><img src="onegin_8h_a519b17729ce1d5a92b6ffe800dd49b88_icgraph.png" border="0" usemap="#onegin_8h_a519b17729ce1d5a92b6ffe800dd49b88_icgraph" alt=""/></div>
+<map name="onegin_8h_a519b17729ce1d5a92b6ffe800dd49b88_icgraph" id="onegin_8h_a519b17729ce1d5a92b6ffe800dd49b88_icgraph">
+<area shape="rect" title="Функция добавляет копию строки srcptr в конец строки destptr." alt="" coords="120,31,179,57"/>
+<area shape="rect" href="onegin_8h.html#a440f1f43809a47271ee3ab544a9eb68b" title="Функция fgets считывает символы из потока и сохраняет их в виде строки в параметр string до тех пор п..." alt="" coords="11,5,66,32"/>
+<area shape="rect" href="onegin_8h.html#afbe0f6088732259cab829274f9c96859" title="Функция считывает целую строку, сохраняя адрес буфера, содержащего текст, в *lineptr." alt="" coords="5,56,72,83"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a0d562abf19efddddc396e64a459c39f6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0d562abf19efddddc396e64a459c39f6">&#9670;&nbsp;</a></span>strchr()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">char* strchr </td>
+          <td>(</td>
+          <td class="paramtype">char *&#160;</td>
+          <td class="paramname"><em>string</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>symbol</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Функция выводит строку в stdout и добавляет символ новой строки </p>
+<dl class="params"><dt>Аргументы</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">string</td><td>Строка для вывода </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">symbol</td><td>Символ для поиска </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Возвращает</dt><dd>Указатель на символ в данной строке </dd></dl>
+
+</div>
+</div>
+<a id="a025ec7e4795be0c02e5e915cd4cb856b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a025ec7e4795be0c02e5e915cd4cb856b">&#9670;&nbsp;</a></span>strcpy()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">char* strcpy </td>
+          <td>(</td>
+          <td class="paramtype">char *&#160;</td>
+          <td class="paramname"><em>destptr</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>srcptr</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Функция выводит длину строки без учета символа конца строки </p>
+<dl class="params"><dt>Аргументы</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">destptr</td><td>Указатель на строку назначения, куда будет скопирована строка-источник. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">srcptr</td><td>Указатель на копируемую строку. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Возвращает</dt><dd>Указатель на строку назначения. </dd></dl>
+<div id="dynsection-5" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
+  <img id="dynsection-5-trigger" src="closed.png" alt="+"/> Граф вызова функции:</div>
+<div id="dynsection-5-summary" class="dynsummary" style="display:block;">
+</div>
+<div id="dynsection-5-content" class="dyncontent" style="display:none;">
+<div class="center"><img src="onegin_8h_a025ec7e4795be0c02e5e915cd4cb856b_icgraph.png" border="0" usemap="#onegin_8h_a025ec7e4795be0c02e5e915cd4cb856b_icgraph" alt=""/></div>
+<map name="onegin_8h_a025ec7e4795be0c02e5e915cd4cb856b_icgraph" id="onegin_8h_a025ec7e4795be0c02e5e915cd4cb856b_icgraph">
+<area shape="rect" title="Функция выводит длину строки без учета символа конца строки" alt="" coords="116,5,179,32"/>
+<area shape="rect" href="onegin_8h.html#a86e0df1bf9e434074f958434e0af7581" title="Функция strdup дублирует строку, на которую указывает аргумент str. Память под дубликат строки выделя..." alt="" coords="5,5,68,32"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a86e0df1bf9e434074f958434e0af7581"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a86e0df1bf9e434074f958434e0af7581">&#9670;&nbsp;</a></span>strdup()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">char* strdup </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>string</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Функция strdup дублирует строку, на которую указывает аргумент str. Память под дубликат строки выделяется с помощью функции malloc, и по окончанию работы с дубликатом должна быть очищена с помощью функции free. </p>
+<dl class="params"><dt>Аргументы</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">string</td><td>Указатель на дублируемую строку </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Возвращает</dt><dd>В случае успеха, функция возвращает указатель на новую строку. NULL – в случае ошибки. </dd></dl>
+<div id="dynsection-6" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
+  <img id="dynsection-6-trigger" src="closed.png" alt="+"/> Граф вызовов:</div>
+<div id="dynsection-6-summary" class="dynsummary" style="display:block;">
+</div>
+<div id="dynsection-6-content" class="dyncontent" style="display:none;">
+<div class="center"><img src="onegin_8h_a86e0df1bf9e434074f958434e0af7581_cgraph.png" border="0" usemap="#onegin_8h_a86e0df1bf9e434074f958434e0af7581_cgraph" alt=""/></div>
+<map name="onegin_8h_a86e0df1bf9e434074f958434e0af7581_cgraph" id="onegin_8h_a86e0df1bf9e434074f958434e0af7581_cgraph">
+<area shape="rect" title="Функция strdup дублирует строку, на которую указывает аргумент str. Память под дубликат строки выделя..." alt="" coords="5,31,68,57"/>
+<area shape="rect" href="onegin_8h.html#a025ec7e4795be0c02e5e915cd4cb856b" title="Функция выводит длину строки без учета символа конца строки" alt="" coords="116,5,179,32"/>
+<area shape="rect" href="onegin_8h.html#ab06529fec46bc0ce6b7ab4b04e4dfc93" title="Функция выводит длину строки без учета символа конца строки" alt="" coords="118,56,177,83"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="ab06529fec46bc0ce6b7ab4b04e4dfc93"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab06529fec46bc0ce6b7ab4b04e4dfc93">&#9670;&nbsp;</a></span>strlen()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">size_t strlen </td>
+          <td>(</td>
+          <td class="paramtype">char *&#160;</td>
+          <td class="paramname"><em>string</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Функция выводит длину строки без учета символа конца строки </p>
+<dl class="params"><dt>Аргументы</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">string</td><td>Строка для расчет длины </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Возвращает</dt><dd>Длина строки </dd></dl>
+<div id="dynsection-7" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
+  <img id="dynsection-7-trigger" src="closed.png" alt="+"/> Граф вызова функции:</div>
+<div id="dynsection-7-summary" class="dynsummary" style="display:block;">
+</div>
+<div id="dynsection-7-content" class="dyncontent" style="display:none;">
+<div class="center"><img src="onegin_8h_ab06529fec46bc0ce6b7ab4b04e4dfc93_icgraph.png" border="0" usemap="#onegin_8h_ab06529fec46bc0ce6b7ab4b04e4dfc93_icgraph" alt=""/></div>
+<map name="onegin_8h_ab06529fec46bc0ce6b7ab4b04e4dfc93_icgraph" id="onegin_8h_ab06529fec46bc0ce6b7ab4b04e4dfc93_icgraph">
+<area shape="rect" title="Функция выводит длину строки без учета символа конца строки" alt="" coords="235,81,293,108"/>
+<area shape="rect" href="onegin_8h.html#a519b17729ce1d5a92b6ffe800dd49b88" title="Функция добавляет копию строки srcptr в конец строки destptr." alt="" coords="124,31,183,57"/>
+<area shape="rect" href="onegin_8h.html#a86e0df1bf9e434074f958434e0af7581" title="Функция strdup дублирует строку, на которую указывает аргумент str. Память под дубликат строки выделя..." alt="" coords="122,81,185,108"/>
+<area shape="rect" href="onegin_8h.html#a11235e9690d2b3aebb81a550d77bd284" title="Функция добавляет первые num символов строки srcptr к концу строки destptr." alt="" coords="120,132,187,159"/>
+<area shape="rect" href="onegin_8h.html#a440f1f43809a47271ee3ab544a9eb68b" title="Функция fgets считывает символы из потока и сохраняет их в виде строки в параметр string до тех пор п..." alt="" coords="11,5,66,32"/>
+<area shape="rect" href="onegin_8h.html#afbe0f6088732259cab829274f9c96859" title="Функция считывает целую строку, сохраняя адрес буфера, содержащего текст, в *lineptr." alt="" coords="5,56,72,83"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a11235e9690d2b3aebb81a550d77bd284"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a11235e9690d2b3aebb81a550d77bd284">&#9670;&nbsp;</a></span>strncat()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">char* strncat </td>
+          <td>(</td>
+          <td class="paramtype">char *&#160;</td>
+          <td class="paramname"><em>destptr</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>srcptr</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>num</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Функция добавляет первые num символов строки srcptr к концу строки destptr. </p>
+<dl class="params"><dt>Аргументы</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">destptr</td><td>Указатель на строку назначения, к которой добавятся символы строки srcptr. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">srcptr</td><td>Строка, которая добавляется в конец строки destptr. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">num</td><td>Максимальное количество копируемых символов строки </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Возвращает</dt><dd>Указатель на строку назначения. </dd></dl>
+<div id="dynsection-8" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
+  <img id="dynsection-8-trigger" src="closed.png" alt="+"/> Граф вызовов:</div>
+<div id="dynsection-8-summary" class="dynsummary" style="display:block;">
+</div>
+<div id="dynsection-8-content" class="dyncontent" style="display:none;">
+<div class="center"><img src="onegin_8h_a11235e9690d2b3aebb81a550d77bd284_cgraph.png" border="0" usemap="#onegin_8h_a11235e9690d2b3aebb81a550d77bd284_cgraph" alt=""/></div>
+<map name="onegin_8h_a11235e9690d2b3aebb81a550d77bd284_cgraph" id="onegin_8h_a11235e9690d2b3aebb81a550d77bd284_cgraph">
+<area shape="rect" title="Функция добавляет первые num символов строки srcptr к концу строки destptr." alt="" coords="5,5,72,32"/>
+<area shape="rect" href="onegin_8h.html#ab06529fec46bc0ce6b7ab4b04e4dfc93" title="Функция выводит длину строки без учета символа конца строки" alt="" coords="120,5,179,32"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a19f64fa2ae87dd8993a85535d3ee1de5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a19f64fa2ae87dd8993a85535d3ee1de5">&#9670;&nbsp;</a></span>strncpy()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">char* strncpy </td>
+          <td>(</td>
+          <td class="paramtype">char *&#160;</td>
+          <td class="paramname"><em>destptr</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>srcptr</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>num</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Функция копирует первые num символов из строки srcptr в строку destptr. </p>
+<dl class="params"><dt>Аргументы</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">destptr</td><td>Указатель на строку назначения, куда будут копироваться символы </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">srcptr</td><td>Копируемая строка </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">num</td><td>Максимальное количество копируемых символов строки </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Возвращает</dt><dd>Указатель на строку назначения. </dd></dl>
+
+</div>
+</div>
+</div><!-- contents -->
+</div><!-- doc-content -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a class="el" href="onegin_8h.html">onegin.h</a></li>
+    <li class="footer">Документация по Функции работы со строками из stdlib. Последние изменения: Вс 29 Авг 2021 13:03:55. Создано системой
+    <a href="http://www.doxygen.org/index.html">
+    <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
+  </ul>
+</div>
+</body>
+</html>
