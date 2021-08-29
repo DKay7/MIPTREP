@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdio.h>
 #include <malloc.h>
-#include "onegin.h"
+#include "string_utils.h"
 
 int puts (const char* string)
 {   
@@ -35,9 +35,9 @@ char* strchr (char* string, int symbol)
 
     int i = 0;
 
-    for (i; *(string + i); i++)
+    for (i; string[i] != '\0'; i++)
     {   
-        if (*(string + i) == symbol)
+        if (string[i] == symbol)
         {
             return string + i;
         }
@@ -54,7 +54,7 @@ size_t strlen (char* string)
 
     size_t i = 0;
 
-    for (i; *(string + i); i++);
+    for (i; string[i] != '\0'; i++);
 
     return i;
 }
@@ -67,16 +67,17 @@ char* strcpy (char* destptr, const char* srcptr)
     assert (srcptr);
     assert (srcptr != destptr);
 
-    char* dest_copy = destptr;
-
-    while (*destptr)
+    size_t i = 0;
+    
+    while (srcptr[i] != '\0')
     {   
-        *destptr = *srcptr;
-        destptr++;
-        srcptr++;
+        destptr[i] = srcptr[i];
+        i++;
     }
 
-    return dest_copy;
+    destptr[i] = '\0';
+
+    return destptr;
 }
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
@@ -88,18 +89,17 @@ char* strncpy (char* destptr, const char* srcptr, size_t num)
     assert (srcptr != destptr);
     assert (num != 0);
 
-    size_t i = 1;
-    char* dest_copy = destptr;
+    size_t i = 0;
     
-    while (*destptr && i < num)
-    {
-        *destptr = *srcptr;
-        destptr++;
-        srcptr++;
+    while (i < num && srcptr[i] != '\0')
+    {   
+        destptr[i] = srcptr[i];
         i++;
     }
 
-    return dest_copy;
+    destptr[i] = '\0';
+
+    return destptr;
 }
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
@@ -110,18 +110,16 @@ char* strcat (char* destptr, const char* srcptr)
     assert (srcptr);
     assert (srcptr != destptr);
 
-    char* dest_copy = destptr;
     size_t index = strlen (destptr);
-    size_t src_len = strlen (srcptr);
 
-    while (*destptr)
+    while (*srcptr != '\0')
     {
-        *(destptr + index) = *srcptr;
+        destptr[index] = *srcptr;
         srcptr++;
         index++;
     }
 
-    return dest_copy;    
+    return destptr;    
 }
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
@@ -133,20 +131,18 @@ char* strncat (char* destptr, const char* srcptr, size_t num)
     assert (num != 0);
     assert (srcptr != destptr);
 
-    char* dest_copy = destptr;
     size_t index = strlen (destptr);
 
     num += index;
 
-    while (*destptr && index < num)
+    while (*srcptr != '\0' && index < num)
     {
-        *(destptr + index) = *srcptr;
+        destptr[index] = *srcptr;
         srcptr++;
-        destptr++;
         index++;       
     }
 
-    return dest_copy;
+    return destptr;
 }
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
@@ -159,7 +155,6 @@ char* fgets (char* string, size_t num, FILE* filestream)
 
     size_t i = 0;
     char next_char = 0;
-    char* string_copy = string;
 
     for (i; i < num; i++)
     {
@@ -171,11 +166,10 @@ char* fgets (char* string, size_t num, FILE* filestream)
             return NULL;
         }
 
-        *string = next_char;
-        string++;
+        string[i] = next_char;
     }
 
-    return string_copy;
+    return string;
 }
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
@@ -184,10 +178,10 @@ char* strdup (const char* string)
 {
     assert (string);
 
-    size_t string_len = strlen (string);
+    size_t full_string_len = strlen (string) + 1;
     char* new_string = NULL;
     
-    new_string = calloc (string_len, 1);
+    new_string = calloc (full_string_len, 1);
 
     if (!new_string)
     {   
@@ -195,7 +189,7 @@ char* strdup (const char* string)
         return NULL;
     }
 
-    new_string = strncpy (new_string, string, string_len);
+    new_string = strncpy (new_string, string, full_string_len);
 
     return new_string;
 }
