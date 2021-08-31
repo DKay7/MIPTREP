@@ -23,6 +23,14 @@ for the JavaScript code in this file
 var NAVTREE =
 [
   [ "Функции работы со строками из stdlib", "index.html", [
+    [ "Структуры данных", "annotated.html", [
+      [ "Структуры данных", "annotated.html", "annotated_dup" ],
+      [ "Алфавитный указатель структур данных", "classes.html", null ],
+      [ "Поля структур", "functions.html", [
+        [ "Указатель", "functions.html", null ],
+        [ "Переменные", "functions_vars.html", null ]
+      ] ]
+    ] ],
     [ "Файлы", "files.html", [
       [ "Файлы", "files.html", "files_dup" ],
       [ "Список членов всех файлов", "globals.html", [
@@ -36,7 +44,7 @@ var NAVTREE =
 
 var NAVTREEINDEX =
 [
-"files.html"
+"annotated.html"
 ];
 
 var SYNCONMSG = 'нажмите на выключить для синхронизации панелей';

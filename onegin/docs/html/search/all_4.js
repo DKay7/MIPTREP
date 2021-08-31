@@ -1,10 +1,7 @@
 var searchData=
 [
-  ['strcat_6',['strcat',['../onegin_8h.html#a519b17729ce1d5a92b6ffe800dd49b88',1,'onegin.c']]],
-  ['strchr_7',['strchr',['../onegin_8h.html#a0d562abf19efddddc396e64a459c39f6',1,'onegin.c']]],
-  ['strcpy_8',['strcpy',['../onegin_8h.html#a025ec7e4795be0c02e5e915cd4cb856b',1,'onegin.c']]],
-  ['strdup_9',['strdup',['../onegin_8h.html#a86e0df1bf9e434074f958434e0af7581',1,'onegin.c']]],
-  ['strlen_10',['strlen',['../onegin_8h.html#ab06529fec46bc0ce6b7ab4b04e4dfc93',1,'onegin.c']]],
-  ['strncat_11',['strncat',['../onegin_8h.html#a11235e9690d2b3aebb81a550d77bd284',1,'onegin.c']]],
-  ['strncpy_12',['strncpy',['../onegin_8h.html#a19f64fa2ae87dd8993a85535d3ee1de5',1,'onegin.c']]]
+  ['paritation_4',['paritation',['../onegin_8h.html#a9f8fce690798490052317c7d28c5ba22',1,'onegin.h']]],
+  ['print_5ferror_5',['print_error',['../string__utils_8h.html#abe7ee30554e731ae61a2dc6fbfcb5dab',1,'string_utils.h']]],
+  ['print_5ferror_5ffunc_6',['print_error_func',['../string__utils_8h.html#ad8965da74f980266a69d5aaa0ea35a47',1,'string_utils.c']]],
+  ['puts_7',['puts',['../string__utils_8h.html#af17f2f3fda696ddc3b7c1bac995edaf8',1,'string_utils.c']]]
 ];

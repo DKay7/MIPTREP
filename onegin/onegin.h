@@ -1,143 +1,111 @@
 /**
 * @file
-* @brief Данный файл содержит в себе прототипы функций работы со строкаи, реализованных в проекте
+* @brief Данный файл содержит в себе прототипы функций для сортировки романа в стихах "Евгений Онегин".
 */
 
 #include <stdio.h>
 
-/// Макрос для print_error_func, который автоматически подставляет
-/// Файл и строку в сообщение об ошибке
-#define print_error(failed_function, error_text) print_error_func(__FILE__, __LINE__, __FUNCTION__, failed_function, error_text)
+//flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+/** @struct string
+ *  @brief Структура для представления строки в программе.
+ */
+typedef struct string 
+{
+    size_t len;     /**< Поле string#len хранит длину строки. */
+    char* start;    /**< Поле string#start хранит указатель на начало строки. */
+} string;
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
 /**
-* @brief Функция выводит строку в stdout и добавляет символ новой строки 
+* @brief Функция qsort сортирует переданный массив.
 *   
-* @param [in] string Строка для вывода
+* @param [in] array Указатель на сортируемый массив.
+* @param [in] start Левая граница сортируемого участка.
+* @param [in] end Правая граница сортируемого участка.
+* @param [in] comp Функция для сравнения элементов массива.
 */
-int puts (const char* string);
+void qsort (void* array, int start, int end, int (*comp) (void*, void*));
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
 /**
-* @brief Функция выводит строку в stdout и добавляет символ новой строки 
-*   
-* @param [in] string Строка для вывода
-* @param [in] symbol Символ для поиска
-* @return Указатель на символ в данной строке
+* @brief Функция paritation разделяет массив вокруг опорного элемента.
+* @details Данная функция используется внутри функции @link qsort @endlink, 
+*          как часть алгоритма быстрой сортировки.
+*
+* @param [in] array Указатель на сортируемый массив.
+* @param [in] start Указатель на левую границу сортируемого участка.
+* @param [in] end Указатель на правую границу сортируемого участка.
+* @param [in] pivot Опорный элемент.
 */
-char* strchr (char* string, int symbol);
+void paritation (void* array, int* start, int* end, int pivot);
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
 /**
-* @brief Функция выводит длину строки без учета символа конца строки 
-*   
-* @param [in] string Строка для расчет длины
-* @return Длина строки
+* @brief Функция swap меняет местами два элемента.
+*
+* @param [in,out] a Указатель на первый элемент.
+* @param [in,out] b Указатель на второй элемент.
 */
-size_t strlen(char* string);
+void swap (void* a, void* b);
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
 /**
-* @brief Функция выводит длину строки без учета символа конца строки 
-*   
-* @param [in] destptr Указатель на строку назначения, куда будет скопирована строка-источник.
-* @param [in] srcptr Указатель на копируемую строку.
-* @return Указатель на строку назначения.
+* @brief Функция lexicographic_comparator используется для лексиграфического
+*        сравнения двух строк
+*
+* @param [in] string_1 Указатель на первую строку.
+* @param [in] string_2 Указатель на втору строку.
+* @return -1, если string_1 < string_2,
+*         0, если string_1 == string_2,
+*         1, если string_1 > string_2
 */
-char* strcpy (char* destptr, const char* srcptr);
+int lexicographic_comparator (void* string_1, void* string_2);
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
 /**
-* @brief Функция копирует первые num символов из строки srcptr в строку destptr 
-*   
-* @param [in] destptr Указатель на строку назначения, куда будут копироваться символы
-* @param [in] srcptr Копируемая строка
-* @param [in] num Максимальное количество копируемых символов строки
-* @return Указатель на строку назначения.
+* @brief Функция string_ctor инициализирует структуру данных @link string @endlink.                           
+*
+* @param [in] string Указатель на строку для парсинга.
+* @param [in] len Длина строки.
+* @return Указатель на структуру @link string @endlink
 */
-char* strncpy(char* destptr, const char* srcptr, size_t num);
+string* string_ctor (char* string, size_t len);
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
 /**
-* @brief Функция добавляет копию строки srcptr в конец строки destptr
-*   
-* @param [in] destptr Указатель на строку назначения, к которой добавятся символы строки srcptr.
-* @param [in] srcptr Строка, которая добавляется в конец строки destptr.
-* @return Указатель на строку назначения.
+* @brief Функция parse_one_line парсит одну строку файла.
+*
+* @param [in] line Указатель на строку для парсинга.
+* @return Указатель на структуру @link string @endlink
 */
-char* strcat(char* destptr, const char* srcptr);
+string* parse_one_line (char* line);
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
 /**
-* @brief Функция добавляет первые num символов строки srcptr к концу строки destptr
-*   
-* @param [in] destptr Указатель на строку назначения, к которой добавятся символы строки srcptr.
-* @param [in] srcptr Строка, которая добавляется в конец строки destptr.
-* @param [in] num Максимальное количество копируемых символов строки
-* @return Указатель на строку назначения.
+* @brief Функция parse_file парсит файл со строками.
+*
+* @param [in] path Указатель на строку c путем до файла, из которого будут прочитаны данные.
+* @return Указатель на массив структур @link string @endlink с 
+*         предобработанными строками из файла.
 */
-char* strncat(char* destptr, const char* srcptr, size_t num);
+string** parse_file (char* path);
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
 /**
-* @brief Функция fgets считывает символы из потока и сохраняет их в виде строки 
-*        в параметр string до тех пор пока не наступит конец строки или пока не 
-*        будет достигнут конец файла.
-*   
-* @param [in] string Указатель на строку назначения, в которую сохраняются считанные символы.
-* @param [in] num Максимальное количество символов для чтения, включая нулевой символ.
-* @param [in] filestream Указатель на объект типа FILE, который идентифицирует поток, 
-*                        из которого считываются символы.
-* @return В случае успеха, функция возвращает указатель на строку назначения. 
-*         Если конец файла был достигнут и ни один символ не был прочитан, возвращается нулевой указатель.
-*         Если происходит ошибка, возвращается нулевой указатель.
+* @brief Функция save_file парсит файл со строками.
+*
+* @param [in] array Указатель на массив структур @link string @endlink.
+* @param [in] path Указатель на строку c путем до файла, в который будут записаны данные.
 */
-char* fgets(char* string, size_t num, FILE* filestream);
+void save_to_file (string** array, char* path);
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-
-/**
-* @brief Функция strdup дублирует строку, на которую указывает аргумент str. 
-*        Память под дубликат строки выделяется с помощью функции malloc, 
-*        и по окончанию работы с дубликатом должна быть очищена с помощью функции free
-*   
-* @param [in] string Указатель на дублируемую строку
-* @return В случае успеха, функция возвращает указатель на новую строку. 
-*         NULL – в случае ошибки.
-*/
-char* strdup(const char* string);
-
-//flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-
-/**
-* @brief Функция считывает целую строку, сохраняя адрес буфера, содержащего текст, в *lineptr. 
-*   
-* @param [in] lineptr Указатель на буффер для считаваемой строки.
-* @param [in] n Указатель на размер буффера.
-* @param [in] streanm Указатель на файл для чтения
-* @return При нормальном завершении работы функция возвращают количество считанных символов
-*/
-int getline(char** lineptr, size_t* n, FILE* streanm);
-
-//flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-
-/**
-* @brief Функция выводит информацию об ошибке в stderr
-* 
-* @param[in] file Файл, в котором произошла ошибка
-* @param[in] line Строка в которой произошла ошибка
-* @param[in] current_function Имя функции, из которой была вызвана \link print_error_func \endlink
-* @param[in] failed_function Имя функции, в которой возникла ошибка
-* @param[in] error_text Текст ошибки
-* @return Указатель на символ в данной строке
-*/
-void print_error_func (const char* file, const int line, const char* current_function, 
-                       const char* failed_function, const char* error_text);

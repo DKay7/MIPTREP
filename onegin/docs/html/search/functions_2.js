@@ -1,5 +1,6 @@
 var searchData=
 [
-  ['print_5ferror_5ffunc_16',['print_error_func',['../onegin_8h.html#ad8965da74f980266a69d5aaa0ea35a47',1,'onegin.c']]],
-  ['puts_17',['puts',['../onegin_8h.html#af17f2f3fda696ddc3b7c1bac995edaf8',1,'onegin.c']]]
+  ['paritation_24',['paritation',['../onegin_8h.html#a9f8fce690798490052317c7d28c5ba22',1,'onegin.h']]],
+  ['print_5ferror_5ffunc_25',['print_error_func',['../string__utils_8h.html#ad8965da74f980266a69d5aaa0ea35a47',1,'string_utils.c']]],
+  ['puts_26',['puts',['../string__utils_8h.html#af17f2f3fda696ddc3b7c1bac995edaf8',1,'string_utils.c']]]
 ];
