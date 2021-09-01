@@ -224,7 +224,6 @@ int getline (char** lineptr, size_t* n, FILE* stream)
 
         if (next_char == EOF)
         {   
-            print_error ("getline", "EOF was reached");
             return -1;
         }
 

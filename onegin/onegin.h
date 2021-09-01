@@ -100,23 +100,24 @@ string* string_ctor (char* string, size_t len);
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
 /**
-* @brief Функция parse_one_line парсит одну строку файла.
+* @brief Функция count_lines считает количество строк в файле.
 *
-* @param [in] line Указатель на строку для парсинга.
-* @return Указатель на структуру @link string @endlink
+* @param [in] file Указатель на файл, из которого будут прочитаны данные.
+* @return Количество строк в файле
 */
-string* parse_one_line (char* line);
+unsigned count_lines (FILE* file);
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
 /**
 * @brief Функция parse_file парсит файл со строками.
 *
-* @param [in] path Указатель на строку c путем до файла, из которого будут прочитаны данные.
+* @param [in] filename Указатель на строку c путем до файла, из которого будут прочитаны данные.
+* @param [in] line_num Количество строк в файле.
 * @return Указатель на массив структур @link string @endlink с 
 *         предобработанными строками из файла.
 */
-string** parse_file (char* path);
+string** parse_file_to_array (char* filename, unsigned line_num);
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
@@ -124,8 +125,9 @@ string** parse_file (char* path);
 * @brief Функция save_file парсит файл со строками.
 *
 * @param [in] array Указатель на массив структур @link string @endlink.
-* @param [in] path Указатель на строку c путем до файла, в который будут записаны данные.
+* @param [in] filename Указатель на строку c путем до файла, в который будут записаны данные.
+* @param [in] line_num Количество строк в файле.
 */
-void save_to_file (string** array, char* path);
+void save_to_file (string** array, char* filename, unsigned line_num);
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx

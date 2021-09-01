@@ -1,5 +1,7 @@
-#include <onegin.h>
+#include "onegin.h"
+#include "string_utils/string_utils.h"
 #include <assert.h>
+#include <malloc.h>
 
 void qsort (void* array, size_t n_memb,  size_t el_size,
             int (*comparator) (const void*, const void*))
@@ -85,22 +87,123 @@ unsigned choose_pivot (size_t n_memb)
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
 int lexicographic_comparator (const void* string_1, const void* string_2)
-{
+{   
+    assert (string_1);
+    assert (string_2);
+
     string* str_1 = (string*) string_1;
     string* str_2 = (string*) string_2;
 
     unsigned minlen = (str_1->len < str_2->len)? str_1->len:str_2->len;
     unsigned i = 0;
 
-    for (i; i < minlen; i ++)
-    {
+    for (i; i < minlen; i++)
+    {   
+        if (!isalpha (str_1->start[i]) || !isalpha (str_2->start[i]))
+        {
+            continue;
+        }
+
         if (str_1->start[i] != str_2->start[i])
         {
-            break;
+            return (int) str_1->start[i] - (int) str_2->start[i];
         }
     }
+    
+    if (str_1->len == str_2->len)
+    {
+        return 0;
+    }
 
-    return (int) str_1->start[i] - (int) str_2->start[i];
+    return (str_1->len < str_2->len)? 1:-1;
+}
+
+//flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+string* string_ctor (char* str_data, size_t len)
+{   
+    assert (str_data);
+
+    string str = {str_data, len};
+
+    return &str;
+}
+
+//flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+unsigned count_lines (FILE* file)
+{   
+    assert (file);
+
+    char* linebuff = NULL;
+    size_t n = 0;
+    unsigned line_cnt = 0;
+
+    while (getline (&linebuff, &n, file) != EOF)
+    {
+        line_cnt++;
+    }
+
+    return line_cnt;
+}
+
+//flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+string** parse_file_to_array (char* filename, unsigned line_num)
+{
+    FILE* file = fopen (filename, 'r');
+
+    if (!file || ferror (file))
+    {
+        print_error ("parse_file_to_array", "Error while opening file");
+        return NULL;
+    }
+
+    string** array = (string**) calloc (line_num, sizeof (string*));
+
+    if (!array)
+    {
+        print_error ("parse_file_to_array", "Error while allocated memory");
+        return NULL;
+    }
+
+    char* linebuff = NULL;
+    size_t str_len = 0;
+    unsigned i = 0;
+
+    for (i; i < line_num; i++)
+    {   
+        getline (&linebuff, &str_len, file);
+        array[i] = string_ctor (linebuff, str_len);
+
+        linebuff = NULL;
+        str_len = 0;
+    }
+
+    fclose (file);
+
+    return array;
+}
+
+//flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+void save_to_file (string** array, char* filename, unsigned line_num)
+{
+    FILE* file = fopen (filename, 'w');
+
+    if (!file || ferror (file))
+    {
+        print_error ("parse_file_to_array", "Error while opening file");
+        return NULL;
+    }
+
+    unsigned i = 0;
+    for (i; i < line_num; i++)
+    {   
+        fputs (array[i]->start, file);
+    }
+
+    fclose (file);
 }
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
