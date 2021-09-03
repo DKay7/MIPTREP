@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['getline_23',['getline',['../string__utils_8h.html#afbe0f6088732259cab829274f9c96859',1,'string_utils.c']]]
+  ['fill_5farray_20',['fill_array',['../onegin_8h.html#a8bdc28ad56b602b0daba15ce0c230eeb',1,'onegin.c']]]
 ];

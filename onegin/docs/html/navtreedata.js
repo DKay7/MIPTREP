@@ -35,8 +35,7 @@ var NAVTREE =
       [ "Файлы", "files.html", "files_dup" ],
       [ "Список членов всех файлов", "globals.html", [
         [ "Указатель", "globals.html", null ],
-        [ "Функции", "globals_func.html", null ],
-        [ "Макросы", "globals_defs.html", null ]
+        [ "Функции", "globals_func.html", null ]
       ] ]
     ] ]
   ] ]

@@ -5,6 +5,10 @@
 
 #include <stdio.h>
 
+/// Макрос для print_error_func, который автоматически подставляет
+/// Файл и строку в сообщение об ошибке
+#define print_error(failed_function, error_text) print_error_func(__FILE__, __LINE__, __FUNCTION__, failed_function, error_text)
+
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
 /** @struct string
@@ -81,8 +85,8 @@ unsigned choose_pivot (size_t n_memb);
 * @param [in] string_1 Указатель на первую строку.
 * @param [in] string_2 Указатель на втору строку.
 * @return -1, если string_1 < string_2,
-*         0, если string_1 == string_2,
-*         1, если string_1 > string_2
+*          0, если string_1 == string_2,
+*          1, если string_1 > string_2
 */
 int lexicographic_comparator (const void* string_1, const void* string_2);
 
@@ -91,33 +95,55 @@ int lexicographic_comparator (const void* string_1, const void* string_2);
 /**
 * @brief Функция string_ctor инициализирует структуру данных @link string @endlink.                           
 *
-* @param [in] string Указатель на строку для парсинга.
+* @param [in] string Указатель на структуру @link string @endlink, которая будет заполнена данными
+* @param [in] data Указатель на строку для парсинга.
 * @param [in] len Длина строки.
-* @return Указатель на структуру @link string @endlink
 */
-string* string_ctor (char* string, size_t len);
+int string_ctor (string* string, char* data, size_t len);
+
+//flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+/**
+* @brief Функция count_symbols считает количество символов в файле.
+*
+* @param [in] buffer Указатель на буфер, из которого будут прочитаны данные.
+* @return Количество строк в файле
+*/
+int count_symbols (const char* filename);
+
+//flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+/**
+* @brief Функция read_file_to_buffer считывает файл в буфер.
+*
+* @param [in] filename Указатель на строку c путем до файла, из которого будут прочитаны данные.
+* @param [out] buffer Указатель на буфер, из которого будут прочитаны данные.
+* @param [in] num_symbols количество символов в файле.
+*/
+int read_file_to_buffer (const char* filename, char* buffer, int num_symbols);
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
 /**
 * @brief Функция count_lines считает количество строк в файле.
 *
-* @param [in] file Указатель на файл, из которого будут прочитаны данные.
+* @param [in] buffer Указатель на буффер, из которого будут прочитаны данные.
 * @return Количество строк в файле
 */
-unsigned count_lines (FILE* file);
+int count_lines (char* buffer);
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
 /**
 * @brief Функция parse_file парсит файл со строками.
 *
-* @param [in] filename Указатель на строку c путем до файла, из которого будут прочитаны данные.
+* @param [in] buffer Указатель на буфер, из которого будут прочитаны данные.
 * @param [in] line_num Количество строк в файле.
-* @return Указатель на массив структур @link string @endlink с 
-*         предобработанными строками из файла.
+* @param [in] num_symbols количество символов в файле.
+* @param [out] array Указатель на массив структур @link string @endlink с 
+*                    предобработанными строками из файла.
 */
-string** parse_file_to_array (char* filename, unsigned line_num);
+int fill_array (char* buffer, string** array, unsigned line_num, unsigned num_symbols);
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
@@ -128,6 +154,21 @@ string** parse_file_to_array (char* filename, unsigned line_num);
 * @param [in] filename Указатель на строку c путем до файла, в который будут записаны данные.
 * @param [in] line_num Количество строк в файле.
 */
-void save_to_file (string** array, char* filename, unsigned line_num);
+int save_to_file (string** array, const char* filename, unsigned line_num);
+
+//flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+/**
+* @brief Функция выводит информацию об ошибке в stderr
+* 
+* @param[in] file Файл, в котором произошла ошибка
+* @param[in] line Строка в которой произошла ошибка
+* @param[in] current_function Имя функции, из которой была вызвана \link print_error_func \endlink
+* @param[in] failed_function Имя функции, в которой возникла ошибка
+* @param[in] error_text Текст ошибки
+* @return Указатель на символ в данной строке
+*/
+void print_error_func (const char* file, const int line, const char* current_function, 
+                       const char* failed_function, const char* error_text);
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx

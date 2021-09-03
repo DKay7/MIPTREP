@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdio.h>
 #include <malloc.h>
+#include <assert.h>
 #include "string_utils.h"
 
 int puts (const char* string)
@@ -181,7 +182,7 @@ char* strdup (const char* string)
     size_t full_string_len = strlen (string) + 1;
     char* new_string = NULL;
     
-    new_string = calloc (full_string_len, 1);
+    new_string = (char*) calloc (full_string_len, 1);
 
     if (!new_string)
     {   
@@ -204,7 +205,7 @@ int getline (char** lineptr, size_t* n, FILE* stream)
 
     if (!(*lineptr) && !(*n))
     {
-        *lineptr = calloc (20, 1);
+        *lineptr = (char*) calloc (20, 1);
         *n = 20;
 
         if (!(*lineptr))
@@ -234,7 +235,7 @@ int getline (char** lineptr, size_t* n, FILE* stream)
         if (n - total_len < 2)
         {
             *n *= 2;
-            temp_buff = realloc (temp_buff, *n);
+            temp_buff = (char*) realloc (temp_buff, *n);
 
             if (!temp_buff)
             {

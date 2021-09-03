@@ -1,7 +1,7 @@
 #include "onegin.h"
-#include "string_utils/string_utils.h"
 #include <assert.h>
 #include <malloc.h>
+#include <ctype.h>
 
 void qsort (void* array, size_t n_memb,  size_t el_size,
             int (*comparator) (const void*, const void*))
@@ -31,14 +31,14 @@ unsigned paritation (void* array, size_t n_memb, size_t el_size, unsigned pivot_
     assert (array);
     assert (comparator);
 
-    if (n_memb <= 1)
-    {
-        return;
-    }
-
     void* pivot = array + pivot_index * el_size;
     unsigned i = 1;
     unsigned left = 0;
+
+    if (n_memb <= 1)
+    {
+        return left;
+    }
 
     swap (array, pivot, el_size);
     pivot = array;
@@ -120,90 +120,174 @@ int lexicographic_comparator (const void* string_1, const void* string_2)
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
-string* string_ctor (char* str_data, size_t len)
+int string_ctor (string* string, char* data, size_t len)
 {   
-    assert (str_data);
+    assert (string);
+    assert (data);
 
-    string str = {str_data, len};
+    string->start = data;
+    string->len = len;
 
-    return &str;
+    return 0;
 }
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
-unsigned count_lines (FILE* file)
-{   
-    assert (file);
-
-    char* linebuff = NULL;
-    size_t n = 0;
-    unsigned line_cnt = 0;
-
-    while (getline (&linebuff, &n, file) != EOF)
-    {
-        line_cnt++;
-    }
-
-    return line_cnt;
-}
-
-//flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-
-string** parse_file_to_array (char* filename, unsigned line_num)
+int count_symbols (const char* filename)
 {
-    FILE* file = fopen (filename, 'r');
+    FILE* file = fopen (filename, "r");
 
     if (!file || ferror (file))
     {
-        print_error ("parse_file_to_array", "Error while opening file");
-        return NULL;
+        print_error ("count_symbols", "Error while opening file");
+        return -1;
     }
 
-    string** array = (string**) calloc (line_num, sizeof (string*));
+    fseek (file, 0, SEEK_END);
+    int num_sumbols = ftell (file);
+    fseek (file, 0, SEEK_SET);
 
-    if (!array)
+    if (fclose (file) != 0)
     {
-        print_error ("parse_file_to_array", "Error while allocated memory");
-        return NULL;
+        print_error ("count_symbols", "Error while closing file");
+        return -1;
     }
-
-    char* linebuff = NULL;
-    size_t str_len = 0;
-    unsigned i = 0;
-
-    for (i; i < line_num; i++)
-    {   
-        getline (&linebuff, &str_len, file);
-        array[i] = string_ctor (linebuff, str_len);
-
-        linebuff = NULL;
-        str_len = 0;
-    }
-
-    fclose (file);
-
-    return array;
 }
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
-void save_to_file (string** array, char* filename, unsigned line_num)
-{
-    FILE* file = fopen (filename, 'w');
+int read_file_to_buffer (const char* filename, char* buffer, int num_symbols)
+{   
+    assert (num_symbols > 0);
+    assert (filename);
+    assert (buffer);
+
+    FILE* file = fopen (filename, "r");
 
     if (!file || ferror (file))
     {
-        print_error ("parse_file_to_array", "Error while opening file");
+        print_error ("read_file_to_buffer", "Error while opening file");
+        return -1;
+    }
+
+    int actual_num_symbols = fread (buffer, sizeof (char), num_symbols, file);
+
+    // TODO Андрей, а такая проверка покатит? 
+    // В смысле, я не понял, учитывает ли fread \0, потому что если я верно понял, 
+    // то count_symbols учитывает \0 в подсчете символов.
+    if (actual_num_symbols != num_symbols)
+    {
+        print_error ("read_file_to_buffer", "Error while reading file");
+        return -1;
+    }
+    
+    if (fclose (file) != 0)
+    {
+        print_error ("read_file_to_buffer", "Error while closing file");
+        return -1;
+    }
+
+    return 0;
+}
+
+//flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+int count_lines (char* buffer)
+{   
+    assert (buffer);
+
+    char c = buffer[0];
+    int num_lines = 0;
+
+    for (int i=0; (c = buffer[i]) != '\0'; i++)
+    {
+        if (c == '\n')
+        {
+            num_lines++;
+        }
+    }
+    
+    return num_lines;
+}
+
+//flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+int fill_array (char* buffer, string** array, unsigned line_num, unsigned num_symbols)
+{   
+    assert (buffer);
+    assert (array);
+
+    int line_len = 0;
+    int j = 0;
+    char* line_ptr = buffer;
+
+    for (int i = 0; i < line_num; i++)
+    {
+        while (line_ptr[j] != '\n' && line_len < num_symbols)
+        {   
+            j++;
+            line_len++;
+        }
+
+         if (line_ptr[j] == '\n')
+            line_ptr[j] = '\0';
+
+        string str;
+        string_ctor (&str, line_ptr, line_len);
+        array[i] = &str;
+
+        line_ptr += j;
+        j = 0;
+        line_len = 0;
+    }
+
+    return 0;
+}
+
+//flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+int save_to_file (string** array, const char* filename, unsigned line_num)
+{
+    FILE* file = fopen (filename, "w");
+
+    if (!file || ferror (file))
+    {
+        print_error ("save_to_file", "Error while opening file");
         return NULL;
     }
 
-    unsigned i = 0;
-    for (i; i < line_num; i++)
+    for (unsigned i = 0; i < line_num; i++)
     {   
         fputs (array[i]->start, file);
+        fputc ('\n', file);
     }
 
-    fclose (file);
+    if (fclose (file) != 0)
+    {
+        print_error ("read_file_to_buffer", "Error while closing file");
+        return -1;
+    }
+
+    return 0;
+}
+
+//flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+void print_error_func (const char* file, const int line, const char* current_function, 
+                       const char* failed_function, const char* error_text)
+{   
+    assert (file);
+    assert (line);
+    assert (current_function);
+    assert (failed_function);
+    assert (error_text);
+
+    fprintf (stderr, "File: %s\n"
+                     "Line: %d\n"
+                     "Current function: %s()\n"
+                     "Failed function: %s()\n"
+                     "Error message: %s\n",
+                    file, line, current_function, failed_function, error_text);
 }
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
