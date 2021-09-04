@@ -84,6 +84,7 @@ $(document).ready(function(){initNavTree('onegin_8h.html',''); initResizable(); 
 <div class="header">
   <div class="summary">
 <a href="#nested-classes">Структуры данных</a> &#124;
+<a href="#define-members">Макросы</a> &#124;
 <a href="#typedef-members">Определения типов</a> &#124;
 <a href="#func-members">Функции</a>  </div>
   <div class="headertitle">
@@ -91,7 +92,7 @@ $(document).ready(function(){initNavTree('onegin_8h.html',''); initResizable(); 
 </div><!--header-->
 <div class="contents">
 
-<p>Данный файл содержит в себе прототипы функций для сортировки романа в стихах "Евгений Онегин".  
+<p>Данный файл содержит в себе прототипы функций для чтения/записи романа в стихах "Евгений Онегин".  
 <a href="#details">Подробнее...</a></p>
 <div class="textblock"><code>#include &lt;stdio.h&gt;</code><br />
 </div><div class="textblock"><div id="dynsection-0" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
@@ -101,7 +102,7 @@ $(document).ready(function(){initNavTree('onegin_8h.html',''); initResizable(); 
 <div id="dynsection-0-content" class="dyncontent" style="display:none;">
 <div class="center"><img src="onegin_8h__incl.png" border="0" usemap="#onegin_8h" alt=""/></div>
 <map name="onegin_8h" id="onegin_8h">
-<area shape="rect" title="Данный файл содержит в себе прототипы функций для сортировки романа в стихах &quot;Евгений Онегин&quot;." alt="" coords="5,5,84,32"/>
+<area shape="rect" title="Данный файл содержит в себе прототипы функций для чтения/записи романа в стихах &quot;Евгений Онегин&quot;." alt="" coords="5,5,84,32"/>
 <area shape="rect" title=" " alt="" coords="11,80,78,107"/>
 </map>
 </div>
@@ -114,6 +115,15 @@ $(document).ready(function(){initNavTree('onegin_8h.html',''); initResizable(); 
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Структура для представления строки в программе.  <a href="structstring.html#details">Подробнее...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
+Макросы</h2></td></tr>
+<tr class="memitem:abe7ee30554e731ae61a2dc6fbfcb5dab"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="onegin_8h.html#abe7ee30554e731ae61a2dc6fbfcb5dab">print_error</a>(failed_function,  error_text)&#160;&#160;&#160;<a class="el" href="onegin_8h.html#ad8965da74f980266a69d5aaa0ea35a47">print_error_func</a>(__FILE__, __LINE__, __FUNCTION__, failed_function, error_text)</td></tr>
+<tr class="separator:abe7ee30554e731ae61a2dc6fbfcb5dab"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac336f62788c35718f9cdd7e6e1e67e10"><td class="memItemLeft" align="right" valign="top"><a id="ac336f62788c35718f9cdd7e6e1e67e10"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="onegin_8h.html#ac336f62788c35718f9cdd7e6e1e67e10">RED_COLOR</a>(text)&#160;&#160;&#160;&quot;\033[91m&quot; text &quot;\033[0m&quot;</td></tr>
+<tr class="memdesc:ac336f62788c35718f9cdd7e6e1e67e10"><td class="mdescLeft">&#160;</td><td class="mdescRight">Макрос для окраски текста в красный цвет <br /></td></tr>
+<tr class="separator:ac336f62788c35718f9cdd7e6e1e67e10"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
 Определения типов</h2></td></tr>
 <tr class="memitem:a63e2e3ee7db5274c6a3929edfc07c6c9"><td class="memItemLeft" align="right" valign="top"><a id="a63e2e3ee7db5274c6a3929edfc07c6c9"></a>
@@ -122,82 +132,65 @@ typedef struct <a class="el" href="structstring.html">string</a>&#160;</td><td c
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Функции</h2></td></tr>
-<tr class="memitem:a5f4e6ca8303804fb01e522d1d87b4345"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="onegin_8h.html#a5f4e6ca8303804fb01e522d1d87b4345">qsort</a> (void *array, size_t n_memb, size_t el_size, int(*comparator)(const void *, const void *))</td></tr>
-<tr class="memdesc:a5f4e6ca8303804fb01e522d1d87b4345"><td class="mdescLeft">&#160;</td><td class="mdescRight">Функция qsort сортирует переданный массив.  <a href="onegin_8h.html#a5f4e6ca8303804fb01e522d1d87b4345">Подробнее...</a><br /></td></tr>
-<tr class="separator:a5f4e6ca8303804fb01e522d1d87b4345"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af2a9aaea51d94fa0801f158fe37c0ddb"><td class="memItemLeft" align="right" valign="top">unsigned&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="onegin_8h.html#af2a9aaea51d94fa0801f158fe37c0ddb">paritation</a> (void *array, size_t n_memb, size_t el_size, unsigned pivot_index, int(*comparator)(const void *, const void *))</td></tr>
-<tr class="memdesc:af2a9aaea51d94fa0801f158fe37c0ddb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Функция paritation разделяет массив вокруг опорного элемента.  <a href="onegin_8h.html#af2a9aaea51d94fa0801f158fe37c0ddb">Подробнее...</a><br /></td></tr>
-<tr class="separator:af2a9aaea51d94fa0801f158fe37c0ddb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7195de6fefa690538c81c00f460caacb"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="onegin_8h.html#a7195de6fefa690538c81c00f460caacb">swap</a> (void *a, void *b, size_t el_size)</td></tr>
-<tr class="memdesc:a7195de6fefa690538c81c00f460caacb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Функция swap меняет местами два элемента.  <a href="onegin_8h.html#a7195de6fefa690538c81c00f460caacb">Подробнее...</a><br /></td></tr>
-<tr class="separator:a7195de6fefa690538c81c00f460caacb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9b9284a302581b3391fe239dc35aa6e8"><td class="memItemLeft" align="right" valign="top">unsigned&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="onegin_8h.html#a9b9284a302581b3391fe239dc35aa6e8">choose_pivot</a> (size_t n_memb)</td></tr>
-<tr class="memdesc:a9b9284a302581b3391fe239dc35aa6e8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Функция choose_pivot выбирает в массиве опорный элемент.  <a href="onegin_8h.html#a9b9284a302581b3391fe239dc35aa6e8">Подробнее...</a><br /></td></tr>
-<tr class="separator:a9b9284a302581b3391fe239dc35aa6e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a06fd4973a98b14d6d3d942db2b9b5cee"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="onegin_8h.html#a06fd4973a98b14d6d3d942db2b9b5cee">lexicographic_comparator</a> (const void *string_1, const void *string_2)</td></tr>
-<tr class="memdesc:a06fd4973a98b14d6d3d942db2b9b5cee"><td class="mdescLeft">&#160;</td><td class="mdescRight">Функция lexicographic_comparator используется для лексиграфического сравнения двух строк  <a href="onegin_8h.html#a06fd4973a98b14d6d3d942db2b9b5cee">Подробнее...</a><br /></td></tr>
-<tr class="separator:a06fd4973a98b14d6d3d942db2b9b5cee"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7653280fd2dbde6f3256422ebd0b9a01"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="onegin_8h.html#a7653280fd2dbde6f3256422ebd0b9a01">string_ctor</a> (<a class="el" href="structstring.html">string</a> *<a class="el" href="structstring.html">string</a>, char *data, size_t len)</td></tr>
 <tr class="memdesc:a7653280fd2dbde6f3256422ebd0b9a01"><td class="mdescLeft">&#160;</td><td class="mdescRight">Функция string_ctor инициализирует структуру данных <a class="el" href="structstring.html">string</a>. <br  />
   <a href="onegin_8h.html#a7653280fd2dbde6f3256422ebd0b9a01">Подробнее...</a><br /></td></tr>
 <tr class="separator:a7653280fd2dbde6f3256422ebd0b9a01"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0be3efc56858b88676f38a625644dd82"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="onegin_8h.html#a0be3efc56858b88676f38a625644dd82">count_symbols</a> (const char *filename)</td></tr>
-<tr class="memdesc:a0be3efc56858b88676f38a625644dd82"><td class="mdescLeft">&#160;</td><td class="mdescRight">Функция count_symbols считает количество символов в файле.  <a href="onegin_8h.html#a0be3efc56858b88676f38a625644dd82">Подробнее...</a><br /></td></tr>
-<tr class="separator:a0be3efc56858b88676f38a625644dd82"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2ddb027516988cb2d4b2c3828a5c0c47"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="onegin_8h.html#a2ddb027516988cb2d4b2c3828a5c0c47">read_file_to_buffer</a> (const char *filename, char *buffer, int num_symbols)</td></tr>
-<tr class="memdesc:a2ddb027516988cb2d4b2c3828a5c0c47"><td class="mdescLeft">&#160;</td><td class="mdescRight">Функция read_file_to_buffer считывает файл в буфер.  <a href="onegin_8h.html#a2ddb027516988cb2d4b2c3828a5c0c47">Подробнее...</a><br /></td></tr>
-<tr class="separator:a2ddb027516988cb2d4b2c3828a5c0c47"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a71b708a6005bc13d0c19079e972c9244"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="onegin_8h.html#a71b708a6005bc13d0c19079e972c9244">count_symbols</a> (FILE *file)</td></tr>
+<tr class="memdesc:a71b708a6005bc13d0c19079e972c9244"><td class="mdescLeft">&#160;</td><td class="mdescRight">Функция count_symbols считает количество символов в файле.  <a href="onegin_8h.html#a71b708a6005bc13d0c19079e972c9244">Подробнее...</a><br /></td></tr>
+<tr class="separator:a71b708a6005bc13d0c19079e972c9244"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a396d12e615014fc76676a72f16058f7a"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="onegin_8h.html#a396d12e615014fc76676a72f16058f7a">read_file_to_buffer</a> (FILE *file, char *buffer, int num_symbols)</td></tr>
+<tr class="memdesc:a396d12e615014fc76676a72f16058f7a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Функция read_file_to_buffer считывает файл в буфер.  <a href="onegin_8h.html#a396d12e615014fc76676a72f16058f7a">Подробнее...</a><br /></td></tr>
+<tr class="separator:a396d12e615014fc76676a72f16058f7a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab33aa392190cd10b77050b8ec15bc8b6"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="onegin_8h.html#ab33aa392190cd10b77050b8ec15bc8b6">count_lines</a> (char *buffer)</td></tr>
 <tr class="memdesc:ab33aa392190cd10b77050b8ec15bc8b6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Функция count_lines считает количество строк в файле.  <a href="onegin_8h.html#ab33aa392190cd10b77050b8ec15bc8b6">Подробнее...</a><br /></td></tr>
 <tr class="separator:ab33aa392190cd10b77050b8ec15bc8b6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8bdc28ad56b602b0daba15ce0c230eeb"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="onegin_8h.html#a8bdc28ad56b602b0daba15ce0c230eeb">fill_array</a> (char *buffer, <a class="el" href="structstring.html">string</a> **array, unsigned line_num, unsigned num_symbols)</td></tr>
-<tr class="memdesc:a8bdc28ad56b602b0daba15ce0c230eeb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Функция parse_file парсит файл со строками.  <a href="onegin_8h.html#a8bdc28ad56b602b0daba15ce0c230eeb">Подробнее...</a><br /></td></tr>
-<tr class="separator:a8bdc28ad56b602b0daba15ce0c230eeb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a834272d64c3ca87fb9fec50a60780a39"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="onegin_8h.html#a834272d64c3ca87fb9fec50a60780a39">save_to_file</a> (<a class="el" href="structstring.html">string</a> **array, const char *filename, unsigned line_num)</td></tr>
-<tr class="memdesc:a834272d64c3ca87fb9fec50a60780a39"><td class="mdescLeft">&#160;</td><td class="mdescRight">Функция save_file парсит файл со строками.  <a href="onegin_8h.html#a834272d64c3ca87fb9fec50a60780a39">Подробнее...</a><br /></td></tr>
-<tr class="separator:a834272d64c3ca87fb9fec50a60780a39"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae0e5eceb09983a5219359f2b0df630cb"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="onegin_8h.html#ae0e5eceb09983a5219359f2b0df630cb">fill_array</a> (char *buffer, <a class="el" href="structstring.html">string</a> **ptr_array, <a class="el" href="structstring.html">string</a> *str_array, unsigned line_num, unsigned num_symbols)</td></tr>
+<tr class="memdesc:ae0e5eceb09983a5219359f2b0df630cb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Функция fill_array заполняет массив указателей на структуры строк данными из буфера.  <a href="onegin_8h.html#ae0e5eceb09983a5219359f2b0df630cb">Подробнее...</a><br /></td></tr>
+<tr class="separator:ae0e5eceb09983a5219359f2b0df630cb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8b094882ff476979546218affb50f9a4"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="onegin_8h.html#a8b094882ff476979546218affb50f9a4">save_to_file</a> (<a class="el" href="structstring.html">string</a> **array, FILE *file, unsigned line_num)</td></tr>
+<tr class="memdesc:a8b094882ff476979546218affb50f9a4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Функция save_file сохраняет массив указателей на строки в файл.  <a href="onegin_8h.html#a8b094882ff476979546218affb50f9a4">Подробнее...</a><br /></td></tr>
+<tr class="separator:a8b094882ff476979546218affb50f9a4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7bcd3f5b05d274d9afff77c0fc6ceac2"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="onegin_8h.html#a7bcd3f5b05d274d9afff77c0fc6ceac2">save_original_to_file</a> (<a class="el" href="structstring.html">string</a> *array, FILE *file, unsigned line_num)</td></tr>
+<tr class="memdesc:a7bcd3f5b05d274d9afff77c0fc6ceac2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Функция save_original_to_file сохраняет массив строк (исходный, неизмененный массив) в файл.  <a href="onegin_8h.html#a7bcd3f5b05d274d9afff77c0fc6ceac2">Подробнее...</a><br /></td></tr>
+<tr class="separator:a7bcd3f5b05d274d9afff77c0fc6ceac2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad8965da74f980266a69d5aaa0ea35a47"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="onegin_8h.html#ad8965da74f980266a69d5aaa0ea35a47">print_error_func</a> (const char *file, const int line, const char *current_function, const char *failed_function, const char *error_text)</td></tr>
+<tr class="memdesc:ad8965da74f980266a69d5aaa0ea35a47"><td class="mdescLeft">&#160;</td><td class="mdescRight">Функция выводит информацию об ошибке в stderr.  <a href="onegin_8h.html#ad8965da74f980266a69d5aaa0ea35a47">Подробнее...</a><br /></td></tr>
+<tr class="separator:ad8965da74f980266a69d5aaa0ea35a47"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Подробное описание</h2>
-<div class="textblock"><p>Данный файл содержит в себе прототипы функций для сортировки романа в стихах "Евгений Онегин". </p>
-</div><h2 class="groupheader">Функции</h2>
-<a id="a9b9284a302581b3391fe239dc35aa6e8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9b9284a302581b3391fe239dc35aa6e8">&#9670;&nbsp;</a></span>choose_pivot()</h2>
+<div class="textblock"><p>Данный файл содержит в себе прототипы функций для чтения/записи романа в стихах "Евгений Онегин". </p>
+</div><h2 class="groupheader">Макросы</h2>
+<a id="abe7ee30554e731ae61a2dc6fbfcb5dab"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abe7ee30554e731ae61a2dc6fbfcb5dab">&#9670;&nbsp;</a></span>print_error</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">unsigned choose_pivot </td>
+          <td class="memname">#define print_error</td>
           <td>(</td>
-          <td class="paramtype">size_t&#160;</td>
-          <td class="paramname"><em>n_memb</em></td><td>)</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">failed_function, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">error_text&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td>&#160;&#160;&#160;<a class="el" href="onegin_8h.html#ad8965da74f980266a69d5aaa0ea35a47">print_error_func</a>(__FILE__, __LINE__, __FUNCTION__, failed_function, error_text)</td>
         </tr>
       </table>
 </div><div class="memdoc">
-
-<p>Функция choose_pivot выбирает в массиве опорный элемент. </p>
-<dl class="params"><dt>Аргументы</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">n_memb</td><td>Количество элементов в массиве. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Возвращает</dt><dd>Индекс опорного элемента в массиве </dd></dl>
-<div id="dynsection-1" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-1-trigger" src="closed.png" alt="+"/> Граф вызова функции:</div>
-<div id="dynsection-1-summary" class="dynsummary" style="display:block;">
-</div>
-<div id="dynsection-1-content" class="dyncontent" style="display:none;">
-<div class="center"><img src="onegin_8h_a9b9284a302581b3391fe239dc35aa6e8_icgraph.png" border="0" usemap="#onegin_8h_a9b9284a302581b3391fe239dc35aa6e8_icgraph" alt=""/></div>
-<map name="onegin_8h_a9b9284a302581b3391fe239dc35aa6e8_icgraph" id="onegin_8h_a9b9284a302581b3391fe239dc35aa6e8_icgraph">
-<area shape="rect" title="Функция choose_pivot выбирает в массиве опорный элемент." alt="" coords="108,5,216,32"/>
-<area shape="rect" href="onegin_8h.html#a5f4e6ca8303804fb01e522d1d87b4345" title="Функция qsort сортирует переданный массив." alt="" coords="5,5,60,32"/>
-</map>
-</div>
+<p>Макрос для print_error_func, который автоматически подставляет Файл и строку в сообщение об ошибке </p>
 
 </div>
 </div>
+<h2 class="groupheader">Функции</h2>
 <a id="ab33aa392190cd10b77050b8ec15bc8b6"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ab33aa392190cd10b77050b8ec15bc8b6">&#9670;&nbsp;</a></span>count_lines()</h2>
 
@@ -225,8 +218,8 @@ typedef struct <a class="el" href="structstring.html">string</a>&#160;</td><td c
 
 </div>
 </div>
-<a id="a0be3efc56858b88676f38a625644dd82"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0be3efc56858b88676f38a625644dd82">&#9670;&nbsp;</a></span>count_symbols()</h2>
+<a id="a71b708a6005bc13d0c19079e972c9244"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a71b708a6005bc13d0c19079e972c9244">&#9670;&nbsp;</a></span>count_symbols()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -234,8 +227,8 @@ typedef struct <a class="el" href="structstring.html">string</a>&#160;</td><td c
         <tr>
           <td class="memname">int count_symbols </td>
           <td>(</td>
-          <td class="paramtype">const char *&#160;</td>
-          <td class="paramname"><em>filename</em></td><td>)</td>
+          <td class="paramtype">FILE *&#160;</td>
+          <td class="paramname"><em>file</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -244,16 +237,16 @@ typedef struct <a class="el" href="structstring.html">string</a>&#160;</td><td c
 <p>Функция count_symbols считает количество символов в файле. </p>
 <dl class="params"><dt>Аргументы</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">buffer</td><td>Указатель на буфер, из которого будут прочитаны данные. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">file</td><td>Файловый дескриптов, через который будут прочитаны данные. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Возвращает</dt><dd>Количество строк в файле </dd></dl>
+<dl class="section return"><dt>Возвращает</dt><dd>Количество символов в файле </dd></dl>
 
 </div>
 </div>
-<a id="a8bdc28ad56b602b0daba15ce0c230eeb"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8bdc28ad56b602b0daba15ce0c230eeb">&#9670;&nbsp;</a></span>fill_array()</h2>
+<a id="ae0e5eceb09983a5219359f2b0df630cb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae0e5eceb09983a5219359f2b0df630cb">&#9670;&nbsp;</a></span>fill_array()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -268,7 +261,13 @@ typedef struct <a class="el" href="structstring.html">string</a>&#160;</td><td c
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype"><a class="el" href="structstring.html">string</a> **&#160;</td>
-          <td class="paramname"><em>array</em>, </td>
+          <td class="paramname"><em>ptr_array</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structstring.html">string</a> *&#160;</td>
+          <td class="paramname"><em>str_array</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -290,47 +289,66 @@ typedef struct <a class="el" href="structstring.html">string</a>&#160;</td><td c
       </table>
 </div><div class="memdoc">
 
-<p>Функция parse_file парсит файл со строками. </p>
+<p>Функция fill_array заполняет массив указателей на структуры строк данными из буфера. </p>
 <dl class="params"><dt>Аргументы</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">buffer</td><td>Указатель на буфер, из которого будут прочитаны данные. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">ptr_array</td><td>Указатель на массив указателей на структуры <a class="el" href="structstring.html">string</a>, в него будут сохранены указатели на структуры. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">str_array</td><td>Указатель на массив структур <a class="el" href="structstring.html">string</a>, в него будут сохранены сами структуры. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">line_num</td><td>Количество строк в файле. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">num_symbols</td><td>количество символов в файле. </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">array</td><td>Указатель на массив структур <a class="el" href="structstring.html">string</a> с предобработанными строками из файла. </td></tr>
   </table>
   </dd>
 </dl>
-<div id="dynsection-2" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-2-trigger" src="closed.png" alt="+"/> Граф вызовов:</div>
-<div id="dynsection-2-summary" class="dynsummary" style="display:block;">
+<div id="dynsection-1" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
+  <img id="dynsection-1-trigger" src="closed.png" alt="+"/> Граф вызовов:</div>
+<div id="dynsection-1-summary" class="dynsummary" style="display:block;">
 </div>
-<div id="dynsection-2-content" class="dyncontent" style="display:none;">
-<div class="center"><img src="onegin_8h_a8bdc28ad56b602b0daba15ce0c230eeb_cgraph.png" border="0" usemap="#onegin_8h_a8bdc28ad56b602b0daba15ce0c230eeb_cgraph" alt=""/></div>
-<map name="onegin_8h_a8bdc28ad56b602b0daba15ce0c230eeb_cgraph" id="onegin_8h_a8bdc28ad56b602b0daba15ce0c230eeb_cgraph">
-<area shape="rect" title="Функция parse_file парсит файл со строками." alt="" coords="5,5,84,32"/>
+<div id="dynsection-1-content" class="dyncontent" style="display:none;">
+<div class="center"><img src="onegin_8h_ae0e5eceb09983a5219359f2b0df630cb_cgraph.png" border="0" usemap="#onegin_8h_ae0e5eceb09983a5219359f2b0df630cb_cgraph" alt=""/></div>
+<map name="onegin_8h_ae0e5eceb09983a5219359f2b0df630cb_cgraph" id="onegin_8h_ae0e5eceb09983a5219359f2b0df630cb_cgraph">
+<area shape="rect" title="Функция fill_array заполняет массив указателей на структуры строк данными из буфера." alt="" coords="5,5,84,32"/>
 <area shape="rect" href="onegin_8h.html#a7653280fd2dbde6f3256422ebd0b9a01" title="Функция string_ctor инициализирует структуру данных string." alt="" coords="132,5,223,32"/>
 </map>
 </div>
 
 </div>
 </div>
-<a id="a06fd4973a98b14d6d3d942db2b9b5cee"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a06fd4973a98b14d6d3d942db2b9b5cee">&#9670;&nbsp;</a></span>lexicographic_comparator()</h2>
+<a id="ad8965da74f980266a69d5aaa0ea35a47"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad8965da74f980266a69d5aaa0ea35a47">&#9670;&nbsp;</a></span>print_error_func()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">int lexicographic_comparator </td>
+          <td class="memname">void print_error_func </td>
           <td>(</td>
-          <td class="paramtype">const void *&#160;</td>
-          <td class="paramname"><em>string_1</em>, </td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>file</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const void *&#160;</td>
-          <td class="paramname"><em>string_2</em>&#160;</td>
+          <td class="paramtype">const int&#160;</td>
+          <td class="paramname"><em>line</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>current_function</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>failed_function</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>error_text</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -340,170 +358,23 @@ typedef struct <a class="el" href="structstring.html">string</a>&#160;</td><td c
       </table>
 </div><div class="memdoc">
 
-<p>Функция lexicographic_comparator используется для лексиграфического сравнения двух строк </p>
+<p>Функция выводит информацию об ошибке в stderr. </p>
 <dl class="params"><dt>Аргументы</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">string_1</td><td>Указатель на первую строку. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">string_2</td><td>Указатель на втору строку. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">file</td><td>Файл, в котором произошла ошибка </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">line</td><td>Строка в которой произошла ошибка </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">current_function</td><td>Имя функции, из которой была вызвана <a class="el" href="onegin_8h.html#ad8965da74f980266a69d5aaa0ea35a47">print_error_func</a> </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">failed_function</td><td>Имя функции, в которой возникла ошибка </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">error_text</td><td>Текст ошибки </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Возвращает</dt><dd>-1, если string_1 &lt; string_2, 0, если string_1 == string_2, 1, если string_1 &gt; string_2 </dd></dl>
+<dl class="section return"><dt>Возвращает</dt><dd>Указатель на символ в данной строке </dd></dl>
 
 </div>
 </div>
-<a id="af2a9aaea51d94fa0801f158fe37c0ddb"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af2a9aaea51d94fa0801f158fe37c0ddb">&#9670;&nbsp;</a></span>paritation()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">unsigned paritation </td>
-          <td>(</td>
-          <td class="paramtype">void *&#160;</td>
-          <td class="paramname"><em>array</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">size_t&#160;</td>
-          <td class="paramname"><em>n_memb</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">size_t&#160;</td>
-          <td class="paramname"><em>el_size</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">unsigned&#160;</td>
-          <td class="paramname"><em>pivot_index</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int(*)(const void *, const void *)&#160;</td>
-          <td class="paramname"><em>comparator</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Функция paritation разделяет массив вокруг опорного элемента. </p>
-<p>Данная функция используется внутри функции <a class="el" href="onegin_8h.html#a5f4e6ca8303804fb01e522d1d87b4345">qsort</a>, как часть алгоритма быстрой сортировки.</p>
-<dl class="params"><dt>Аргументы</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in,out]</td><td class="paramname">array</td><td>Указатель на массив указателей для сортировки. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">n_memb</td><td>Количество элементов в массиве. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">el_size</td><td>Размер одного элемента в байтах. </td></tr>
-    <tr><td class="paramdir">[in,out]</td><td class="paramname">left</td><td>Указатель на левую границу сортируемого участка (индекс элемента массива). </td></tr>
-    <tr><td class="paramdir">[in,out]</td><td class="paramname">right</td><td>Указатель на правую границу сортируемого участка (индекс элемента массива). </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">pivot_index</td><td>Индекс опорного элемента. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">comparator</td><td>Указатель на функцию для сравнения элементов массива.</td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Возвращает</dt><dd>Возвращает индекс последнего элемента левой части массива. </dd></dl>
-<div id="dynsection-3" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-3-trigger" src="closed.png" alt="+"/> Граф вызовов:</div>
-<div id="dynsection-3-summary" class="dynsummary" style="display:block;">
-</div>
-<div id="dynsection-3-content" class="dyncontent" style="display:none;">
-<div class="center"><img src="onegin_8h_af2a9aaea51d94fa0801f158fe37c0ddb_cgraph.png" border="0" usemap="#onegin_8h_af2a9aaea51d94fa0801f158fe37c0ddb_cgraph" alt=""/></div>
-<map name="onegin_8h_af2a9aaea51d94fa0801f158fe37c0ddb_cgraph" id="onegin_8h_af2a9aaea51d94fa0801f158fe37c0ddb_cgraph">
-<area shape="rect" title="Функция paritation разделяет массив вокруг опорного элемента." alt="" coords="5,5,91,32"/>
-<area shape="rect" href="onegin_8h.html#a7195de6fefa690538c81c00f460caacb" title="Функция swap меняет местами два элемента." alt="" coords="139,5,195,32"/>
-</map>
-</div>
-<div id="dynsection-4" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-4-trigger" src="closed.png" alt="+"/> Граф вызова функции:</div>
-<div id="dynsection-4-summary" class="dynsummary" style="display:block;">
-</div>
-<div id="dynsection-4-content" class="dyncontent" style="display:none;">
-<div class="center"><img src="onegin_8h_af2a9aaea51d94fa0801f158fe37c0ddb_icgraph.png" border="0" usemap="#onegin_8h_af2a9aaea51d94fa0801f158fe37c0ddb_icgraph" alt=""/></div>
-<map name="onegin_8h_af2a9aaea51d94fa0801f158fe37c0ddb_icgraph" id="onegin_8h_af2a9aaea51d94fa0801f158fe37c0ddb_icgraph">
-<area shape="rect" title="Функция paritation разделяет массив вокруг опорного элемента." alt="" coords="108,5,193,32"/>
-<area shape="rect" href="onegin_8h.html#a5f4e6ca8303804fb01e522d1d87b4345" title="Функция qsort сортирует переданный массив." alt="" coords="5,5,60,32"/>
-</map>
-</div>
-
-</div>
-</div>
-<a id="a5f4e6ca8303804fb01e522d1d87b4345"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5f4e6ca8303804fb01e522d1d87b4345">&#9670;&nbsp;</a></span>qsort()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void qsort </td>
-          <td>(</td>
-          <td class="paramtype">void *&#160;</td>
-          <td class="paramname"><em>array</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">size_t&#160;</td>
-          <td class="paramname"><em>n_memb</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">size_t&#160;</td>
-          <td class="paramname"><em>el_size</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int(*)(const void *, const void *)&#160;</td>
-          <td class="paramname"><em>comparator</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Функция qsort сортирует переданный массив. </p>
-<dl class="params"><dt>Аргументы</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">array</td><td>Указатель на массив указателей для сортировки. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">n_memb</td><td>Количество элементов в массиве. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">el_size</td><td>Размер одного элемента в байтах. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">start</td><td>Левая граница сортируемого участка (индекс элемента массива). </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">end</td><td>Правая граница сортируемого участка (индекс элемента массива). </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">comparator</td><td>Указатель на функцию для сравнения элементов массива. </td></tr>
-  </table>
-  </dd>
-</dl>
-<div id="dynsection-5" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-5-trigger" src="closed.png" alt="+"/> Граф вызовов:</div>
-<div id="dynsection-5-summary" class="dynsummary" style="display:block;">
-</div>
-<div id="dynsection-5-content" class="dyncontent" style="display:none;">
-<div class="center"><img src="onegin_8h_a5f4e6ca8303804fb01e522d1d87b4345_cgraph.png" border="0" usemap="#onegin_8h_a5f4e6ca8303804fb01e522d1d87b4345_cgraph" alt=""/></div>
-<map name="onegin_8h_a5f4e6ca8303804fb01e522d1d87b4345_cgraph" id="onegin_8h_a5f4e6ca8303804fb01e522d1d87b4345_cgraph">
-<area shape="rect" title="Функция qsort сортирует переданный массив." alt="" coords="5,31,60,57"/>
-<area shape="rect" href="onegin_8h.html#a9b9284a302581b3391fe239dc35aa6e8" title="Функция choose_pivot выбирает в массиве опорный элемент." alt="" coords="108,5,216,32"/>
-<area shape="rect" href="onegin_8h.html#af2a9aaea51d94fa0801f158fe37c0ddb" title="Функция paritation разделяет массив вокруг опорного элемента." alt="" coords="119,56,205,83"/>
-<area shape="rect" href="onegin_8h.html#a7195de6fefa690538c81c00f460caacb" title="Функция swap меняет местами два элемента." alt="" coords="264,56,320,83"/>
-</map>
-</div>
-
-</div>
-</div>
-<a id="a2ddb027516988cb2d4b2c3828a5c0c47"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2ddb027516988cb2d4b2c3828a5c0c47">&#9670;&nbsp;</a></span>read_file_to_buffer()</h2>
+<a id="a396d12e615014fc76676a72f16058f7a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a396d12e615014fc76676a72f16058f7a">&#9670;&nbsp;</a></span>read_file_to_buffer()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -511,8 +382,8 @@ typedef struct <a class="el" href="structstring.html">string</a>&#160;</td><td c
         <tr>
           <td class="memname">int read_file_to_buffer </td>
           <td>(</td>
-          <td class="paramtype">const char *&#160;</td>
-          <td class="paramname"><em>filename</em>, </td>
+          <td class="paramtype">FILE *&#160;</td>
+          <td class="paramname"><em>file</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -537,8 +408,8 @@ typedef struct <a class="el" href="structstring.html">string</a>&#160;</td><td c
 <p>Функция read_file_to_buffer считывает файл в буфер. </p>
 <dl class="params"><dt>Аргументы</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">filename</td><td>Указатель на строку c путем до файла, из которого будут прочитаны данные. </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">buffer</td><td>Указатель на буфер, из которого будут прочитаны данные. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">file</td><td>Файловый дескриптов, через который будут прочитаны данные. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">buffer</td><td>Указатель на буфер, в который будут сохранены данные. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">num_symbols</td><td>количество символов в файле. </td></tr>
   </table>
   </dd>
@@ -546,23 +417,23 @@ typedef struct <a class="el" href="structstring.html">string</a>&#160;</td><td c
 
 </div>
 </div>
-<a id="a834272d64c3ca87fb9fec50a60780a39"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a834272d64c3ca87fb9fec50a60780a39">&#9670;&nbsp;</a></span>save_to_file()</h2>
+<a id="a7bcd3f5b05d274d9afff77c0fc6ceac2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7bcd3f5b05d274d9afff77c0fc6ceac2">&#9670;&nbsp;</a></span>save_original_to_file()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">int save_to_file </td>
+          <td class="memname">int save_original_to_file </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="structstring.html">string</a> **&#160;</td>
+          <td class="paramtype"><a class="el" href="structstring.html">string</a> *&#160;</td>
           <td class="paramname"><em>array</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const char *&#160;</td>
-          <td class="paramname"><em>filename</em>, </td>
+          <td class="paramtype">FILE *&#160;</td>
+          <td class="paramname"><em>file</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -578,11 +449,55 @@ typedef struct <a class="el" href="structstring.html">string</a>&#160;</td><td c
       </table>
 </div><div class="memdoc">
 
-<p>Функция save_file парсит файл со строками. </p>
+<p>Функция save_original_to_file сохраняет массив строк (исходный, неизмененный массив) в файл. </p>
 <dl class="params"><dt>Аргументы</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">array</td><td>Указатель на массив структур <a class="el" href="structstring.html">string</a>. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">filename</td><td>Указатель на строку c путем до файла, в который будут записаны данные. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">file</td><td>Файловый дескриптоп, через который будут записаны данные. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">line_num</td><td>Количество строк в файле. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a8b094882ff476979546218affb50f9a4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8b094882ff476979546218affb50f9a4">&#9670;&nbsp;</a></span>save_to_file()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int save_to_file </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structstring.html">string</a> **&#160;</td>
+          <td class="paramname"><em>array</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">FILE *&#160;</td>
+          <td class="paramname"><em>file</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">unsigned&#160;</td>
+          <td class="paramname"><em>line_num</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Функция save_file сохраняет массив указателей на строки в файл. </p>
+<dl class="params"><dt>Аргументы</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">array</td><td>Указатель на массив указателей на структуры <a class="el" href="structstring.html">string</a>. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">file</td><td>Файловый дескриптоп, через который будут записаны данные. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">line_num</td><td>Количество строк в файле. </td></tr>
   </table>
   </dd>
@@ -626,77 +541,21 @@ typedef struct <a class="el" href="structstring.html">string</a>&#160;</td><td c
  </p>
 <dl class="params"><dt>Аргументы</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">string</td><td>Указатель на структуру <a class="el" href="structstring.html">string</a>, которая будет заполнена данными </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">data</td><td>Указатель на строку для парсинга. </td></tr>
+    <tr><td class="paramdir">[in,out]</td><td class="paramname">string</td><td>Указатель на структуру <a class="el" href="structstring.html">string</a>, которая будет заполнена данными. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">data</td><td>Указатель на начало строки для сохранения в структуру. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">len</td><td>Длина строки. </td></tr>
   </table>
   </dd>
 </dl>
-<div id="dynsection-6" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-6-trigger" src="closed.png" alt="+"/> Граф вызова функции:</div>
-<div id="dynsection-6-summary" class="dynsummary" style="display:block;">
+<div id="dynsection-2" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
+  <img id="dynsection-2-trigger" src="closed.png" alt="+"/> Граф вызова функции:</div>
+<div id="dynsection-2-summary" class="dynsummary" style="display:block;">
 </div>
-<div id="dynsection-6-content" class="dyncontent" style="display:none;">
+<div id="dynsection-2-content" class="dyncontent" style="display:none;">
 <div class="center"><img src="onegin_8h_a7653280fd2dbde6f3256422ebd0b9a01_icgraph.png" border="0" usemap="#onegin_8h_a7653280fd2dbde6f3256422ebd0b9a01_icgraph" alt=""/></div>
 <map name="onegin_8h_a7653280fd2dbde6f3256422ebd0b9a01_icgraph" id="onegin_8h_a7653280fd2dbde6f3256422ebd0b9a01_icgraph">
 <area shape="rect" title="Функция string_ctor инициализирует структуру данных string." alt="" coords="132,5,223,32"/>
-<area shape="rect" href="onegin_8h.html#a8bdc28ad56b602b0daba15ce0c230eeb" title="Функция parse_file парсит файл со строками." alt="" coords="5,5,84,32"/>
-</map>
-</div>
-
-</div>
-</div>
-<a id="a7195de6fefa690538c81c00f460caacb"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7195de6fefa690538c81c00f460caacb">&#9670;&nbsp;</a></span>swap()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void swap </td>
-          <td>(</td>
-          <td class="paramtype">void *&#160;</td>
-          <td class="paramname"><em>a</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">void *&#160;</td>
-          <td class="paramname"><em>b</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">size_t&#160;</td>
-          <td class="paramname"><em>el_size</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Функция swap меняет местами два элемента. </p>
-<dl class="params"><dt>Аргументы</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in,out]</td><td class="paramname">a</td><td>Указатель на первый элемент. </td></tr>
-    <tr><td class="paramdir">[in,out]</td><td class="paramname">b</td><td>Указатель на второй элемент. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">el_size</td><td>Размер одного элемента в байтах. </td></tr>
-  </table>
-  </dd>
-</dl>
-<div id="dynsection-7" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-7-trigger" src="closed.png" alt="+"/> Граф вызова функции:</div>
-<div id="dynsection-7-summary" class="dynsummary" style="display:block;">
-</div>
-<div id="dynsection-7-content" class="dyncontent" style="display:none;">
-<div class="center"><img src="onegin_8h_a7195de6fefa690538c81c00f460caacb_icgraph.png" border="0" usemap="#onegin_8h_a7195de6fefa690538c81c00f460caacb_icgraph" alt=""/></div>
-<map name="onegin_8h_a7195de6fefa690538c81c00f460caacb_icgraph" id="onegin_8h_a7195de6fefa690538c81c00f460caacb_icgraph">
-<area shape="rect" title="Функция swap меняет местами два элемента." alt="" coords="241,5,297,32"/>
-<area shape="rect" href="onegin_8h.html#af2a9aaea51d94fa0801f158fe37c0ddb" title="Функция paritation разделяет массив вокруг опорного элемента." alt="" coords="108,5,193,32"/>
-<area shape="rect" href="onegin_8h.html#a5f4e6ca8303804fb01e522d1d87b4345" title="Функция qsort сортирует переданный массив." alt="" coords="5,5,60,32"/>
+<area shape="rect" href="onegin_8h.html#ae0e5eceb09983a5219359f2b0df630cb" title="Функция fill_array заполняет массив указателей на структуры строк данными из буфера." alt="" coords="5,5,84,32"/>
 </map>
 </div>
 
@@ -708,7 +567,7 @@ typedef struct <a class="el" href="structstring.html">string</a>&#160;</td><td c
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="onegin_8h.html">onegin.h</a></li>
-    <li class="footer">Документация по Функции работы со строками из stdlib. Последние изменения: Сб 4 Сен 2021 02:42:06. Создано системой
+    <li class="footer">Документация по Функции работы со строками из stdlib. Последние изменения: Сб 4 Сен 2021 23:30:08. Создано системой
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

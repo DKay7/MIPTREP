@@ -109,7 +109,6 @@ int lexicographic_comparator (const void* string_1, const void* string_2)
     string* str_1 = *((string**) string_1);
     string* str_2 = *((string**) string_2);
 
-
     unsigned i = 0;
     unsigned j = 0;
 

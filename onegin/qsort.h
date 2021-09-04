@@ -94,13 +94,13 @@ int lexicographic_comparator (const void* string_1, const void* string_2);
 
 /**
 * @brief Функция reversed_lexicographic_comparator используется для обратного
-*        лексиграфического сравнения двух строк
+*        лексиграфического сравнения двух строк (с конца строк)
 *
 * @param [in] string_1 Указатель на первую строку.
 * @param [in] string_2 Указатель на втору строку.
-* @return -1, если string_1 > string_2,
+* @return -1, если string_1 < string_2,
 *          0, если string_1 == string_2,
-*          1, если string_1 < string_2
+*          1, если string_1 > string_2
 */
 int reversed_lexicographic_comparator (const void* string_1, const void* string_2);
 

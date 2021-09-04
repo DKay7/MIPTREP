@@ -74,7 +74,8 @@ int fill_array (char* buffer, string** ptr_array, string* str_array,
     assert (buffer);
     assert (ptr_array);
     assert (str_array);
-
+    assert (num_symbols > 0);
+    
     int line_len = 0;
     int j = 0;
     char* line_ptr = buffer;
