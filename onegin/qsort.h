@@ -73,10 +73,9 @@ unsigned choose_pivot (size_t n_memb);
 *          0, если a == b,
 *          1, если a > b
 */
-
 int compare_letters (char a, char b);
 
-// //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+//flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
 /**
 * @brief Функция lexicographic_comparator используется для лексиграфического

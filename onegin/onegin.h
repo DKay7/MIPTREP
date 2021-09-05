@@ -12,6 +12,30 @@
 /// Макрос для окраски текста в красный цвет
 #define RED_COLOR(text) "\033[91m" text "\033[0m"
 
+/// Макрос для закрытия файла
+#define CLOSE_FILE(file, func_name, ret)  \
+            if (fclose (file) != 0) \
+            { \
+                print_error ((func_name), "Error while closing " #file); \
+                return ret; \
+            }
+
+/// Макрос для проверки файла
+#define CHECK_FILE_OPENED(file, func_name, ret)  \
+            if (!(file) || ferror (file)) \
+            { \
+                print_error ((func_name), "Error while opening " #file); \
+                return ret; \
+            }
+
+/// Макрос для проверки указателя
+#define CHECK_POINTER(ptr, func_name, ret)  \
+            if (!(ptr)) \
+            { \
+                print_error ((func_name), "Error while allocating memory for " #ptr); \
+                return ret; \
+            }
+
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
 /** @struct string
@@ -53,7 +77,7 @@ int count_symbols (FILE* file);
 * @param [out] buffer Указатель на буфер, в который будут сохранены данные.
 * @param [in] num_symbols количество символов в файле.
 */
-int read_file_to_buffer (FILE* file, char* buffer, int num_symbols);
+char* read_file_to_buffer (FILE* file, int num_symbols);
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 

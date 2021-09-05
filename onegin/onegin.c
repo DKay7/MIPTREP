@@ -29,21 +29,24 @@ int count_symbols (FILE* file)
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
-int read_file_to_buffer (FILE* file, char* buffer, int num_symbols)
+char* read_file_to_buffer (FILE* file, int num_symbols)
 {   
     assert (num_symbols > 0);
     assert (file);
-    assert (buffer);
 
-    int actual_num_symbols = fread (buffer, sizeof (char), num_symbols, file);
+    char* file_buffer = (char*) calloc (num_symbols + 1, sizeof (char));
+    
+    CHECK_POINTER (file_buffer, "read_file_to_buffer", NULL);
+
+    int actual_num_symbols = fread (file_buffer, sizeof (char), num_symbols, file);
 
     if (actual_num_symbols != num_symbols)
     {
         print_error ("read_file_to_buffer", "Error while reading file");
-        return -1;
+        return NULL;
     }
 
-    return 0;
+    return file_buffer;
 }
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
@@ -75,7 +78,7 @@ int fill_array (char* buffer, string** ptr_array, string* str_array,
     assert (ptr_array);
     assert (str_array);
     assert (num_symbols > 0);
-    
+
     int line_len = 0;
     int j = 0;
     char* line_ptr = buffer;

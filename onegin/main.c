@@ -1,9 +1,13 @@
 #include "onegin.h"
 #include "qsort.h"
 #include <malloc.h>
+#include <locale.h>
 
 int main (int argc, char* argv[])
 {   
+    // setting 8-bit iso locale to working correctly with cyrillic characters
+    setlocale (LC_CTYPE, "ru_RU.iso88595");
+
     const char* sort_filepath = "hamlet.txt";
     const char* save_filepath = "hamlet_sorted.txt";
 
@@ -16,50 +20,19 @@ int main (int argc, char* argv[])
     FILE* sort_file = fopen (sort_filepath, "r");
     FILE* save_file = fopen (save_filepath, "w");
 
-    if (!sort_file || ferror (sort_file))
-    {
-        print_error ("main", "Error while opening file to sort");
-        return -1;
-    }
-
-    if (!save_file || ferror (save_file))
-    {
-        print_error ("main", "Error while opening file to save");
-        return -1;
-    }
+    CHECK_FILE_OPENED (sort_file, "main", -1);
+    CHECK_FILE_OPENED (save_file, "main", -1);
 
     int num_symbols = count_symbols (sort_file);
-    char* file_buffer = (char*) calloc (num_symbols + 1, sizeof (char));
-
-    if (!file_buffer)
-    {
-        print_error ("main", "Error while allocating memory for file buffer");
-        return -1;
-    }
-
-    read_file_to_buffer (sort_file, file_buffer, num_symbols);
-
-    if (fclose (sort_file) != 0)
-    {
-        print_error ("main", "Error while closing file to sort");
-        return -1;
-    }
+    char* file_buffer = read_file_to_buffer (sort_file, num_symbols);
+    CLOSE_FILE (sort_file, "main", -1);
 
     int num_lines = count_lines (file_buffer);
     string** ptr_array = (string**) calloc (num_lines, sizeof (string*));
     string* str_array = (string*) calloc (num_lines, sizeof (string));
 
-    if (!ptr_array)
-    {
-        print_error ("main", "Error while allocating memory for string's-pointers array");
-        return -1;
-    }
-
-    if (!str_array)
-    {
-        print_error ("main", "Error while allocating memory for strings array");
-        return -1;
-    }
+    CHECK_POINTER (ptr_array, "main", -1);
+    CHECK_POINTER (str_array, "main", -1);
     
     fill_array (file_buffer, ptr_array, str_array, num_lines, num_symbols);
 
@@ -71,11 +44,6 @@ int main (int argc, char* argv[])
 
     save_original_to_file (str_array, save_file, num_lines);
 
-    if (fclose (save_file) != 0)
-    {
-        print_error ("main", "Error while closing file to save");
-        return -1;
-    }
-
+    CLOSE_FILE (save_file, "main", -1);
     return 0;
 }
