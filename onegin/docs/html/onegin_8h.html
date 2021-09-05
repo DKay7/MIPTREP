@@ -92,7 +92,7 @@ $(document).ready(function(){initNavTree('onegin_8h.html',''); initResizable(); 
 </div><!--header-->
 <div class="contents">
 
-<p>Данный файл содержит в себе прототипы функций для чтения/записи романа в стихах "Евгений Онегин".  
+<p>Данный файл содержит в себе прототипы функций для чтения/записи романа в стихах "Евгений Онегин" и трагедии "Гамлет".  
 <a href="#details">Подробнее...</a></p>
 <div class="textblock"><code>#include &lt;stdio.h&gt;</code><br />
 </div><div class="textblock"><div id="dynsection-0" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
@@ -102,7 +102,7 @@ $(document).ready(function(){initNavTree('onegin_8h.html',''); initResizable(); 
 <div id="dynsection-0-content" class="dyncontent" style="display:none;">
 <div class="center"><img src="onegin_8h__incl.png" border="0" usemap="#onegin_8h" alt=""/></div>
 <map name="onegin_8h" id="onegin_8h">
-<area shape="rect" title="Данный файл содержит в себе прототипы функций для чтения/записи романа в стихах &quot;Евгений Онегин&quot;." alt="" coords="5,5,84,32"/>
+<area shape="rect" title="Данный файл содержит в себе прототипы функций для чтения/записи романа в стихах &quot;Евгений Онегин&quot; и тр..." alt="" coords="5,5,84,32"/>
 <area shape="rect" title=" " alt="" coords="11,80,78,107"/>
 </map>
 </div>
@@ -123,6 +123,15 @@ $(document).ready(function(){initNavTree('onegin_8h.html',''); initResizable(); 
 #define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="onegin_8h.html#ac336f62788c35718f9cdd7e6e1e67e10">RED_COLOR</a>(text)&#160;&#160;&#160;&quot;\033[91m&quot; text &quot;\033[0m&quot;</td></tr>
 <tr class="memdesc:ac336f62788c35718f9cdd7e6e1e67e10"><td class="mdescLeft">&#160;</td><td class="mdescRight">Макрос для окраски текста в красный цвет <br /></td></tr>
 <tr class="separator:ac336f62788c35718f9cdd7e6e1e67e10"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac17af23ede1994a24ecbdcdb6bedfd67"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="onegin_8h.html#ac17af23ede1994a24ecbdcdb6bedfd67">CLOSE_FILE</a>(file,  func_name,  ret)</td></tr>
+<tr class="memdesc:ac17af23ede1994a24ecbdcdb6bedfd67"><td class="mdescLeft">&#160;</td><td class="mdescRight">Макрос для закрытия файла  <a href="onegin_8h.html#ac17af23ede1994a24ecbdcdb6bedfd67">Подробнее...</a><br /></td></tr>
+<tr class="separator:ac17af23ede1994a24ecbdcdb6bedfd67"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a66c99051274376cf13e0cb506525188b"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="onegin_8h.html#a66c99051274376cf13e0cb506525188b">CHECK_FILE_OPENED</a>(file,  func_name,  ret)</td></tr>
+<tr class="memdesc:a66c99051274376cf13e0cb506525188b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Макрос для проверки файла  <a href="onegin_8h.html#a66c99051274376cf13e0cb506525188b">Подробнее...</a><br /></td></tr>
+<tr class="separator:a66c99051274376cf13e0cb506525188b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac0bb0dd50c996581ae45b29652a8d12d"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="onegin_8h.html#ac0bb0dd50c996581ae45b29652a8d12d">CHECK_POINTER</a>(ptr,  func_name,  ret)</td></tr>
+<tr class="memdesc:ac0bb0dd50c996581ae45b29652a8d12d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Макрос для проверки указателя  <a href="onegin_8h.html#ac0bb0dd50c996581ae45b29652a8d12d">Подробнее...</a><br /></td></tr>
+<tr class="separator:ac0bb0dd50c996581ae45b29652a8d12d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
 Определения типов</h2></td></tr>
@@ -139,9 +148,9 @@ typedef struct <a class="el" href="structstring.html">string</a>&#160;</td><td c
 <tr class="memitem:a71b708a6005bc13d0c19079e972c9244"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="onegin_8h.html#a71b708a6005bc13d0c19079e972c9244">count_symbols</a> (FILE *file)</td></tr>
 <tr class="memdesc:a71b708a6005bc13d0c19079e972c9244"><td class="mdescLeft">&#160;</td><td class="mdescRight">Функция count_symbols считает количество символов в файле.  <a href="onegin_8h.html#a71b708a6005bc13d0c19079e972c9244">Подробнее...</a><br /></td></tr>
 <tr class="separator:a71b708a6005bc13d0c19079e972c9244"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a396d12e615014fc76676a72f16058f7a"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="onegin_8h.html#a396d12e615014fc76676a72f16058f7a">read_file_to_buffer</a> (FILE *file, char *buffer, int num_symbols)</td></tr>
-<tr class="memdesc:a396d12e615014fc76676a72f16058f7a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Функция read_file_to_buffer считывает файл в буфер.  <a href="onegin_8h.html#a396d12e615014fc76676a72f16058f7a">Подробнее...</a><br /></td></tr>
-<tr class="separator:a396d12e615014fc76676a72f16058f7a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a43d4c142ddb427a3faa601fbf2a1d8a9"><td class="memItemLeft" align="right" valign="top">char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="onegin_8h.html#a43d4c142ddb427a3faa601fbf2a1d8a9">read_file_to_buffer</a> (FILE *file, int num_symbols)</td></tr>
+<tr class="memdesc:a43d4c142ddb427a3faa601fbf2a1d8a9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Функция read_file_to_buffer считывает файл в буфер.  <a href="onegin_8h.html#a43d4c142ddb427a3faa601fbf2a1d8a9">Подробнее...</a><br /></td></tr>
+<tr class="separator:a43d4c142ddb427a3faa601fbf2a1d8a9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab33aa392190cd10b77050b8ec15bc8b6"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="onegin_8h.html#ab33aa392190cd10b77050b8ec15bc8b6">count_lines</a> (char *buffer)</td></tr>
 <tr class="memdesc:ab33aa392190cd10b77050b8ec15bc8b6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Функция count_lines считает количество строк в файле.  <a href="onegin_8h.html#ab33aa392190cd10b77050b8ec15bc8b6">Подробнее...</a><br /></td></tr>
 <tr class="separator:ab33aa392190cd10b77050b8ec15bc8b6"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -159,8 +168,132 @@ typedef struct <a class="el" href="structstring.html">string</a>&#160;</td><td c
 <tr class="separator:ad8965da74f980266a69d5aaa0ea35a47"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Подробное описание</h2>
-<div class="textblock"><p>Данный файл содержит в себе прототипы функций для чтения/записи романа в стихах "Евгений Онегин". </p>
+<div class="textblock"><p>Данный файл содержит в себе прототипы функций для чтения/записи романа в стихах "Евгений Онегин" и трагедии "Гамлет". </p>
+<dl class="section note"><dt>Заметки</dt><dd>Если файл с произведением для сортировки содержит кириллические символы, то он обязательно должен быть в кодироке iso88595. В противном случае, не гарантируется надлежащее сравнение символов файла. Если же файл содержит только символы латиницы, он может быть в любой 8-битной кодировке. </dd></dl>
 </div><h2 class="groupheader">Макросы</h2>
+<a id="a66c99051274376cf13e0cb506525188b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a66c99051274376cf13e0cb506525188b">&#9670;&nbsp;</a></span>CHECK_FILE_OPENED</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define CHECK_FILE_OPENED</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">file, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">func_name, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">ret&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Макроопределение:</b><div class="fragment"><div class="line">            <span class="keywordflow">if</span> (!(file) || ferror (file)) \</div>
+<div class="line">            { \</div>
+<div class="line">                print_error ((func_name), <span class="stringliteral">&quot;Error while opening &quot;</span> #file); \</div>
+<div class="line">                return ret; \</div>
+<div class="line">            }</div>
+</div><!-- fragment -->
+<p>Макрос для проверки файла </p>
+
+</div>
+</div>
+<a id="ac0bb0dd50c996581ae45b29652a8d12d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac0bb0dd50c996581ae45b29652a8d12d">&#9670;&nbsp;</a></span>CHECK_POINTER</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define CHECK_POINTER</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">ptr, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">func_name, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">ret&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Макроопределение:</b><div class="fragment"><div class="line">            <span class="keywordflow">if</span> (!(ptr)) \</div>
+<div class="line">            { \</div>
+<div class="line">                print_error ((func_name), <span class="stringliteral">&quot;Error while allocating memory for &quot;</span> #ptr); \</div>
+<div class="line">                return ret; \</div>
+<div class="line">            }</div>
+</div><!-- fragment -->
+<p>Макрос для проверки указателя </p>
+
+</div>
+</div>
+<a id="ac17af23ede1994a24ecbdcdb6bedfd67"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac17af23ede1994a24ecbdcdb6bedfd67">&#9670;&nbsp;</a></span>CLOSE_FILE</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define CLOSE_FILE</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">file, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">func_name, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">ret&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Макроопределение:</b><div class="fragment"><div class="line">            <span class="keywordflow">if</span> (fclose (file) != 0) \</div>
+<div class="line">            { \</div>
+<div class="line">                print_error ((func_name), <span class="stringliteral">&quot;Error while closing &quot;</span> #file); \</div>
+<div class="line">                return ret; \</div>
+<div class="line">            }</div>
+</div><!-- fragment -->
+<p>Макрос для закрытия файла </p>
+
+</div>
+</div>
 <a id="abe7ee30554e731ae61a2dc6fbfcb5dab"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#abe7ee30554e731ae61a2dc6fbfcb5dab">&#9670;&nbsp;</a></span>print_error</h2>
 
@@ -373,23 +506,17 @@ typedef struct <a class="el" href="structstring.html">string</a>&#160;</td><td c
 
 </div>
 </div>
-<a id="a396d12e615014fc76676a72f16058f7a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a396d12e615014fc76676a72f16058f7a">&#9670;&nbsp;</a></span>read_file_to_buffer()</h2>
+<a id="a43d4c142ddb427a3faa601fbf2a1d8a9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a43d4c142ddb427a3faa601fbf2a1d8a9">&#9670;&nbsp;</a></span>read_file_to_buffer()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">int read_file_to_buffer </td>
+          <td class="memname">char* read_file_to_buffer </td>
           <td>(</td>
           <td class="paramtype">FILE *&#160;</td>
           <td class="paramname"><em>file</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">char *&#160;</td>
-          <td class="paramname"><em>buffer</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -410,10 +537,11 @@ typedef struct <a class="el" href="structstring.html">string</a>&#160;</td><td c
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">file</td><td>Файловый дескриптов, через который будут прочитаны данные. </td></tr>
     <tr><td class="paramdir">[out]</td><td class="paramname">buffer</td><td>Указатель на буфер, в который будут сохранены данные. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">num_symbols</td><td>количество символов в файле. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">num_symbols</td><td>количество символов в файле.</td></tr>
   </table>
   </dd>
 </dl>
+<dl class="section note"><dt>Заметки</dt><dd>Если файл содержит кириллические символы, то он обязательно должен быть в кодироке iso88595. В противном случае, не гарантируется надлежащее сравнение символов файла. Если же файл содержит только символы латиницы, он может быть в любой 8-битной кодировке. </dd></dl>
 
 </div>
 </div>
@@ -567,7 +695,7 @@ typedef struct <a class="el" href="structstring.html">string</a>&#160;</td><td c
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="onegin_8h.html">onegin.h</a></li>
-    <li class="footer">Документация по Функции работы со строками из stdlib. Последние изменения: Сб 4 Сен 2021 23:30:08. Создано системой
+    <li class="footer">Документация по Функции работы со строками из stdlib. Последние изменения: Вс 5 Сен 2021 15:16:12. Создано системой
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

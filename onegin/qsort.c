@@ -158,9 +158,6 @@ int reversed_lexicographic_comparator (const void* string_1, const void* string_
     int i = str_1->len - 1;
     int j = str_2->len - 1;
 
-    char cur_sym1 = str_1->start[i];
-    char cur_sym2 = str_2->start[j];
-
     while (i >= 0 && j >= 0)
     {   
         if (isalpha (str_1->start[i]) && isalpha (str_2->start[j]) &&

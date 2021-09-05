@@ -79,11 +79,11 @@ int fill_array (char* buffer, string** ptr_array, string* str_array,
     assert (str_array);
     assert (num_symbols > 0);
 
-    int line_len = 0;
+    unsigned line_len = 0;
     int j = 0;
     char* line_ptr = buffer;
 
-    for (int i = 0; i < line_num; i++)
+    for (unsigned i = 0; i < line_num; i++)
     {
         while (line_ptr[j] != '\n' && line_len < num_symbols)
         {   
@@ -96,7 +96,8 @@ int fill_array (char* buffer, string** ptr_array, string* str_array,
 
         if (line_ptr[line_len - 2] != '\n')
             line_ptr[line_len - 2] = '\n';
-            line_ptr[line_len - 1] = '\0';
+        
+        line_ptr[line_len - 1] = '\0';
 
         string str;
         string_ctor (&str, line_ptr, line_len);
@@ -116,6 +117,9 @@ int fill_array (char* buffer, string** ptr_array, string* str_array,
 
 int save_to_file (string** array, FILE* file, unsigned line_num)
 {   
+    assert (array);
+    assert (file);
+
     fputs ("\n\n\n"
            "===============================\n"
            "\t\tFILE STARTS HERE\n"
@@ -141,6 +145,9 @@ int save_to_file (string** array, FILE* file, unsigned line_num)
 
 int save_original_to_file (string* array, FILE* file, unsigned line_num)
 {   
+    assert (array);
+    assert (file);
+
     fputs ("\n\n\n"
            "=================================\n"
            "\tORIGINAL TEXT STARTS HERE\n"
