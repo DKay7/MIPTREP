@@ -22,7 +22,7 @@ for the JavaScript code in this file
 */
 var NAVTREE =
 [
-  [ "Функции работы со строками из stdlib", "index.html", [
+  [ "Сортировка Онегина", "index.html", [
     [ "Структуры данных", "annotated.html", [
       [ "Структуры данных", "annotated.html", "annotated_dup" ],
       [ "Алфавитный указатель структур данных", "classes.html", null ],

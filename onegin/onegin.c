@@ -80,19 +80,19 @@ int fill_array (char* buffer, string** ptr_array, string* str_array,
     assert (num_symbols > 0);
 
     unsigned line_len = 0;
-    int j = 0;
+    int line_iter = 0;
     char* line_ptr = buffer;
 
     for (unsigned i = 0; i < line_num; i++)
     {
-        while (line_ptr[j] != '\n' && line_len < num_symbols)
+        while (line_ptr[line_iter] != '\n' && line_len < num_symbols)
         {   
-            j++;
+            line_iter++;
             line_len++;
         }
 
         line_len++;
-        j++;
+        line_iter++;
 
         if (line_ptr[line_len - 2] != '\n')
             line_ptr[line_len - 2] = '\n';
@@ -105,8 +105,8 @@ int fill_array (char* buffer, string** ptr_array, string* str_array,
         str_array[i] = str;
         ptr_array[i] = &str_array[i];
 
-        line_ptr += j;
-        j = 0;
+        line_ptr += line_iter;
+        line_iter = 0;
         line_len = 0;
     }
 

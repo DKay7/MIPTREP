@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.17"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Функции работы со строками из stdlib: Исходный файл onegin.h</title>
+<title>Сортировка Онегина: Исходный файл onegin.h</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -25,7 +25,7 @@
  <tbody>
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
-   <div id="projectname">Функции работы со строками из stdlib
+   <div id="projectname">Сортировка Онегина
    </div>
    <div id="projectbrief">Проект реализует некоторые функции для работы со строками из stdlib</div>
   </td>
@@ -160,7 +160,7 @@ $(document).ready(function(){initNavTree('onegin_8h_source.html',''); initResiza
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <div class="ttc" id="aonegin_8h_html_ab33aa392190cd10b77050b8ec15bc8b6"><div class="ttname"><a href="onegin_8h.html#ab33aa392190cd10b77050b8ec15bc8b6">count_lines</a></div><div class="ttdeci">int count_lines(char *buffer)</div><div class="ttdoc">Функция count_lines считает количество строк в файле.</div><div class="ttdef"><b>Definition:</b> onegin.c:54</div></div>
-<div class="ttc" id="aonegin_8h_html_a8b094882ff476979546218affb50f9a4"><div class="ttname"><a href="onegin_8h.html#a8b094882ff476979546218affb50f9a4">save_to_file</a></div><div class="ttdeci">int save_to_file(string **array, FILE *file, unsigned line_num)</div><div class="ttdoc">Функция save_file сохраняет массив указателей на строки в файл.</div><div class="ttdef"><b>Definition:</b> onegin.c:117</div></div>
+<div class="ttc" id="aonegin_8h_html_a8b094882ff476979546218affb50f9a4"><div class="ttname"><a href="onegin_8h.html#a8b094882ff476979546218affb50f9a4">save_to_file</a></div><div class="ttdeci">int save_to_file(string **array, FILE *file, unsigned line_num)</div><div class="ttdoc">Функция save_file сохраняет массив указателей на строки в файл.</div><div class="ttdef"><b>Definition:</b> onegin.c:118</div></div>
 <div class="ttc" id="aonegin_8h_html_a7653280fd2dbde6f3256422ebd0b9a01"><div class="ttname"><a href="onegin_8h.html#a7653280fd2dbde6f3256422ebd0b9a01">string_ctor</a></div><div class="ttdeci">int string_ctor(string *string, char *data, size_t len)</div><div class="ttdoc">Функция string_ctor инициализирует структуру данных string.</div><div class="ttdef"><b>Definition:</b> onegin.c:7</div></div>
 <div class="ttc" id="aonegin_8h_html_ac0bb0dd50c996581ae45b29652a8d12d"><div class="ttname"><a href="onegin_8h.html#ac0bb0dd50c996581ae45b29652a8d12d">CHECK_POINTER</a></div><div class="ttdeci">#define CHECK_POINTER(ptr, func_name, ret)</div><div class="ttdoc">Макрос для проверки указателя</div><div class="ttdef"><b>Definition:</b> onegin.h:36</div></div>
 <div class="ttc" id="astructstring_html"><div class="ttname"><a href="structstring.html">string</a></div><div class="ttdoc">Структура для представления строки в программе.</div><div class="ttdef"><b>Definition:</b> onegin.h:48</div></div>
@@ -169,12 +169,12 @@ $(document).ready(function(){initNavTree('onegin_8h_source.html',''); initResiza
 <div class="ttc" id="aonegin_8h_html_ac17af23ede1994a24ecbdcdb6bedfd67"><div class="ttname"><a href="onegin_8h.html#ac17af23ede1994a24ecbdcdb6bedfd67">CLOSE_FILE</a></div><div class="ttdeci">#define CLOSE_FILE(file, func_name, ret)</div><div class="ttdoc">Макрос для закрытия файла</div><div class="ttdef"><b>Definition:</b> onegin.h:20</div></div>
 <div class="ttc" id="aqsort_8h_html_a5f4e6ca8303804fb01e522d1d87b4345"><div class="ttname"><a href="qsort_8h.html#a5f4e6ca8303804fb01e522d1d87b4345">qsort</a></div><div class="ttdeci">void qsort(void *array, size_t n_memb, size_t el_size, int(*comparator)(const void *, const void *))</div><div class="ttdoc">Функция qsort сортирует переданный массив.</div><div class="ttdef"><b>Definition:</b> qsort.c:6</div></div>
 <div class="ttc" id="aonegin_8h_html_a66c99051274376cf13e0cb506525188b"><div class="ttname"><a href="onegin_8h.html#a66c99051274376cf13e0cb506525188b">CHECK_FILE_OPENED</a></div><div class="ttdeci">#define CHECK_FILE_OPENED(file, func_name, ret)</div><div class="ttdoc">Макрос для проверки файла</div><div class="ttdef"><b>Definition:</b> onegin.h:28</div></div>
-<div class="ttc" id="aonegin_8h_html_a7bcd3f5b05d274d9afff77c0fc6ceac2"><div class="ttname"><a href="onegin_8h.html#a7bcd3f5b05d274d9afff77c0fc6ceac2">save_original_to_file</a></div><div class="ttdeci">int save_original_to_file(string *array, FILE *file, unsigned line_num)</div><div class="ttdoc">Функция save_original_to_file сохраняет массив строк (исходный, неизмененный массив) в файл.</div><div class="ttdef"><b>Definition:</b> onegin.c:142</div></div>
+<div class="ttc" id="aonegin_8h_html_a7bcd3f5b05d274d9afff77c0fc6ceac2"><div class="ttname"><a href="onegin_8h.html#a7bcd3f5b05d274d9afff77c0fc6ceac2">save_original_to_file</a></div><div class="ttdeci">int save_original_to_file(string *array, FILE *file, unsigned line_num)</div><div class="ttdoc">Функция save_original_to_file сохраняет массив строк (исходный, неизмененный массив) в файл.</div><div class="ttdef"><b>Definition:</b> onegin.c:146</div></div>
 <div class="ttc" id="aonegin_8h_html_ac336f62788c35718f9cdd7e6e1e67e10"><div class="ttname"><a href="onegin_8h.html#ac336f62788c35718f9cdd7e6e1e67e10">RED_COLOR</a></div><div class="ttdeci">#define RED_COLOR(text)</div><div class="ttdoc">Макрос для окраски текста в красный цвет</div><div class="ttdef"><b>Definition:</b> onegin.h:17</div></div>
 <div class="ttc" id="aonegin_8h_html_abe7ee30554e731ae61a2dc6fbfcb5dab"><div class="ttname"><a href="onegin_8h.html#abe7ee30554e731ae61a2dc6fbfcb5dab">print_error</a></div><div class="ttdeci">#define print_error(failed_function, error_text)</div><div class="ttdef"><b>Definition:</b> onegin.h:14</div></div>
 <div class="ttc" id="aqsort_8h_html_a06fd4973a98b14d6d3d942db2b9b5cee"><div class="ttname"><a href="qsort_8h.html#a06fd4973a98b14d6d3d942db2b9b5cee">lexicographic_comparator</a></div><div class="ttdeci">int lexicographic_comparator(const void *string_1, const void *string_2)</div><div class="ttdoc">Функция lexicographic_comparator используется для лексиграфического сравнения двух строк</div><div class="ttdef"><b>Definition:</b> qsort.c:104</div></div>
 <div class="ttc" id="aqsort_8h_html"><div class="ttname"><a href="qsort_8h.html">qsort.h</a></div><div class="ttdoc">Данный файл содержит в себе прототипы функций для сортировки романа в стихах &quot;Евгений Онегин&quot; и траге...</div></div>
-<div class="ttc" id="aonegin_8h_html_ad8965da74f980266a69d5aaa0ea35a47"><div class="ttname"><a href="onegin_8h.html#ad8965da74f980266a69d5aaa0ea35a47">print_error_func</a></div><div class="ttdeci">void print_error_func(const char *file, const int line, const char *current_function, const char *failed_function, const char *error_text)</div><div class="ttdoc">Функция выводит информацию об ошибке в stderr.</div><div class="ttdef"><b>Definition:</b> onegin.c:163</div></div>
+<div class="ttc" id="aonegin_8h_html_ad8965da74f980266a69d5aaa0ea35a47"><div class="ttname"><a href="onegin_8h.html#ad8965da74f980266a69d5aaa0ea35a47">print_error_func</a></div><div class="ttdeci">void print_error_func(const char *file, const int line, const char *current_function, const char *failed_function, const char *error_text)</div><div class="ttdoc">Функция выводит информацию об ошибке в stderr.</div><div class="ttdef"><b>Definition:</b> onegin.c:170</div></div>
 <div class="ttc" id="aonegin_8h_html"><div class="ttname"><a href="onegin_8h.html">onegin.h</a></div><div class="ttdoc">Данный файл содержит в себе прототипы функций для чтения/записи романа в стихах &quot;Евгений Онегин&quot; и тр...</div></div>
 <div class="ttc" id="aonegin_8h_html_a43d4c142ddb427a3faa601fbf2a1d8a9"><div class="ttname"><a href="onegin_8h.html#a43d4c142ddb427a3faa601fbf2a1d8a9">read_file_to_buffer</a></div><div class="ttdeci">char * read_file_to_buffer(FILE *file, int num_symbols)</div><div class="ttdoc">Функция read_file_to_buffer считывает файл в буфер.</div><div class="ttdef"><b>Definition:</b> onegin.c:32</div></div>
 <div class="ttc" id="astructstring_html_af5a7f431c860d58f8dfced6878ee8660"><div class="ttname"><a href="structstring.html#af5a7f431c860d58f8dfced6878ee8660">string::start</a></div><div class="ttdeci">char * start</div><div class="ttdef"><b>Definition:</b> onegin.h:51</div></div>
@@ -184,7 +184,7 @@ $(document).ready(function(){initNavTree('onegin_8h_source.html',''); initResiza
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="onegin_8h.html">onegin.h</a></li>
-    <li class="footer">Документация по Функции работы со строками из stdlib. Последние изменения: Вс 5 Сен 2021 15:16:11. Создано системой
+    <li class="footer">Документация по Сортировка Онегина. Последние изменения: Пн 6 Сен 2021 21:38:15. Создано системой
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>
