@@ -6,8 +6,8 @@
 #include <stdio.h>
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-
-#define STACK_DUMP (stack) StackDumpFunction (stack, __LINE__, __FUNCTION__, __FILE__, #stack);
+// TODO передавать функцию печати
+#define STACK_DUMP (stack) StackDumpFunction (stack, __LINE__, __FUNCTION__, __FILE__, #stack); // TODO: func
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
@@ -129,12 +129,13 @@ int StackDecrease (Stack* stack);
 *   @brief Функция StackDumpFunction выводит отладочную информацию о стаке.
 *   
 *   @param [in, out] stack Указатель на структуру \link Stack \endlink.
+*   @param [in] print_function Указатель на функцию для печати одного элемента стека. 
 *   @param [in] line Номер строки, в которой вызвана данная функция.
 *   @param [in] func_name Имя функции, в которой вызвана данная функция.
 *   @param [in] file_name Имя файла, из которого вызвана данная функция.
 *   @return Один из кодов \link RETURN_CODES \endlink.
 */
-int StackDumpFunction (Stack* stack, int line, char* func_name, char* file_name, char* stack_name);
+int StackDumpFunction (Stack* stack, void (print_function)(stack_type), int line, char* func_name, char* file_name, char* stack_name);
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 

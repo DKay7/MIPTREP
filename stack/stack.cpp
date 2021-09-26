@@ -98,24 +98,82 @@ int StackIncrease (Stack* stack)
     assert (stack);
     assert (stack->data);
 
-    if (stack->size > (3/4)*stack->capacity)
+    if (stack->size + 1 > stack->capacity)
     {
-        stack_type* tmp = (stack_type*) realloc (stack->data, 2 * stack->size);
+        stack_type* tmp = (stack_type*) realloc (stack->data, 2 * stack->capacity);
 
         if (!tmp)
         {
-            stack->error_code = STACK_MEM_ALLOCK_ERR + STACK_INCREASE_ERR;
+            stack->error_code = STACK_MEM_ALLOCK_ERR + STACK_INCREASE;
 
             return STACK_MEM_ALLOCK_ERR;
         }
+
+        stack->data = tmp;
+        stack->capacity = 2 * stack->capacity;
     }
 
-    
+    return STACK_OK;
 }
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
 int StackDecrease (Stack* stack)
 {
+    assert (stack);
+    assert (stack->data);
 
+    if (stack->size < stack->capacity / 2)
+    {
+        stack_type* tmp = (stack_type*) realloc (stack->data, stack->capacity / 2 + 1);
+
+        if (!tmp)
+        {
+            stack->error_code = STACK_MEM_ALLOCK_ERR + STACK_INCREASE;
+
+            return STACK_MEM_ALLOCK_ERR;
+        }
+
+        stack->data = tmp;
+        stack->capacity = stack->capacity / 2 + 1;
+    }
+
+    return STACK_OK;
+}
+
+//flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+int StackDumpFunction (Stack* stack,  void (print_function)(stack_type), int line, char* func_name, char* file_name, char* stack_name)
+{
+    printf ("------------\n"
+            "------------\n"
+            "FILENAME: %s\n"
+            "FUNCTION: %s\n"
+            "LINE: %d\n"
+            "STACK NAME: %s\n"
+            "STACK STATUS: %s\n");
+    
+    err_code = StackValidateFunc(stack);
+    
+    switch ()
+    {
+        case STACK_OK:
+            printf ("STACK OK");
+            break;
+        
+        case STACK_MEM_ALLOCK_ERR:
+            printf ("STACK OK");
+            break;
+    }
+
+    printf ("STACK DATA:\n");
+    
+    for (unsigned i = 0; i < stack->size; i++)
+    {
+        printf ("S[%d] = ", i);
+        print_function (stack->data[i]);
+        printf ("\n");
+    }
+
+    return STACK_OK;
 }
