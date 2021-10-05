@@ -9,10 +9,10 @@
 #include "stdio.h"
 
 /// Макрос для окраски текста в зеленый цвет
-#define GREEN_COLOR(text) "\033[92m"#text"\033[0m"
+#define GREEN_COLOR(text) ("\033[92m"#text"\033[0m")
 
 /// Макрос для окраски текста в красный цвет
-#define RED_COLOR(text) "\033[91m"#text"\033[0m"
+#define RED_COLOR(text) ("\033[91m"#text"\033[0m")
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
