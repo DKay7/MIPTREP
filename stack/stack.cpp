@@ -73,6 +73,7 @@ int SetStackPrinterFunc (Stack* stack, void (*printer_func)(stack_type*))
     assert (printer_func);
 
     stack->info.print_function = printer_func;
+    stack->hash = StackHashSum (stack);
 
     return ValidateResult (stack, SET_STACK_PRINTER_CODE);
 
@@ -166,7 +167,7 @@ int StackIncrease (Stack* stack)
         stack->data = tmp;
         stack->capacity = 2 * stack->capacity;
     }
-
+    
     return ValidateResult (stack, STACK_INCREASE_CODE);
 }
 
@@ -222,7 +223,7 @@ int StackValidate (Stack* stack, int func_code)
         stack->info.error_code = stack->info.error_code |  STACK_INCORRECT_SIZE;
     }
 
-    if(CheckStackHash (stack) != 1)
+    if(stack->hash != StackHashSum (stack))
     {
         stack->info.error_code = stack->info.error_code |  STACK_WRONG_HASH_SUM;
     }
@@ -495,7 +496,7 @@ unsigned long long HashSum(void* pointer, size_t size, unsigned long long hash)
 unsigned long long StackHashSum(Stack* stack)
 {
     assert(stack);
-    //TODO норм или не норм?
+    unsigned long long old_hash = stack->hash;
     stack->hash = 0;
     unsigned long long hash = HashSum (stack, sizeof(stack));
 
@@ -503,20 +504,8 @@ unsigned long long StackHashSum(Stack* stack)
     hash = HashSum (stack->data, stack->size * sizeof (stack_type), hash);
     #endif
     
-    return hash;
-}
-
-//flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-
-int CheckStackHash (Stack* stack)
-{
-    unsigned long long old_hash = stack->hash;
-    unsigned long long cur_hash = StackHashSum (stack);
-
-    //TODO норм или не норм?
     stack->hash = old_hash;
-
-    return stack->hash == cur_hash;
+    return hash;
 }
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx

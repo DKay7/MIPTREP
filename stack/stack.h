@@ -235,16 +235,6 @@ unsigned long long StackHashSum(Stack* stack);
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
 /**
-*   @brief Функция CheckStackHash проверяет хэш-сумму стека на корректность.
-*   
-*   @param [in] stack Указатель на структуру \link Stack \endlink.
-*   @return 1, если хэш-сумма текущего состояния стека равна сохраненной хэш-сумме, иначе 0
-*/
-int CheckStackHash (Stack* stack);
-
-//flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-
-/**
 *   @brief Функция StackPrintExitCode .
 *   
 *   @param [in] stack Указатель на объект стека.
