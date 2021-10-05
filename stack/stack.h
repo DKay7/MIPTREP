@@ -7,28 +7,38 @@
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
+/// Макрос для окраски текста в зеленый цвет
 #define GREEN_COLOR(text) ("\033[92m" text "\033[0m")
+
+//flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+/// Макрос для окраски текста в красный цвет
 #define RED_COLOR(text) ("\033[91m" text "\033[0m")
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
+/// Макрос для функции \link StackDumpFunc, \endlink который автоматически подставляет строку, имя функции, имя файла и имя переменной.
 #define StackDump(stack) StackDumpFunc (stack, __LINE__, __PRETTY_FUNCTION__, __FILE__, #stack)
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
+/// Макрос для функции \link StackCtorFunc, \endlink который автоматически подставляет строку, имя функции, имя файла и имя переменной.
 #define StackCtor(stack, size) StackCtorFunc (stack, size, #stack, __PRETTY_FUNCTION__, __LINE__, __FILE__)
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
-#ifndef STACK_DATA_POISON
+#if !defined(STACK_DATA_POISON)
+/// Макрос для константы яда для данных в стеке.
 #define STACK_DATA_POISON 0xDEAD
 #endif
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
 #ifdef VALIDATE_ALL
+/// Макрос для константы яда для данных в стеке. Если VALIDATE_ALL не определено.
 #define ValidateResult(stack, func_code) StackValidate(stack, func_code)
 #else
+/// Макрос для константы яда для данных в стеке. Если VALIDATE_ALL не определено.
 #define ValidateResult(stack, func_code) STACK_OK
 #endif
 
@@ -78,18 +88,18 @@ typedef struct Stack
 */
 enum RETURN_CODES
 {
-    STACK_OK =                          0x00000000,     // Все ОК.
-    STACK_MEM_ALLOCK_ERR =              0x00000001,     // Ошибка аллоцирования / реаллоцирования памяти.
-    STACK_INCREASE_ERR =                0x00000002,     // Ошибка в функции увеличения размера стека.
-    STACK_DECREASE_ERR =                0x00000004,     // Ошибка в функции уменьшения размера стека.
-    STACK_CTOR_DBL_CALL =               0x00000008,     // Двойной вызов конструктора.
-    STACK_DTOR_DBL_CALL =               0x00000010,     // Двойной вызов деструктора.
-    STACK_INCORRECT_DATA_PTR =          0x00000020,     //  Неверный указатель на данные.
-    STACK_WRONG_START_HUMMINGBIRD =     0x00000040,     //  Неверная начальная канарейка.
-    STACK_WRONG_END_HUMMINGBIRD =       0x00000080,     //  Неверная конечная канарейка.
-    STACK_INCORRECT_SIZE =              0x00000100,     //  Неверный размер стека.
-    STACK_INCORRECT_CAPACITY =          0x00000200,     //  Неверный размер стека.
-    STACK_WRONG_HASH_SUM =              0x00000400      //  Неверный размер стека.
+    STACK_OK =                          0x00000000,      ///< Все ОК.
+    STACK_MEM_ALLOCK_ERR =              0x00000001,      ///< Ошибка аллоцирования / реаллоцирования памяти.
+    STACK_INCREASE_ERR =                0x00000002,      ///< Ошибка в функции увеличения размера стека.
+    STACK_DECREASE_ERR =                0x00000004,      ///< Ошибка в функции уменьшения размера стека.
+    STACK_CTOR_DBL_CALL =               0x00000008,      ///< Двойной вызов конструктора.
+    STACK_DTOR_DBL_CALL =               0x00000010,      ///< Двойной вызов деструктора.
+    STACK_INCORRECT_DATA_PTR =          0x00000020,      ///< Неверный указатель на данные.
+    STACK_WRONG_START_HUMMINGBIRD =     0x00000040,      ///< Неверная начальная канарейка.
+    STACK_WRONG_END_HUMMINGBIRD =       0x00000080,      ///< Неверная конечная канарейка.
+    STACK_INCORRECT_SIZE =              0x00000100,      ///< Неверный размер стека.
+    STACK_INCORRECT_CAPACITY =          0x00000200,      ///< Неверный размер стека.
+    STACK_WRONG_HASH_SUM =              0x00000400       ///< Неверный размер стека.
 };
 
 /**
@@ -97,17 +107,17 @@ enum RETURN_CODES
 */
 enum FUNC_CODES
 {
-    STACK_CTOR_CODE  =           0x00000001,
-    STACK_DTOR_CODE =            0x00000002,
-    STACK_PUSH_CODE =            0x00000004,
-    STACK_POP_CODE =             0x00000008,
-    STACK_INCREASE_CODE =        0x00000010,
-    STACK_DECREASE_CODE =        0x00000020,
-    STACK_DUMP_CODE =            0x00000040,
-    STACK_UNIT_TEST_CODE =       0x00000080,
-    STACK_SET_PRINTER_CODE =     0x00000100,
-    STACK_PRINT_EXIT_CODE_CODE = 0x00000200,
-    STACK_VALIDATE_CODE =        0x00000400
+    STACK_CTOR_CODE  =           0x00000001,    ///< #StackCtorFunc()
+    STACK_DTOR_CODE =            0x00000002,    ///< #StackDtor()
+    STACK_PUSH_CODE =            0x00000004,    ///< #StackPush()
+    STACK_POP_CODE =             0x00000008,    ///< #StackPop()
+    STACK_INCREASE_CODE =        0x00000010,    ///< #StackIncrease()
+    STACK_DECREASE_CODE =        0x00000020,    ///< #StackDecrease()
+    STACK_DUMP_CODE =            0x00000040,    ///< #StackDumpFunc()
+    STACK_UNIT_TEST_CODE =       0x00000080,    ///< #UnitTest()
+    STACK_SET_PRINTER_CODE =     0x00000100,    ///< #SetStackPrinterFunc()
+    STACK_PRINT_EXIT_CODE_CODE = 0x00000200,    ///< #StackPrintExitCode()
+    STACK_VALIDATE_CODE =        0x00000400     ///< #StackValidate()
 };
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
@@ -115,6 +125,9 @@ enum FUNC_CODES
 /**
 *   @brief Функция StackCtorFunc конструирует объект стека.
 *   
+*   @note Вы также должны объявить тип данных стека \link stack_type \endlink и яд для данных:
+*         #STACK_DATA_POISON
+*
 *   @param [in, out] stack  Указатель на структуру \link Stack \endlink.
 *   @param [in] size        Начальный размер для аллоцирования буффера.
 *   @param [in] stack_name  Имя переменной стека.

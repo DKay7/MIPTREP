@@ -1,0 +1,5 @@
+<map id="SetStackPrinterFunc" name="SetStackPrinterFunc">
+<area shape="rect" id="node1" title="Функция SetStackPrinterFunc уничтожает объект стака." alt="" coords="5,5,157,32"/>
+<area shape="rect" id="node2" href="$stack_8h.html#a9463184548ef3c3a48ec1c8b007dee45" title="Функция StackHashSum считает хэш&#45;сумму стека." alt="" coords="205,5,325,32"/>
+<area shape="rect" id="node3" href="$stack_8h.html#a9dea65bbcb845fc8b9d9757869c41eb8" title="Функция HashSum считает универсальную хэш&#45;сумму." alt="" coords="373,5,457,32"/>
+</map>

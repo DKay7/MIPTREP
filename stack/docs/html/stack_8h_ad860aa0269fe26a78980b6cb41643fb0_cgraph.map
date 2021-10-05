@@ -1,0 +1,7 @@
+<map id="StackPop" name="StackPop">
+<area shape="rect" id="node1" title="Функция StackPush попит элемент из стака." alt="" coords="5,56,88,83"/>
+<area shape="rect" id="node2" href="$stack_8h.html#a750996c1ae1518a0c1b955ab163b2226" title="Функция StackDecrease уменьшает стак при необходимости." alt="" coords="137,5,255,32"/>
+<area shape="rect" id="node3" href="$stack_8h.html#a9463184548ef3c3a48ec1c8b007dee45" title="Функция StackHashSum считает хэш&#45;сумму стека." alt="" coords="136,56,256,83"/>
+<area shape="rect" id="node5" href="$stack_8h.html#afddcf1b7ba7e7d536a86ba5101b9db15" title="Функция StackValidate проверяет, что со стеком все хорошо." alt="" coords="141,107,251,133"/>
+<area shape="rect" id="node4" href="$stack_8h.html#a9dea65bbcb845fc8b9d9757869c41eb8" title="Функция HashSum считает универсальную хэш&#45;сумму." alt="" coords="304,56,388,83"/>
+</map>

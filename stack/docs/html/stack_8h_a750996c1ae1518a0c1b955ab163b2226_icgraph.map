@@ -1,0 +1,5 @@
+<map id="StackDecrease" name="StackDecrease">
+<area shape="rect" id="node1" title="Функция StackDecrease уменьшает стак при необходимости." alt="" coords="259,5,377,32"/>
+<area shape="rect" id="node2" href="$stack_8h.html#ad860aa0269fe26a78980b6cb41643fb0" title="Функция StackPush попит элемент из стака." alt="" coords="128,5,211,32"/>
+<area shape="rect" id="node3" href="$stack_8h.html#af46f08780595717ea5bdb292bf645b8e" title="Функция UnitTest проводит тестирование стака." alt="" coords="5,5,80,32"/>
+</map>
