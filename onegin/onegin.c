@@ -176,11 +176,18 @@ void print_error_func (const char* file, const int line, const char* current_fun
     assert (failed_function);
     assert (error_text);
 
-    fprintf (stderr, RED_COLOR("File: %s\n"
-                               "Line: %d\n"
-                               "Current function: %s()\n"
-                               "Failed function: %s()\n"
-                               "Error message: %s\n"),
+    FILE* log_file = fopen ("onegin.log", "wa+");
+    
+    if (!log_file || ferror(log_file))
+    {
+        log_file = stderr;
+    }
+
+    fprintf (log_file, "File: %s\n"
+                       "Line: %d\n"
+                       "Current function: %s()\n"
+                       "Failed function: %s()\n"
+                       "Error message: %s\n",
                     file, line, current_function, failed_function, error_text);
 }
 

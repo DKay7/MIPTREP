@@ -11,7 +11,7 @@
 
 /// Макрос для print_error_func, который автоматически подставляет
 /// Файл и строку в сообщение об ошибке
-#define print_error(failed_function, error_text) print_error_func(__FILE__, __LINE__, __FUNCTION__, failed_function, error_text)
+#define print_error(failed_function, error_text) print_error_func(__FILE__, __LINE__, __PRETTY_FUNCTION__, failed_function, error_text)
 
 /// Макрос для окраски текста в красный цвет
 #define RED_COLOR(text) "\033[91m" text "\033[0m"
