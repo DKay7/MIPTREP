@@ -1,10 +1,11 @@
 #include "onegin.h"
 #include <assert.h>
 #include <malloc.h>
+#include <string.h>
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
-int string_ctor (string* string, char* data, size_t len)
+int StringCtor (String* string, char* data, size_t len)
 {   
     assert (data);
 
@@ -16,7 +17,7 @@ int string_ctor (string* string, char* data, size_t len)
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
-int count_symbols (FILE* file)
+int CountSymbols (FILE* file)
 {   
     assert (file);
     
@@ -29,20 +30,20 @@ int count_symbols (FILE* file)
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
-char* read_file_to_buffer (FILE* file, int num_symbols)
+char* ReadFileToBuffer (FILE* file, size_t num_symbols)
 {   
     assert (num_symbols > 0);
     assert (file);
 
     char* file_buffer = (char*) calloc (num_symbols + 1, sizeof (char));
     
-    CHECK_POINTER (file_buffer, "read_file_to_buffer", NULL);
+    CHECK_POINTER (file_buffer, "ReadFileToBuffer", NULL);
 
     int actual_num_symbols = fread (file_buffer, sizeof (char), num_symbols, file);
 
     if (actual_num_symbols != num_symbols)
     {
-        print_error ("read_file_to_buffer", "Error while reading file");
+        OneginErrno ("ReadFileToBuffe", "Error while reading file");
         return NULL;
     }
 
@@ -51,7 +52,7 @@ char* read_file_to_buffer (FILE* file, int num_symbols)
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
-int count_lines (char* buffer)
+int CountLines (char* buffer)
 {   
     assert (buffer);
 
@@ -71,8 +72,8 @@ int count_lines (char* buffer)
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
-int fill_array (char* buffer, string** ptr_array, string* str_array, 
-                unsigned line_num, unsigned num_symbols)
+int OneginFillPArray
+(char* buffer, String** ptr_array, String* str_array, size_t line_num, size_t num_symbols)
 {   
     assert (buffer);
     assert (ptr_array);
@@ -99,8 +100,8 @@ int fill_array (char* buffer, string** ptr_array, string* str_array,
         
         line_ptr[line_len - 1] = '\0';
 
-        string str;
-        string_ctor (&str, line_ptr, line_len);
+        String str;
+        StringCtor (&str, line_ptr, line_len);
 
         str_array[i] = str;
         ptr_array[i] = &str_array[i];
@@ -115,7 +116,7 @@ int fill_array (char* buffer, string** ptr_array, string* str_array,
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
-int save_to_file (string** array, FILE* file, unsigned line_num)
+int OneginSavePArrToFile (String** array, FILE* file, size_t line_num)
 {   
     assert (array);
     assert (file);
@@ -125,7 +126,7 @@ int save_to_file (string** array, FILE* file, unsigned line_num)
            "\t\tFILE STARTS HERE\n"
            "===============================\n", file);
 
-    for (unsigned i = 0; i < line_num; i++)
+    for (size_t i = 0; i < line_num; i++)
     {   
         if (array[i]->len > 2)
         {
@@ -136,14 +137,14 @@ int save_to_file (string** array, FILE* file, unsigned line_num)
 
     fputs ("=============================\n"
            "\t\tFILE ENDS HERE\n"
-           "=============================\n\n\n", file);
+           "============================= \n\n\n", file);
 
     return 0;
 }
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
-int save_original_to_file (string* array, FILE* file, unsigned line_num)
+int OneginSaveOrigToFile (String* array, FILE* file, size_t line_num)
 {   
     assert (array);
     assert (file);
@@ -153,7 +154,7 @@ int save_original_to_file (string* array, FILE* file, unsigned line_num)
            "\tORIGINAL TEXT STARTS HERE\n"
            "=================================\n", file);
 
-    for (unsigned i = 0; i < line_num; i++)
+    for (size_t i = 0; i < line_num; i++)
     {   
             fputs (array[i].start, file);
             fputc ('\n',  file);
@@ -167,7 +168,7 @@ int save_original_to_file (string* array, FILE* file, unsigned line_num)
 }
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
-void print_error_func (const char* file, const int line, const char* current_function, 
+void OneginErrnoFunc (const char* file, const int line, const char* current_function, 
                        const char* failed_function, const char* error_text)
 {   
     assert (file);
@@ -178,7 +179,7 @@ void print_error_func (const char* file, const int line, const char* current_fun
 
     FILE* log_file = fopen ("onegin.log", "wa+");
     
-    if (!log_file || ferror(log_file))
+    if (!log_file || ferror (log_file))
     {
         log_file = stderr;
     }

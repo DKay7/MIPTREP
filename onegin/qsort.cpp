@@ -106,8 +106,8 @@ int lexicographic_comparator (const void* string_1, const void* string_2)
     assert (string_1);
     assert (string_2);
 
-    string* str_1 = *((string**) string_1);
-    string* str_2 = *((string**) string_2);
+    String* str_1 = *((String**) string_1);
+    String* str_2 = *((String**) string_2);
 
     unsigned i = 0;
     unsigned j = 0;
@@ -152,8 +152,8 @@ int reversed_lexicographic_comparator (const void* string_1, const void* string_
     assert (string_1);
     assert (string_2);
 
-    string* str_1 = *((string**) string_1);
-    string* str_2 = *((string**) string_2);
+    String* str_1 = *((String**) string_1);
+    String* str_2 = *((String**) string_2);
 
     int i = str_1->len - 1;
     int j = str_2->len - 1;

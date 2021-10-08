@@ -23,27 +23,32 @@ int main (int argc, char* argv[])
     CHECK_FILE_OPENED (sort_file, "main", -1);
     CHECK_FILE_OPENED (save_file, "main", -1);
 
-    int num_symbols = count_symbols (sort_file);
-    char* file_buffer = read_file_to_buffer (sort_file, num_symbols);
+    size_t num_symbols = CountSymbols (sort_file);
+    char* file_buffer = ReadFileToBuffer (sort_file, num_symbols);
     CLOSE_FILE (sort_file, "main", -1);
 
-    int num_lines = count_lines (file_buffer);
-    string** ptr_array = (string**) calloc (num_lines, sizeof (string*));
-    string* str_array = (string*) calloc (num_lines, sizeof (string));
+    size_t num_lines = CountLines (file_buffer);
+    String** ptr_array = (String**) calloc (num_lines, sizeof (String*));
+    String* str_array = (String*) calloc (num_lines, sizeof (String));
 
     CHECK_POINTER (ptr_array, "main", -1);
     CHECK_POINTER (str_array, "main", -1);
     
-    fill_array (file_buffer, ptr_array, str_array, num_lines, num_symbols);
+    OneginFillPArray (file_buffer, ptr_array, str_array, num_lines, num_symbols);
 
-    qsort (ptr_array, num_lines, sizeof (string*), lexicographic_comparator);
-    save_to_file (ptr_array, save_file, num_lines);
+    qsort (ptr_array, num_lines, sizeof (String*), lexicographic_comparator);
+    OneginSavePArrToFile (ptr_array, save_file, num_lines);
 
-    qsort (ptr_array, num_lines, sizeof (string*), reversed_lexicographic_comparator);
-    save_to_file (ptr_array, save_file, num_lines);
+    qsort (ptr_array, num_lines, sizeof (String*), reversed_lexicographic_comparator);
+    OneginSavePArrToFile (ptr_array, save_file, num_lines);
 
-    save_original_to_file (str_array, save_file, num_lines);
+    OneginSaveOrigToFile (str_array, save_file, num_lines);
 
     CLOSE_FILE (save_file, "main", -1);
+
+    free (file_buffer);
+    free (str_array);
+    free (ptr_array);
+
     return 0;
 }
