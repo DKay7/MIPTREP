@@ -9,13 +9,18 @@
 
 #include <stdio.h>
 
+#ifndef OneginErrno
 /// Макрос для OneginErrnoFunc, который автоматически подставляет
 /// Файл и строку в сообщение об ошибке
 #define OneginErrno(failed_function, error_text) OneginErrnoFunc(__FILE__, __LINE__, __PRETTY_FUNCTION__, failed_function, error_text)
+#endif
 
+#ifndef RED_COLOR
 /// Макрос для окраски текста в красный цвет
 #define RED_COLOR(text) "\033[91m" text "\033[0m"
+#endif
 
+#ifndef CLOSE_FILE
 /// Макрос для закрытия файла
 #define CLOSE_FILE(file, func_name, ret)  \
             if (fclose (file) != 0) \
@@ -23,7 +28,9 @@
                 OneginErrno ((func_name), "Error while closing " #file); \
                 return ret; \
             }
+#endif
 
+#ifndef CHECK_FILE_OPENED
 /// Макрос для проверки файла
 #define CHECK_FILE_OPENED(file, func_name, ret)  \
             if (!(file) || ferror (file)) \
@@ -31,7 +38,9 @@
                 OneginErrno ((func_name), "Error while opening " #file); \
                 return ret; \
             }
+#endif
 
+#ifndef CHECK_POINTER
 /// Макрос для проверки указателя
 #define CHECK_POINTER(ptr, func_name, ret)  \
             if (!(ptr)) \
@@ -39,6 +48,7 @@
                 OneginErrno ((func_name), "Error while allocating memory for " #ptr); \
                 return ret; \
             }
+#endif
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
@@ -85,7 +95,7 @@ int CountSymbols (FILE* file);
 *       iso88595. В противном случае, не гарантируется надлежащее сравнение символов файла.
 *       Если же файл содержит только символы латиницы, он может быть в любой 8-битной кодировке.
 */
-char* ReadFileToBuffer (FILE* file, size_t num_symbols);
+char* ReadFileToBuffer (FILE* file, int num_symbols);
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
@@ -110,7 +120,8 @@ int CountLines (char* buffer);
 * @param [in] line_num Количество строк в файле.
 * @param [in] num_symbols количество символов в файле.
 */
-int OneginFillPArray (char* buffer, String** ptr_array, String* str_array, size_t line_num, size_t num_symbols);
+int OneginFillPArray (char* buffer, String** ptr_array, String* str_array, 
+                unsigned line_num, unsigned num_symbols);
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
@@ -121,7 +132,7 @@ int OneginFillPArray (char* buffer, String** ptr_array, String* str_array, size_
 * @param [in] file Файловый дескриптоп, через который будут записаны данные.
 * @param [in] line_num Количество строк в файле.
 */
-int OneginSavePArrToFile (String** array, FILE* file, size_t line_num);
+int OneginSavePArrToFile (String** array, FILE* file, unsigned line_num);
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
@@ -132,7 +143,7 @@ int OneginSavePArrToFile (String** array, FILE* file, size_t line_num);
 * @param [in] file Файловый дескриптоп, через который будут записаны данные.
 * @param [in] line_num Количество строк в файле.
 */
-int OneginSaveOrigToFile (String* array, FILE* file, size_t line_num);
+int OneginSaveOrigToFile (String* array, FILE* file, unsigned line_num);
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 

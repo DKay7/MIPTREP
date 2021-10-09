@@ -1,7 +1,6 @@
 #include "onegin.h"
 #include <assert.h>
 #include <malloc.h>
-#include <string.h>
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
@@ -30,7 +29,7 @@ int CountSymbols (FILE* file)
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
-char* ReadFileToBuffer (FILE* file, size_t num_symbols)
+char* ReadFileToBuffer (FILE* file, int num_symbols)
 {   
     assert (num_symbols > 0);
     assert (file);
@@ -57,23 +56,31 @@ int CountLines (char* buffer)
     assert (buffer);
 
     char c = buffer[0];
+    char last_c = c;
+
     int num_lines = 0;
 
     for (int i=0; (c = buffer[i]) != '\0'; i++)
     {
         if (c == '\n')
         {
-            num_lines++;
+            ++num_lines;
         }
+
+        last_c = c;
     }
     
+    if (last_c != '\n')
+        ++num_lines;
+
     return num_lines;
 }
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
 int OneginFillPArray
-(char* buffer, String** ptr_array, String* str_array, size_t line_num, size_t num_symbols)
+ (char* buffer, String** ptr_array, String* str_array, 
+                unsigned line_num, unsigned num_symbols)
 {   
     assert (buffer);
     assert (ptr_array);
@@ -81,34 +88,31 @@ int OneginFillPArray
     assert (num_symbols > 0);
 
     unsigned line_len = 0;
-    int line_iter = 0;
+    unsigned line_iter = 0;
     char* line_ptr = buffer;
 
     for (unsigned i = 0; i < line_num; i++)
-    {
-        while (line_ptr[line_iter] != '\n' && line_len < num_symbols)
+    {   
+        line_ptr = buffer + line_iter;
+        line_len = 0;
+
+        while (buffer[line_iter] != '\n' && line_iter < num_symbols)
         {   
             line_iter++;
             line_len++;
         }
 
+        if (buffer[line_iter] == '\n')
+            buffer[line_iter] = '\0';
+
         line_len++;
         line_iter++;
-
-        if (line_ptr[line_len - 2] != '\n')
-            line_ptr[line_len - 2] = '\n';
-        
-        line_ptr[line_len - 1] = '\0';
 
         String str;
         StringCtor (&str, line_ptr, line_len);
 
         str_array[i] = str;
         ptr_array[i] = &str_array[i];
-
-        line_ptr += line_iter;
-        line_iter = 0;
-        line_len = 0;
     }
 
     return 0;
@@ -116,7 +120,7 @@ int OneginFillPArray
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
-int OneginSavePArrToFile (String** array, FILE* file, size_t line_num)
+int OneginSavePArrToFile (String** array, FILE* file, unsigned line_num)
 {   
     assert (array);
     assert (file);
@@ -126,7 +130,7 @@ int OneginSavePArrToFile (String** array, FILE* file, size_t line_num)
            "\t\tFILE STARTS HERE\n"
            "===============================\n", file);
 
-    for (size_t i = 0; i < line_num; i++)
+    for (unsigned i = 0; i < line_num; i++)
     {   
         if (array[i]->len > 2)
         {
@@ -137,14 +141,14 @@ int OneginSavePArrToFile (String** array, FILE* file, size_t line_num)
 
     fputs ("=============================\n"
            "\t\tFILE ENDS HERE\n"
-           "============================= \n\n\n", file);
+           "=============================\n\n\n", file);
 
     return 0;
 }
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
-int OneginSaveOrigToFile (String* array, FILE* file, size_t line_num)
+int OneginSaveOrigToFile (String* array, FILE* file, unsigned line_num)
 {   
     assert (array);
     assert (file);
@@ -154,7 +158,7 @@ int OneginSaveOrigToFile (String* array, FILE* file, size_t line_num)
            "\tORIGINAL TEXT STARTS HERE\n"
            "=================================\n", file);
 
-    for (size_t i = 0; i < line_num; i++)
+    for (unsigned i = 0; i < line_num; i++)
     {   
             fputs (array[i].start, file);
             fputc ('\n',  file);
@@ -179,7 +183,7 @@ void OneginErrnoFunc (const char* file, const int line, const char* current_func
 
     FILE* log_file = fopen ("onegin.log", "wa+");
     
-    if (!log_file || ferror (log_file))
+    if (!log_file || ferror(log_file))
     {
         log_file = stderr;
     }

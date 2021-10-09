@@ -8,8 +8,8 @@ int main (int argc, char* argv[])
     // setting 8-bit iso locale to working correctly with cyrillic characters
     setlocale (LC_CTYPE, "ru_RU.iso88595");
 
-    const char* sort_filepath = "hamlet.txt";
-    const char* save_filepath = "hamlet_sorted.txt";
+    const char* sort_filepath = "onegin.txt";
+    const char* save_filepath = "onegin_sorted.txt";
 
     if (argc == 3)
     {
