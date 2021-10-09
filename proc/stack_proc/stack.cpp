@@ -3,7 +3,10 @@
 #include <assert.h>
 #include <string.h>
 
+const hummingbird_type HUMMINGBIRD = (hummingbird_type) 0xDEAD0DED;
+
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
 int StackCtorFunc (Stack* stack, size_t size, const char* stack_name, const char* func_name, int line, const char* file_name)
 {   
     assert (stack);
@@ -31,6 +34,9 @@ int StackCtorFunc (Stack* stack, size_t size, const char* stack_name, const char
     stack->size = 0;
     stack->capacity = size;
     stack->data = tmp_pointer;
+
+    StackPoison (stack, 0, stack->capacity);
+
     stack->hash = StackHashSum (stack);
     stack->end_bird = HUMMINGBIRD;
 
@@ -59,10 +65,26 @@ int StackDtor (Stack* stack)
         return STACK_DTOR_DBL_CALL;
     }
 
-    memset (stack->data, STACK_DATA_POISON, stack->capacity);
+    StackPoison (stack, 0, stack->capacity);
+
     free (stack->data);
 
     return ValidateResult (stack, STACK_DTOR_CODE);
+}
+
+//flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+void StackPoison (Stack* stack, size_t start, size_t num)
+{   
+    assert (stack);
+    assert (num <= stack->capacity);
+
+    for (size_t i = start; i < num; i++)
+    {
+        stack->data[i] = STACK_DATA_POISON;
+    }
+
+    return;
 }
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
@@ -154,7 +176,7 @@ int StackIncrease (Stack* stack)
 
     if (stack->size + 1 > stack->capacity)
     {
-        stack_type* tmp = (stack_type*) realloc (stack->data, 2 * stack->capacity);
+        stack_type* tmp = (stack_type*) realloc (stack->data, 2 * stack->capacity * sizeof (stack_type));
 
         if (!tmp)
         {
@@ -166,6 +188,9 @@ int StackIncrease (Stack* stack)
 
         stack->data = tmp;
         stack->capacity = 2 * stack->capacity;
+
+        StackPoison (stack, stack->size + 1, stack->capacity);
+
     }
     
     return ValidateResult (stack, STACK_INCREASE_CODE);
@@ -180,7 +205,7 @@ int StackDecrease (Stack* stack)
 
     if (stack->size < stack->capacity / 2)
     {
-        stack_type* tmp = (stack_type*) realloc (stack->data, stack->capacity / 2 + 1);
+        stack_type* tmp = (stack_type*) realloc (stack->data, (stack->capacity / 2 + 1) * sizeof (stack_type));
 
         if (!tmp)
         {   
@@ -464,6 +489,12 @@ int StackPrintExitCode(Stack* stack)
         func_code -= STACK_VALIDATE_CODE;
     }
 
+    if (func_code & STACK_EXTERNAL_FUNC_CODE)
+    {
+        printf (RED_COLOR("Some external function\n"));
+        func_code -= STACK_EXTERNAL_FUNC_CODE;
+    }
+
     if (func_code != 0)
     {
         printf (RED_COLOR("Unkwonw function with code: %X\n"), func_code);
@@ -510,11 +541,6 @@ unsigned long long StackHashSum(Stack* stack)
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
-void stack_hex_printer (stack_type* data)
-{
-    printf ("%X", *data);
-}
-
 int UnitTest ()
 {   
     Stack stack1 = {};
@@ -527,9 +553,8 @@ int UnitTest ()
     StackPush(&stack1, 0xFFFFFFAF);
     StackDump (&stack1);
 
-    int el = 666;
+    stack_type el = 666;
     StackPop (&stack1, &el);
-    SetStackPrinterFunc (&stack1, stack_hex_printer);
 
     stack1.info.error_code = 0x000001C3;
     stack1.info.error_func_code = 0x000004C3;

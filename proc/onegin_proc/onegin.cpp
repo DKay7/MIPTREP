@@ -4,7 +4,7 @@
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
-int string_ctor (string* string, char* data, size_t len)
+int StringCtor (String* string, char* data, size_t len)
 {   
     assert (data);
 
@@ -16,7 +16,7 @@ int string_ctor (string* string, char* data, size_t len)
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
-int count_symbols (FILE* file)
+int CountSymbols (FILE* file)
 {   
     assert (file);
     
@@ -29,20 +29,20 @@ int count_symbols (FILE* file)
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
-char* read_file_to_buffer (FILE* file, int num_symbols)
+char* ReadFileToBuffer (FILE* file, int num_symbols)
 {   
     assert (num_symbols > 0);
     assert (file);
 
     char* file_buffer = (char*) calloc (num_symbols + 1, sizeof (char));
     
-    CHECK_POINTER (file_buffer, "read_file_to_buffer", NULL);
+    CHECK_POINTER (file_buffer, "ReadFileToBuffer", NULL);
 
     int actual_num_symbols = fread (file_buffer, sizeof (char), num_symbols, file);
 
     if (actual_num_symbols != num_symbols)
     {
-        print_error ("read_file_to_buffer", "Error while reading file");
+        OneginErrno ("ReadFileToBuffe", "Error while reading file");
         return NULL;
     }
 
@@ -51,7 +51,7 @@ char* read_file_to_buffer (FILE* file, int num_symbols)
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
-int count_lines (char* buffer)
+int CountLines (char* buffer)
 {   
     assert (buffer);
 
@@ -71,7 +71,8 @@ int count_lines (char* buffer)
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
-int fill_array (char* buffer, string** ptr_array, string* str_array, 
+int OneginFillPArray
+ (char* buffer, String** ptr_array, String* str_array, 
                 unsigned line_num, unsigned num_symbols)
 {   
     assert (buffer);
@@ -84,7 +85,7 @@ int fill_array (char* buffer, string** ptr_array, string* str_array,
     char* line_ptr = buffer;
 
     for (unsigned i = 0; i < line_num; i++)
-    {
+    {   
         while (line_ptr[line_iter] != '\n' && line_len < num_symbols)
         {   
             line_iter++;
@@ -94,13 +95,10 @@ int fill_array (char* buffer, string** ptr_array, string* str_array,
         line_len++;
         line_iter++;
 
-        if (line_ptr[line_len - 2] != '\n')
-            line_ptr[line_len - 2] = '\n';
-        
         line_ptr[line_len - 1] = '\0';
-
-        string str;
-        string_ctor (&str, line_ptr, line_len);
+        
+        String str;
+        StringCtor (&str, line_ptr, line_len);
 
         str_array[i] = str;
         ptr_array[i] = &str_array[i];
@@ -115,7 +113,7 @@ int fill_array (char* buffer, string** ptr_array, string* str_array,
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
-int save_to_file (string** array, FILE* file, unsigned line_num)
+int OneginSavePArrToFile (String** array, FILE* file, unsigned line_num)
 {   
     assert (array);
     assert (file);
@@ -143,7 +141,7 @@ int save_to_file (string** array, FILE* file, unsigned line_num)
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
-int save_original_to_file (string* array, FILE* file, unsigned line_num)
+int OneginSaveOrigToFile (String* array, FILE* file, unsigned line_num)
 {   
     assert (array);
     assert (file);
@@ -167,7 +165,7 @@ int save_original_to_file (string* array, FILE* file, unsigned line_num)
 }
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
-void print_error_func (const char* file, const int line, const char* current_function, 
+void OneginErrnoFunc (const char* file, const int line, const char* current_function, 
                        const char* failed_function, const char* error_text)
 {   
     assert (file);
