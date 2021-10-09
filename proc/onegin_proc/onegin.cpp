@@ -56,16 +56,23 @@ int CountLines (char* buffer)
     assert (buffer);
 
     char c = buffer[0];
+    char last_c = c;
+
     int num_lines = 0;
 
     for (int i=0; (c = buffer[i]) != '\0'; i++)
     {
         if (c == '\n')
         {
-            num_lines++;
+            ++num_lines;
         }
+
+        last_c = c;
     }
     
+    if (last_c != '\n')
+        ++num_lines;
+
     return num_lines;
 }
 
@@ -81,31 +88,31 @@ int OneginFillPArray
     assert (num_symbols > 0);
 
     unsigned line_len = 0;
-    int line_iter = 0;
+    unsigned line_iter = 0;
     char* line_ptr = buffer;
 
     for (unsigned i = 0; i < line_num; i++)
     {   
-        while (line_ptr[line_iter] != '\n' && line_len < num_symbols)
+        line_ptr = buffer + line_iter;
+        line_len = 0;
+
+        while (buffer[line_iter] != '\n' && line_iter < num_symbols)
         {   
             line_iter++;
             line_len++;
         }
 
+        if (buffer[line_iter] == '\n')
+            buffer[line_iter] = '\0';
+
         line_len++;
         line_iter++;
 
-        line_ptr[line_len - 1] = '\0';
-        
         String str;
         StringCtor (&str, line_ptr, line_len);
 
         str_array[i] = str;
         ptr_array[i] = &str_array[i];
-
-        line_ptr += line_iter;
-        line_iter = 0;
-        line_len = 0;
     }
 
     return 0;
