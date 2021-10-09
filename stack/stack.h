@@ -29,7 +29,7 @@
 
 #if !defined(STACK_DATA_POISON)
 /// Макрос для константы яда для данных в стеке.
-#define STACK_DATA_POISON 0xDEAD
+#define STACK_DATA_POISON 666
 #endif
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
@@ -43,11 +43,13 @@
 #endif
 
 /// Объявление типа стака. Необходимо, чтобы стак был независим от типа данных.
-typedef int stack_type;
+typedef double stack_type;
+
+/// Объявление типа канарейки.
 typedef unsigned long long hummingbird_type;
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
-const hummingbird_type HUMMINGBIRD = (hummingbird_type) 0xDEAD0DED;
+extern const hummingbird_type HUMMINGBIRD;
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
@@ -117,7 +119,8 @@ enum FUNC_CODES
     STACK_UNIT_TEST_CODE =       0x00000080,    ///< #UnitTest()
     STACK_SET_PRINTER_CODE =     0x00000100,    ///< #SetStackPrinterFunc()
     STACK_PRINT_EXIT_CODE_CODE = 0x00000200,    ///< #StackPrintExitCode()
-    STACK_VALIDATE_CODE =        0x00000400     ///< #StackValidate()
+    STACK_VALIDATE_CODE =        0x00000400,    ///< #StackValidate()
+    STACK_EXTERNAL_FUNC_CODE =   0x00000800,    ///< Любая внешняя функция
 };
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
@@ -147,6 +150,19 @@ int StackCtorFunc (Stack* stack, size_t size, const char* stack_name, const char
 *   @return Один из кодов \link RETURN_CODES \endlink.
 */
 int StackDtor (Stack* stack);
+
+//flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+/**
+*   @brief Функция StackPoison заполняет ядом первые num элементов стека.
+*   
+*   @param [in] stack Указатель на структуру \link Stack \endlink.
+*   @param [in] start Индекс первого элемента для отравления.
+*   @param [in] num Количество элементов для отравления.
+*
+*   @return Один из кодов \link RETURN_CODES \endlink.
+*/
+void StackPoison (Stack* stack, size_t start, size_t num);
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
