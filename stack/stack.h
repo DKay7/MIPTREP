@@ -35,7 +35,7 @@
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
 #ifdef VALIDATE_ALL
-/// Макрос для константы яда для данных в стеке. Если VALIDATE_ALL не определено.
+/// Макрос для константы яда для данных в стеке. Если VALIDATE_ALL определено.
 #define ValidateResult(stack, func_code) StackValidate(stack, func_code)
 #else
 /// Макрос для константы яда для данных в стеке. Если VALIDATE_ALL не определено.
@@ -56,7 +56,7 @@ extern const hummingbird_type HUMMINGBIRD;
 /** @struct AdditionalInfo
  *  @brief Дополнительные данные стека.
  */
-typedef struct AdditionalInfo
+typedef struct
 {       
     int error_code;                         /**< Поле AdditionalInfo#error_code хранит код ошибки. */
     int error_func_code;                    /**< Поле AdditionalInfo#error_code хранит код функции, в которой произошла ошибка. */
@@ -101,7 +101,8 @@ enum RETURN_CODES
     STACK_WRONG_END_HUMMINGBIRD =       0x00000080,      ///< Неверная конечная канарейка.
     STACK_INCORRECT_SIZE =              0x00000100,      ///< Неверный размер стека.
     STACK_INCORRECT_CAPACITY =          0x00000200,      ///< Неверный размер стека.
-    STACK_WRONG_HASH_SUM =              0x00000400       ///< Неверный размер стека.
+    STACK_WRONG_HASH_SUM =              0x00000400,      ///< Неверный размер стека.
+    STACK_NOT_CREATED =                 0x00000800,      ///< Стек еще не создан.
 };
 
 /**
