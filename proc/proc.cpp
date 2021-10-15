@@ -164,7 +164,7 @@ int AsmDiv (Stack* stack)
         return errno;
     }
 
-    if (abs (second_term) < EPSILON)
+    if (fabs (second_term) < EPSILON)
     {
         errno = errno | PROC_ZERO_DIVISION_ERR;
         return errno;

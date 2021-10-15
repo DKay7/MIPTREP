@@ -1,3 +1,5 @@
+#ifndef STACK_H
+#define STACK_H
 /**
 *   @file
 *   @brief Файл содержит в себе прототипы функций для работы со стаком и саму структуру стака.
@@ -29,18 +31,28 @@
 
 #if !defined(STACK_DATA_POISON)
 /// Макрос для константы яда для данных в стеке.
-#define STACK_DATA_POISON 666.666
+#define STACK_DATA_POISON 666
 #endif
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
 #ifdef VALIDATE_ALL
-/// Макрос для константы яда для данных в стеке. Если VALIDATE_ALL не определено.
+/// Макрос для константы яда для данных в стеке. Если VALIDATE_ALL определено.
 #define ValidateResult(stack, func_code) StackValidate(stack, func_code)
 #else
 /// Макрос для константы яда для данных в стеке. Если VALIDATE_ALL не определено.
 #define ValidateResult(stack, func_code) STACK_OK
 #endif
+
+//flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+#define STACK_INCREASE_COEFFICIENT(stack_size) 2 * stack_size + 1
+
+//flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+#define STACK_DECREASE_COEFFICIENT(stack_size) stack_size / 4 + 1
+
+//flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
 /// Объявление типа стака. Необходимо, чтобы стак был независим от типа данных.
 typedef double stack_type;
@@ -49,14 +61,14 @@ typedef double stack_type;
 typedef unsigned long long hummingbird_type;
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
-extern const hummingbird_type HUMMINGBIRD;
+const hummingbird_type HUMMINGBIRD = (hummingbird_type) 0xDEAD0DED;
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
 /** @struct AdditionalInfo
- *  @brief Дополнительные данные стека.
- */
-typedef struct AdditionalInfo
+*  @brief Дополнительные данные стека.
+*/
+typedef struct
 {       
     int error_code;                         /**< Поле AdditionalInfo#error_code хранит код ошибки. */
     int error_func_code;                    /**< Поле AdditionalInfo#error_code хранит код функции, в которой произошла ошибка. */
@@ -101,7 +113,8 @@ enum RETURN_CODES
     STACK_WRONG_END_HUMMINGBIRD =       0x00000080,      ///< Неверная конечная канарейка.
     STACK_INCORRECT_SIZE =              0x00000100,      ///< Неверный размер стека.
     STACK_INCORRECT_CAPACITY =          0x00000200,      ///< Неверный размер стека.
-    STACK_WRONG_HASH_SUM =              0x00000400       ///< Неверный размер стека.
+    STACK_WRONG_HASH_SUM =              0x00000400,      ///< Неверный размер стека.
+    STACK_NOT_CREATED =                 0x00000800,      ///< Стек еще не создан.
 };
 
 /**
@@ -276,3 +289,4 @@ int StackPrintExitCode(Stack* stack);
 int UnitTest ();
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+#endif

@@ -3,8 +3,6 @@
 #include <assert.h>
 #include <string.h>
 
-const hummingbird_type HUMMINGBIRD = (hummingbird_type) 0xDEAD0DED;
-
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
 int StackCtorFunc (Stack* stack, size_t size, const char* stack_name, const char* func_name, int line, const char* file_name)
@@ -24,9 +22,8 @@ int StackCtorFunc (Stack* stack, size_t size, const char* stack_name, const char
 
     if (!tmp_pointer)
     {   
-        stack->info.error_code = stack->info.error_code | STACK_MEM_ALLOCK_ERR;
-        stack->info.error_func_code = stack->info.error_func_code | STACK_CTOR_CODE;
-
+        stack->info.error_code |= STACK_MEM_ALLOCK_ERR;
+        stack->info.error_func_code |=  STACK_CTOR_CODE;
         return STACK_MEM_ALLOCK_ERR;
     }
 
@@ -37,7 +34,6 @@ int StackCtorFunc (Stack* stack, size_t size, const char* stack_name, const char
 
     StackPoison (stack, 0, stack->capacity);
 
-    stack->hash = StackHashSum (stack);
     stack->end_bird = HUMMINGBIRD;
 
     stack->info.print_function = NULL;
@@ -47,6 +43,8 @@ int StackCtorFunc (Stack* stack, size_t size, const char* stack_name, const char
     stack->info.filename = file_name;
     stack->info.error_code = STACK_OK;
     stack->info.error_func_code = 0;
+
+    stack->hash = StackHashSum (stack);
 
     return StackValidate (stack, STACK_CTOR_CODE);
 }
@@ -59,15 +57,28 @@ int StackDtor (Stack* stack)
 
     if (!stack->data)
     {   
-        stack->info.error_code = stack->info.error_code | STACK_DTOR_DBL_CALL;
-        stack->info.error_func_code = stack->info.error_func_code | STACK_DTOR_CODE;
+        stack->info.error_code |= STACK_DTOR_DBL_CALL;
+        stack->info.error_func_code |= STACK_DTOR_CODE;
 
         return STACK_DTOR_DBL_CALL;
     }
 
     StackPoison (stack, 0, stack->capacity);
 
+    stack->capacity = 0;
+    stack->size = 0;
+    stack->hash = 0;
+    stack->info.error_code = STACK_NOT_CREATED;
+    stack->info.error_func_code = STACK_DTOR_CODE;
+    stack->info.stack_name = NULL;
+    stack->info.init_func = NULL;
+    stack->info.filename = NULL;
+    stack->info.line = -1;
+    stack->info.print_function = NULL;
+    stack->info.stack_name = NULL;
+
     free (stack->data);
+    stack->data = NULL;
 
     return ValidateResult (stack, STACK_DTOR_CODE);
 }
@@ -112,23 +123,20 @@ int StackPush (Stack* stack, stack_type element)
 
     if ((err_code = StackValidate (stack, STACK_PUSH_CODE)) != STACK_OK)
     {   
-        stack->info.error_code = stack->info.error_code | err_code;
-        stack->info.error_func_code = stack->info.error_func_code | STACK_PUSH_CODE;
-
         StackDump (stack);
-
         return err_code;
     }
 
     if (StackIncrease (stack) != STACK_OK)
     {   
-        stack->info.error_code = stack->info.error_code | STACK_INCREASE_ERR;
-        stack->info.error_func_code = stack->info.error_func_code | STACK_PUSH_CODE;
+        stack->info.error_code |= STACK_INCREASE_ERR;
+        stack->info.error_func_code |= STACK_PUSH_CODE;
 
         return STACK_INCREASE_ERR;
     }
 
-    stack->data[stack->size++] = element;
+    stack->data[stack->size] = element;
+    stack->size++;
     stack->hash = StackHashSum (stack);
 
     return ValidateResult (stack, STACK_PUSH_CODE);
@@ -145,8 +153,8 @@ int StackPop (Stack* stack, stack_type* out_element)
 
     if ((err_code = StackValidate (stack, STACK_POP_CODE)) != STACK_OK)
     {   
-        stack->info.error_code = stack->info.error_code | err_code;
-        stack->info.error_func_code = stack->info.error_func_code | STACK_POP_CODE;
+        stack->info.error_code |= err_code;
+        stack->info.error_func_code |= STACK_POP_CODE;
 
         StackDump (stack);
         return err_code;
@@ -154,8 +162,8 @@ int StackPop (Stack* stack, stack_type* out_element)
 
     if (StackDecrease (stack) != STACK_OK)
     {   
-        stack->info.error_code = stack->info.error_code | STACK_DECREASE_ERR;
-        stack->info.error_func_code = stack->info.error_func_code | STACK_POP_CODE;
+        stack->info.error_code |= STACK_DECREASE_ERR;
+        stack->info.error_func_code |= STACK_POP_CODE;
 
         return STACK_DECREASE_ERR;
     }
@@ -176,21 +184,21 @@ int StackIncrease (Stack* stack)
 
     if (stack->size + 1 > stack->capacity)
     {
-        stack_type* tmp = (stack_type*) realloc (stack->data, 2 * stack->capacity * sizeof (stack_type));
+        stack_type* tmp = (stack_type*) realloc (stack->data, STACK_INCREASE_COEFFICIENT (stack->size) * sizeof (stack_type));
 
         if (!tmp)
         {
-            stack->info.error_code = stack->info.error_code | STACK_MEM_ALLOCK_ERR;
-            stack->info.error_func_code = stack->info.error_func_code | STACK_INCREASE_CODE;
+            stack->info.error_code |= STACK_MEM_ALLOCK_ERR;
+            stack->info.error_func_code |= STACK_INCREASE_CODE;
 
             return STACK_MEM_ALLOCK_ERR;
         }
 
         stack->data = tmp;
-        stack->capacity = 2 * stack->capacity;
+        stack->capacity = STACK_INCREASE_COEFFICIENT (stack->size);
 
         StackPoison (stack, stack->size + 1, stack->capacity);
-
+        stack->hash = StackHashSum (stack);
     }
     
     return ValidateResult (stack, STACK_INCREASE_CODE);
@@ -203,20 +211,21 @@ int StackDecrease (Stack* stack)
     assert (stack);
     assert (stack->data);
 
-    if (stack->size < stack->capacity / 2)
+    if (stack->size < STACK_DECREASE_COEFFICIENT (stack->capacity))
     {
-        stack_type* tmp = (stack_type*) realloc (stack->data, (stack->capacity / 2 + 1) * sizeof (stack_type));
+        stack_type* tmp = (stack_type*) realloc (stack->data, STACK_DECREASE_COEFFICIENT (stack->size) * sizeof (stack_type));
 
         if (!tmp)
         {   
-            stack->info.error_code = stack->info.error_code | STACK_MEM_ALLOCK_ERR;
-            stack->info.error_func_code = stack->info.error_func_code | STACK_DECREASE_CODE;
+            stack->info.error_code |= STACK_MEM_ALLOCK_ERR;
+            stack->info.error_func_code |= STACK_DECREASE_CODE;
 
             return STACK_MEM_ALLOCK_ERR;
         }
 
         stack->data = tmp;
-        stack->capacity = stack->capacity / 2 + 1;
+        stack->capacity = STACK_DECREASE_COEFFICIENT (stack->size);
+        stack->hash = StackHashSum (stack);
     }
 
     return ValidateResult (stack, STACK_DECREASE_CODE);
@@ -230,27 +239,27 @@ int StackValidate (Stack* stack, int func_code)
 
     if(stack->data == NULL)
     {
-        stack->info.error_code = stack->info.error_code | STACK_INCORRECT_DATA_PTR;
+        stack->info.error_code |= STACK_INCORRECT_DATA_PTR;
     }
 
     if(stack->start_bird != HUMMINGBIRD)
     {
-        stack->info.error_code = stack->info.error_code | STACK_WRONG_START_HUMMINGBIRD;
+        stack->info.error_code |= STACK_WRONG_START_HUMMINGBIRD;
     }
 
-    if(stack->start_bird != HUMMINGBIRD)
+    if(stack->end_bird != HUMMINGBIRD)
     {
-        stack->info.error_code = stack->info.error_code |  STACK_WRONG_END_HUMMINGBIRD;
+        stack->info.error_code |= STACK_WRONG_END_HUMMINGBIRD;
     }
 
     if(stack->size > stack->capacity)
     {
-        stack->info.error_code = stack->info.error_code |  STACK_INCORRECT_SIZE;
+        stack->info.error_code |= STACK_INCORRECT_SIZE;
     }
 
     if(stack->hash != StackHashSum (stack))
-    {
-        stack->info.error_code = stack->info.error_code |  STACK_WRONG_HASH_SUM;
+    {   
+        stack->info.error_code |= STACK_WRONG_HASH_SUM;
     }
 
     stack->info.error_func_code = stack->info.error_func_code |  STACK_VALIDATE_CODE;
@@ -280,28 +289,23 @@ int StackDumpFunc (Stack* stack, const int line, const char* func_name, const ch
         printf (RED_COLOR("\nSTACK [ERROR][ERR_CODE: 0x%X]"), err_code);
     }
 
-    printf ("[%p] ", &stack->data);
-    printf ("\"%s\" was init. in func. %s line %d file %s \n", stack->info.stack_name, stack->info.init_func, stack->info.line, stack->info.filename);
-    printf ("Dump for \"%s\" called in func. %s, line %d, file %s'\n", stack_name, func_name, line, file_name);
+    printf ("[%p] \"%s\" was init. in func. %s line %d file %s \n"
+            "Dump for \"%s\" called in func. %s, line %d, file %s'\n", &stack->data, stack->info.stack_name, stack->info.init_func, stack->info.line, stack->info.filename, stack_name, func_name, line, file_name);
  
     if(err_code != STACK_OK)
     {
         StackPrintExitCode(stack);
     }
 
-    printf ("\n{\n");              
-                                                
-    printf (" size = %lu \n", stack->size);           
-                                                    
-    printf (" capacity = %lu\n", stack->capacity);    
-                                                    
-    printf (" hash_sum = %llX\n", stack->hash);       
-                                                    
-    printf ("\t{\n"); 
+    printf ("\n{\n"
+            " size = %lu \n"    
+            " capacity = %lu\n"
+            " hash_sum = %llX\n"
+            "\t{\n", stack->size, stack->capacity, stack->hash); 
 
     for (size_t i = 0; i < stack->capacity; i++)
     {
-        printf ("   ");      
+        printf ("\t");      
 
         if (i < stack->size)
         {                      
@@ -331,7 +335,7 @@ int StackDumpFunc (Stack* stack, const int line, const char* func_name, const ch
         printf  ("\n");
     }
 
-    printf ("   }\n}\n");
+    printf ("\t}\n}\n");
 
     return ValidateResult (stack, STACK_DUMP_CODE);
 }
@@ -414,6 +418,12 @@ int StackPrintExitCode(Stack* stack)
     {
         printf (RED_COLOR("Error while decreasing stack\n"));
         err_code -= STACK_DECREASE_ERR;
+    }
+    
+    if (err_code & STACK_NOT_CREATED)
+    {
+        printf (RED_COLOR("Stack was descructed and wasn't created\n"));
+        err_code -= STACK_NOT_CREATED;
     }
 
     if (err_code != 0)
@@ -511,13 +521,18 @@ unsigned long long HashSum(void* pointer, size_t size, unsigned long long hash)
 {
     assert(pointer);
 
-    char* ptr = (char*) pointer;
+    unsigned char* ptr = (unsigned char*) pointer;
 
-    for (unsigned i = 0; i < size; i++)
+    for (size_t i = 0; i < size; i++)
     {
         hash += *(ptr + i);
-        hash = hash << i;
+        hash += (hash << 10);
+        hash ^= (hash >> 6);
     }
+
+    hash += (hash << 3);
+    hash ^= (hash >> 11);
+    hash += (hash << 15);
 
     return hash;
 }
@@ -527,15 +542,25 @@ unsigned long long HashSum(void* pointer, size_t size, unsigned long long hash)
 unsigned long long StackHashSum(Stack* stack)
 {
     assert(stack);
+
     unsigned long long old_hash = stack->hash;
+    int stack_err_code = stack->info.error_code;
+    int stack_err_func_code = stack->info.error_func_code;
+
+    stack->info.error_code = 0;
+    stack->info.error_func_code = 0;
     stack->hash = 0;
-    unsigned long long hash = HashSum (stack, sizeof(stack));
+
+    unsigned long long hash = HashSum (stack, sizeof(*stack));
 
     #ifdef DATA_HASHING
     hash = HashSum (stack->data, stack->size * sizeof (stack_type), hash);
     #endif
     
+    stack->info.error_code = stack_err_code;
+    stack->info.error_func_code = stack_err_func_code;
     stack->hash = old_hash;
+    
     return hash;
 }
 
@@ -544,23 +569,24 @@ unsigned long long StackHashSum(Stack* stack)
 int UnitTest ()
 {   
     Stack stack1 = {};
-    StackCtor (&stack1, 10);
-    StackDump (&stack1);
 
-    StackPush(&stack1, 256);
-    StackPush(&stack1, 8);
-    StackPush(&stack1, 9);
-    StackPush(&stack1, 0xFFFFFFAF);
-    StackDump (&stack1);
+    StackCtor (&stack1, 1);
+    StackDump(&stack1);
+    
+    printf ("%llX\n", stack1.hash);
+    printf ("%llX\n", StackHashSum (&stack1));
 
-    stack_type el = 666;
-    StackPop (&stack1, &el);
+    StackPush(&stack1, 3078);
+    StackPush(&stack1, 255);
+    StackPush(&stack1, 3565);
+    StackDump(&stack1);
 
-    stack1.info.error_code = 0x000001C3;
-    stack1.info.error_func_code = 0x000004C3;
-    StackDump (&stack1);
 
+
+    stack1.capacity = 15;
+    StackDump(&stack1);
     StackDtor (&stack1);
+
 
     return 0;
 }
