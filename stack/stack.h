@@ -1,3 +1,5 @@
+#ifndef STACK_H
+#define STACK_H
 /**
 *   @file
 *   @brief Файл содержит в себе прототипы функций для работы со стаком и саму структуру стака.
@@ -42,6 +44,16 @@
 #define ValidateResult(stack, func_code) STACK_OK
 #endif
 
+//flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+#define STACK_INCREASE_COEFFICIENT(stack_size) 2 * stack_size + 1
+
+//flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+#define STACK_DECREASE_COEFFICIENT(stack_size) stack_size / 4 + 1
+
+//flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
 /// Объявление типа стака. Необходимо, чтобы стак был независим от типа данных.
 typedef double stack_type;
 
@@ -49,13 +61,13 @@ typedef double stack_type;
 typedef unsigned long long hummingbird_type;
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
-extern const hummingbird_type HUMMINGBIRD;
+const hummingbird_type HUMMINGBIRD = (hummingbird_type) 0xDEAD0DED;
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
 /** @struct AdditionalInfo
- *  @brief Дополнительные данные стека.
- */
+*  @brief Дополнительные данные стека.
+*/
 typedef struct
 {       
     int error_code;                         /**< Поле AdditionalInfo#error_code хранит код ошибки. */
@@ -277,3 +289,4 @@ int StackPrintExitCode(Stack* stack);
 int UnitTest ();
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+#endif
