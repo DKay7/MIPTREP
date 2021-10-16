@@ -1,3 +1,4 @@
+#include "../machine/proc.h"
 #include "onegin.h"
 #include <assert.h>
 #include <malloc.h>
@@ -102,7 +103,7 @@ int OneginFillPArray
             line_len++;
         }
 
-        if (buffer[line_iter] == '\n')
+        if (buffer[line_iter] == '\n' || buffer[line_iter] == PROC_COMMENT_SYMBOL)
             buffer[line_iter] = '\0';
 
         line_len++;

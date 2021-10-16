@@ -1,13 +1,17 @@
+#ifndef PROC_H
+#define PROC_H
 /**
 *   @file
 *   @brief Файл содержит в себе прототипы функций для основы процессора.
 */
 
-#include "stack_proc/stack.h"
-#include "onegin_proc/onegin.h"
+#include "../stack_proc/stack.h"
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
+#define PROC_COMMENT_SYMBOL ';'
+
+//flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
 /// Малая величина для сравнения чисел с плавающей точкой с нулем.
 #ifndef EPSILON
@@ -15,58 +19,41 @@
 #endif
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-#ifdef STACK_DATA_POISON
-#undef STACK_DATA_POISON
-#define STACK_DATA_POISON 666.666
-#else
-#define STACK_DATA_POISON 666.666
-#endif
 
-/// Спецификатор ввода/вывода для типа данных #stack_type
-#ifdef STACK_TYPE_SPEC
-#undef STACK_TYPE_SPEC
-#define STACK_TYPE_SPEC "%lf "
-#else
-#define STACK_TYPE_SPEC "%lf "
-#endif
-
-/// Макрос для проверки количества аргументов команды
-#ifndef CHECK_ARGS_NUM
-#define CHECK_ARGS_NUM(actual_num, correct_num) \
-do { \
-    if (actual_num != correct_num)  \
-    {   \
-        errno = errno | PROC_WRONG_NUM_OF_CMD_ARGS; \
-        return errno;   \
-    }   \
-} while (0)
-#endif
-
-//flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-
-///Определение типа данных, с которыми работает процессор.
-//typedef double stack_type;
+enum COMMAND_MACHINE_CODES
+{
+    ASM_HLT_CODE        = 0,
+    ASM_PUSH_CODE       = 1,
+    ASM_POP_CODE        = 2,
+    ASM_ADD_CODE        = 3,
+    ASM_SUB_CODE        = 4,
+    ASM_MUL_CODE        = 5,
+    ASM_DIV_CODE        = 6,
+    ASM_OUT_CODE        = 7,
+    ASM_DUMP_CODE       = 8,
+    ASM_VALIDATE_CODE   = 9,
+};
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
 /**
 *   Перечисление кодов ошибок, которые функции процессора возвращают.  
 */
-enum AsmReturnCodes
+enum ProcReturnCodes
 {
-    PROC_OK =                           0x00000000,
-    PROC_NOT_ENOUGH_VALUES_IN_STACK =   0x00000001,
-    PROC_ZERO_DIVISION_ERR =            0x00000002,
-    PROC_INTERNAL_STACK_ERR =           0x00000004,
-    PROC_ERR_READING_CMD_NAME =         0x00000008,
-    PROC_WRONG_NUM_OF_CMD_ARGS =        0x00000010,
-    PROC_FILE_OPENING_ERR =             0x00000020,
+    PROC_OK                         = 0x00000000,
+    PROC_NOT_ENOUGH_VALUES_IN_STACK = 0x00000001,
+    PROC_ZERO_DIVISION_ERR          = 0x00000002,
+    PROC_INTERNAL_STACK_ERR         = 0x00000004,
+    ASM_ERR_READING_CMD_NAME        = 0x00000008,
+    ASM_WRONG_NUM_OF_CMD_ARGS       = 0x00000010,
+    ASM_FILE_OPENING_ERR            = 0x00000020,
 };
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
 /// Константа для хранения ошибки процессора. 
-extern int errno;
+int proc_errno = PROC_OK;
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
@@ -140,30 +127,6 @@ int AsmDiv (Stack* stack);
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
 /**
-*   Функция AsmParseCommand реализует парсинг команды.
-*   
-*   @param [in, out] stack Указатель на структуру  #Stack.
-*   @param [in] command_and_args Указатель на структуру #String, которая хранит в себе команду и аргументы.
-*   
-*   @return Один из кодов #AsmReturnCodes.
-*/
-int AsmParseCommand(Stack* stack, String* command_and_args);
-
-//flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-
-/**
-*   Функция AsmProcessFile реализует парсинг файла.
-*   
-*   @param [in, out] stack Указатель на структуру  #Stack.
-*   @param [in] file Файдловый дескриптор для чтения.
-* 
-*   @return Один из кодов #AsmReturnCodes.
-*/
-int AsmProcessFile(Stack* stack, FILE* file);
-
-//flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-
-/**
 *   Функция ProcDump выводит отладочную информацию о процессоре.
 *   
 *   @param [in] stack Указатель на структуру  #Stack.
@@ -194,3 +157,4 @@ int ProcValidate (Stack* stack);
 int ProcUnitTest();
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+#endif

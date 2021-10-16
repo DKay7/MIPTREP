@@ -1,3 +1,5 @@
+#ifndef ONEGIN_H
+#define ONEGIN_H
 /**
 * @file
 * @brief Данный файл содержит в себе прототипы функций для чтения/записи романа в стихах "Евгений Онегин" и трагедии "Гамлет".
@@ -161,3 +163,4 @@ void OneginErrnoFunc (const char* file, const int line, const char* current_func
                        const char* failed_function, const char* error_text);
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+#endif

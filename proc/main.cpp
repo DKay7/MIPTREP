@@ -1,10 +1,11 @@
-#include "proc.h"
+#include "assembler/asm.h"
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
 int main ()
 {   
-    ProcUnitTest ();
+    AsmUnitTest ();
+    // ProcUnitTest ();
     
     return 0;
 }
