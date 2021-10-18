@@ -1,5 +1,4 @@
 #include "proc.h"
-#include "assembler/asm.h"
 #include <assert.h>
 #include <math.h>
 #include <string.h>
@@ -7,8 +6,6 @@
 
 int AsmPush (Stack* stack, stack_type value)
 {
-    assert (stack);
-
     int stack_code = StackPush (stack, value);
 
     if (stack_code != STACK_OK)
@@ -25,8 +22,6 @@ int AsmPush (Stack* stack, stack_type value)
 
 int AsmPop (Stack* stack, stack_type* value)
 {
-    assert (stack);
-
     if (stack->size < 1)
     {
         proc_errno = proc_errno | PROC_NOT_ENOUGH_VALUES_IN_STACK;
@@ -49,8 +44,6 @@ int AsmPop (Stack* stack, stack_type* value)
 
 int AsmAdd (Stack* stack)
 {
-    assert (stack);
-
     if (stack->size < 2)
     {
         proc_errno = proc_errno | PROC_NOT_ENOUGH_VALUES_IN_STACK;
@@ -79,8 +72,6 @@ int AsmAdd (Stack* stack)
 
 int AsmSub (Stack* stack)
 {
-    assert (stack);
-
     if (stack->size < 2)
     {
         proc_errno = proc_errno | PROC_NOT_ENOUGH_VALUES_IN_STACK;
@@ -109,8 +100,6 @@ int AsmSub (Stack* stack)
 
 int AsmMul (Stack* stack)
 {
-    assert (stack);
-
     if (stack->size < 2)
     {
         proc_errno = proc_errno | PROC_NOT_ENOUGH_VALUES_IN_STACK;
@@ -139,8 +128,6 @@ int AsmMul (Stack* stack)
 
 int AsmDiv (Stack* stack)
 {
-    assert (stack);
-
     if (stack->size < 2)
     {
         proc_errno = proc_errno | PROC_NOT_ENOUGH_VALUES_IN_STACK;

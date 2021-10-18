@@ -1,19 +1,6 @@
-#include "../machine/proc.h"
 #include "onegin.h"
 #include <assert.h>
 #include <malloc.h>
-
-//flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-
-int StringCtor (String* string, char* data, size_t len)
-{   
-    assert (data);
-
-    string->start = data;
-    string->len = len;
-
-    return 0;
-}
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
@@ -62,7 +49,7 @@ int CountLines (char* buffer)
     int num_lines = 0;
 
     for (int i=0; (c = buffer[i]) != '\0'; i++)
-    {
+    {   
         if (c == '\n')
         {
             ++num_lines;
@@ -79,98 +66,40 @@ int CountLines (char* buffer)
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
-int OneginFillPArray
- (char* buffer, String** ptr_array, String* str_array, 
-                unsigned line_num, unsigned num_symbols)
+char** OneginFillPArray (char* buffer, unsigned line_num, unsigned num_symbols)
 {   
     assert (buffer);
-    assert (ptr_array);
-    assert (str_array);
-    assert (num_symbols > 0);
 
-    unsigned line_len = 0;
     unsigned line_iter = 0;
     char* line_ptr = buffer;
+
+    char** str_array = (char**) calloc (line_num, sizeof (char*));
+
+    if (!str_array)
+    {
+        return NULL;
+    }
 
     for (unsigned i = 0; i < line_num; i++)
     {   
         line_ptr = buffer + line_iter;
-        line_len = 0;
 
         while (buffer[line_iter] != '\n' && line_iter < num_symbols)
         {   
             line_iter++;
-            line_len++;
         }
 
-        if (buffer[line_iter] == '\n' || buffer[line_iter] == PROC_COMMENT_SYMBOL)
+        if (buffer[line_iter] == '\n')
             buffer[line_iter] = '\0';
 
-        line_len++;
         line_iter++;
 
-        String str;
-        StringCtor (&str, line_ptr, line_len);
-
-        str_array[i] = str;
-        ptr_array[i] = &str_array[i];
+        str_array[i] = line_ptr;
     }
 
-    return 0;
+    return str_array;
 }
 
-//flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-
-int OneginSavePArrToFile (String** array, FILE* file, unsigned line_num)
-{   
-    assert (array);
-    assert (file);
-
-    fputs ("\n\n\n"
-           "===============================\n"
-           "\t\tFILE STARTS HERE\n"
-           "===============================\n", file);
-
-    for (unsigned i = 0; i < line_num; i++)
-    {   
-        if (array[i]->len > 2)
-        {
-            fputs (array[i]->start, file);
-            fputc ('\n',  file);
-        }
-    }
-
-    fputs ("=============================\n"
-           "\t\tFILE ENDS HERE\n"
-           "=============================\n\n\n", file);
-
-    return 0;
-}
-
-//flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-
-int OneginSaveOrigToFile (String* array, FILE* file, unsigned line_num)
-{   
-    assert (array);
-    assert (file);
-
-    fputs ("\n\n\n"
-           "=================================\n"
-           "\tORIGINAL TEXT STARTS HERE\n"
-           "=================================\n", file);
-
-    for (unsigned i = 0; i < line_num; i++)
-    {   
-            fputs (array[i].start, file);
-            fputc ('\n',  file);
-    }
-
-    fputs ("=================================\n"
-           "\tORIGINAL TEXT  ENDS HERE\n"
-           "=================================\n\n\n", file);
-
-    return 0;
-}
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
 void OneginErrnoFunc (const char* file, const int line, const char* current_function, 

@@ -115,37 +115,10 @@ int CountLines (char* buffer);
 * @brief Функция OneginFillPArray заполняет массив указателей на структуры строк данными из буфера.
 *
 * @param [in] buffer Указатель на буфер, из которого будут прочитаны данные.
-* @param [out] ptr_array Указатель на массив указателей на структуры @link String @endlink,
-*                        в него будут сохранены указатели на структуры.
-* @param [out] str_array Указатель на массив структур @link String @endlink,
-*                        в него будут сохранены сами структуры.
 * @param [in] line_num Количество строк в файле.
 * @param [in] num_symbols количество символов в файле.
 */
-int OneginFillPArray (char* buffer, String** ptr_array, String* str_array, 
-                unsigned line_num, unsigned num_symbols);
-
-//flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-
-/**
-* @brief Функция save_file сохраняет массив указателей на строки в файл.
-*
-* @param [in] array Указатель на массив указателей на структуры @link String @endlink.
-* @param [in] file Файловый дескриптоп, через который будут записаны данные.
-* @param [in] line_num Количество строк в файле.
-*/
-int OneginSavePArrToFile (String** array, FILE* file, unsigned line_num);
-
-//flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-
-/**
-* @brief Функция OneginSaveOrigToFile сохраняет массив строк (исходный, неизмененный массив) в файл.
-*
-* @param [in] array Указатель на массив структур @link String @endlink.
-* @param [in] file Файловый дескриптоп, через который будут записаны данные.
-* @param [in] line_num Количество строк в файле.
-*/
-int OneginSaveOrigToFile (String* array, FILE* file, unsigned line_num);
+char** OneginFillPArray (char* buffer, unsigned line_num, unsigned num_symbols);
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
