@@ -1,250 +1,144 @@
 #include "asm.h"
-#include <assert.h>
-#include <string.h>
-#include <ctype.h>
+#include "../libs/bin_text_lib/binlib.h"
+#include "../defines_and_setups/cmd_setup.h"
+#include "../defines_and_setups/proc_errors.h"
 #include <malloc.h>
-#include "../machine/proc.h"
+#include <assert.h>
+#include <stdio.h>
+#include <cstddef>
+#include <string.h>
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
-int AsmGetArg (char* args_str, double* arg)
-{   
-    int num_readed_symbols = 0;
-    sscanf (args_str, " %lf %n", arg, &num_readed_symbols);
-
-    return num_readed_symbols;
-}
-
-//flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-
-int AsmCheckCommand (char* command_and_args, const char* command_name, int command_len)
-{   
-    if (strncmp (command_and_args, command_name, command_len) == 0)
-    {   
-        command_and_args += command_len;
-        return AsmCheckCmdEnd (command_and_args); 
-    }
-
-    return 0;
-}
-
-//flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-
-int AsmCheckCmdEnd (const char* command_and_args)
-{   
-    return *command_and_args == '\0' || *command_and_args == ';' || *command_and_args == '\n' || *command_and_args == ' ';
-}
-
-//flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-
-int AsmParseCommand (void* cmd_array, char* command_and_args, int* pc, FILE* listing_f)
-{   
-    assert (command_and_args);
-    assert (listing_f);
-    assert (cmd_array);
-
-
-    #define DEF_COMMAND(name, n_args, _id, command_name, ...)    \
-    if (AsmCheckCommand (command_and_args, command_name, strlen (command_name))) \
-    { \
-        int id = _id; \
-        fprintf (listing_f, "%-32s\t|\t", command_and_args); \
-        AsmPprintArgLst (listing_f, pc, sizeof (int)); \
-        fprintf (listing_f, "\t|\t"); \
-        AsmPprintArgLst (listing_f, &id, sizeof (unsigned char)); \
-        fprintf (listing_f, "\t|\t"); \
-        \
-        ((unsigned char*)cmd_array)[*pc] = (unsigned char)(id); \
-        (*pc) += sizeof (unsigned char); \
-        \
-        stack_type arg = STACK_DATA_POISON;     \
-        int num_readed_symbols = 0;          \
-        command_and_args += strlen (command_name); \
-        \
-        for (int i = 0; i < n_args; i++)     \
-        {   num_readed_symbols = AsmGetArg (command_and_args, &arg);\
-            AsmPprintArgLst (listing_f, &arg, sizeof (double)); \
-            \
-            *(double*)((unsigned char*)cmd_array + *pc) = (double)arg; \
-            command_and_args += num_readed_symbols; \
-            (*pc) += sizeof (double); \
-        }   \
-        fprintf (listing_f, "\n");\
-        } \
-        else
-
-    #include "../commands.h"
-    /*else */
-    {   
-        if (!AsmCheckCmdEnd (command_and_args))
-        {
-            proc_errno |= ASM_ERR_READING_CMD_NAME;
-            fprintf (listing_f, "ERROR WHILE COMPILING FILE\n"
-                                "ERRNO: %08X", proc_errno);\
-            return proc_errno;
-        }
-    }
-
-    #undef DEF_COMMAND
-
-    return proc_errno;
-}
-
-//flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-
-FILE* AsmOpenFile(const char* filename, const char* mode)
+int CompileCode (Text* code, const char* filename, const char* listing_filename)
 {
-    assert (filename);
-    assert (mode);
+    AsmCompiler acc = {};
+    AsmCompilerCtor (&acc, code->text_size);
 
-    FILE* file = fopen(filename, mode); 
+    FILE* listing_file = fopen (listing_filename, "w");
 
-    if (!file || ferror (file) || !file || ferror (file))
-    {
-        proc_errno = proc_errno | ASM_FILE_OPENING_ERR;
-        return NULL;
+    if (ferror (listing_file) || listing_file == NULL)
+    {   
+        acc.asm_errno |= ASMCC_ERR_OPENING_FILE;
+        
+        int asm_errno = acc.asm_errno;
+        AsmCompilerDtor (&acc);
+        return asm_errno;
     }
 
-    return file;
-}
-
-//flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-
-int AsmPreprocStrArray (char** str_array, size_t num_lines)
-{
-    assert (str_array);
-
-    for (size_t i = 0; i < num_lines; i++)
+    for (size_t i = 0; i < code->non_empty_lines; i++)
     {   
-        for (size_t j = 0, k = 0; (str_array[i][j]) != '\0'; j++, k++)
+        if (ParseCommand (&acc, code->lines[i].ptr, listing_file) != ASMCC_OK)
         {   
-            if (j == 0 && str_array[i][j] == ' ')
-            {   
-                char* tmp_ptr = str_array[i];
-                printf ("B: :%s:\n", tmp_ptr);
-                while (*tmp_ptr == ' ')
-                {
-                    ++tmp_ptr;
-                }
+            // TODO AsmDump to listing file
+            fprintf (listing_file, "\nERROR!\nERROR NUM: %08X", acc.asm_errno);
 
-                str_array[i] = tmp_ptr;
-                printf ("A: :%s:\n", tmp_ptr);
-            }
-
-            if (str_array[i][j] == PROC_COMMENT_SYMBOL)
-            {   
-                str_array[i][j] = '\0';
-                break;
-            }
+            int asm_errno = acc.asm_errno;
+            AsmCompilerDtor (&acc);
+            return asm_errno;
         }
     }
 
-    return proc_errno;
-}
+    BinHeader bh = {};
+    BinHeaderCtor (&bh, SIGNATURE, CC_VERSION);
+    WriteToBinary (&bh, acc.cmd_array, code->text_size, filename);
+    
+    int asm_errno = acc.asm_errno;
+    AsmCompilerDtor (&acc);
+    return asm_errno;
+}   
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-    
-int AsmProcessFile(const char* filename_to_read, const char* filename_to_write, const char* filename_listing)
+
+int AsmCompilerCtor (AsmCompiler* acc, int cmd_array_size)
 {
-    assert (filename_to_read);
-    assert (filename_to_write);
+    acc->ip = 0;
+    acc->asm_errno = ASMCC_OK;
+    acc->cmd_array = (unsigned char*) calloc(cmd_array_size, sizeof (unsigned char));
 
-    FILE* file_to_read = AsmOpenFile(filename_to_read, "r");
-    FILE* file_to_write = AsmOpenFile(filename_to_write, "wb");
-    FILE* file_for_listing = AsmOpenFile (filename_listing, "w");
-
-    size_t num_symbols = CountSymbols (file_to_read);
-    char* file_buffer = ReadFileToBuffer (file_to_read, num_symbols);
-    size_t num_lines = CountLines (file_buffer);
-    
-    char** str_array = OneginFillPArray (file_buffer, num_lines, num_symbols);
-    AsmPreprocStrArray (str_array, num_lines);
-    
-    ssize_t cmd_array_size = AsmFindCmdArraySize (str_array, num_lines);
-    
-    if (cmd_array_size < 0)
-    {
-        return proc_errno;
-    }
-
-    void* cmd_array = (void*) calloc (1, cmd_array_size);
-    int program_counter = 0;
-    int err_code = PROC_OK;
-
-    for (size_t i = 0; i < num_lines; ++i)
-    {   
-        err_code = AsmParseCommand (cmd_array, str_array[i], &program_counter, file_for_listing);
-
-        if (err_code != PROC_OK)
-        {
-            return proc_errno;
-        }
-    }
-    
-    fwrite (cmd_array, cmd_array_size, 1, file_to_write);
-
-    fclose (file_to_read);
-    fclose (file_to_write);
-
-    free (str_array);
-    free (file_buffer);
-    free (cmd_array);
-
-    return proc_errno;
+    return acc->asm_errno;
 }
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
-ssize_t AsmFindCmdArraySize (char** str_array, size_t num_lines)
+void AsmCompilerDtor (AsmCompiler* acc)
+{
+    assert (acc);
+    assert (acc->cmd_array);
+
+    free (acc->cmd_array);
+}
+
+//flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+int ParseCommand (AsmCompiler* acc, char* command, FILE* listing_file)
+{
+    assert (acc);
+    assert (command);
+
+    char* is_comment = strchr (command, COMMENT_SYMBOL);
+    if (is_comment)
+    {
+        *is_comment = '\0';
+    }
+
+    char cmd_name[MAX_CMD_LEN] = "";
+    int shift = 0;
+    sscanf (command, " %s%n ", cmd_name, &shift);
+
+    if (*cmd_name == '\0')
+    {
+        return acc->asm_errno;
+    }
+
+    #include "read_command_defines.h"
+
+    return acc->asm_errno;
+}
+
+//flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+int GetArg (AsmCompiler* acc, char* command, int n_args, FILE* listing_file)
 {   
-    #define DEF_COMMAND(name, n_args, id, command_name, ...)\
-        if (AsmCheckCommand (str_array[i], command_name, strlen (command_name))) \
-        { \
-            num_commands_bytes += sizeof (unsigned char); \
-            num_args_bytes += sizeof(double) * n_args; \
-        } \
-        else
-
-    size_t num_commands_bytes = 0;
-    size_t num_args_bytes = 0;
-
-    for (size_t i = 0; i < num_lines; i++)
+    if (n_args > 0)
     {
-        #include "../commands.h"
-        /* else */
+        arg_t arg = 0;
+        if (sscanf (command, " %lf", &arg) > 0)
         {   
-            if (!AsmCheckCmdEnd (str_array[i]))
-            {
-                proc_errno |= ASM_ERR_READING_CMD_NAME;
-                return -1;
-            }
+            *(double*) (acc->cmd_array + acc->ip) = arg;
+            acc->ip += sizeof (arg_t);
+            
+            PrintValToListing (listing_file, &arg, sizeof (arg_t));
+            return acc->asm_errno;
         }
+        
+        return ASMCC_ERR_READING_CMD_ARGS;
     }
 
-    #undef DEF_COMMAND
-
-    return num_commands_bytes + num_args_bytes;
+    return acc->asm_errno;
 }
 
-//flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
-int AsmPprintArgLst (FILE* file, void* val, size_t el_size)
-{
-    unsigned char* data_ptr = (unsigned char*) (val);
+void PrintValToListing (FILE* listing_file, void* val, size_t type_size)
+{   
+    unsigned char* data = (unsigned char*) val;
 
-    for (size_t j = 0; j <  el_size; j++)
+    for (size_t i = 0; i < type_size; i++)
     {
-        fprintf (file, "%02X ", data_ptr[j]);
+        fprintf (listing_file, "%02X ", data[i]);
     }
 
-    return proc_errno;
+    return;
 }
-
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
 int AsmUnitTest ()
 {   
-    AsmProcessFile ("asm_file.asm", "asm_result.asmmc", "asm.lst");
-    printf ("ERRNO: %d\n", proc_errno);
-    return proc_errno;
+    Text code = {};
+    TextCtor (&code, "asm_file.asm");
+    CompileCode (&code, "asm_result.mc", "asm.lst");
+
+    TextDtor (&code);
+
+    return 0;
 }

@@ -5,48 +5,33 @@
 *   @brief Файл содержит в себе прототипы функций для основы процессора.
 */
 
+//flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
 #include "../stack_proc/stack.h"
+#include "proc_errors.h"
+#include "cmd_setup.h"
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
-/// Малая величина для сравнения чисел с плавающей точкой с нулем.
-#ifndef EPSILON
-#define EPSILON 1e-5
-#endif
+/// Количество регистров массива
+#define REG_SIZE 4
+
+/// Объем оперативной памяти массива
+#define MEM_SIZE 256
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
-enum COMMAND_MACHINE_CODES
-{
-  #define DEF_COMMAND(name, n_args, id, ...) \
-    name = id, \
-
-  #include "../commands.h"
-
-  #undef DEF_COMMAND
-};
-
-//flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-
-/**
-*   Перечисление кодов ошибок, которые функции процессора возвращают.  
+/** @struct AdditionalInfo
+*  @brief Дополнительные данные стека.
 */
-enum ProcReturnCodes
+typedef struct
 {
-    PROC_OK                         = 0x00,
-    PROC_NOT_ENOUGH_VALUES_IN_STACK = 0x01,
-    PROC_ZERO_DIVISION_ERR          = 0x02,
-    PROC_INTERNAL_STACK_ERR         = 0x04,
-    ASM_ERR_READING_CMD_NAME        = 0x08,
-    ASM_WRONG_NUM_OF_CMD_ARGS       = 0x10,
-    ASM_FILE_OPENING_ERR            = 0x20,
-    ASM_ERR_ALLOCATING_MEMORY       = 0x40,
-};
-
-//flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-
-/// Константа для хранения ошибки процессора. 
-int proc_errno = PROC_OK;
+  Stack* stack;         /**< Поле Cpu#stack хранит указатель на стек процессора. */
+  void* cmd_array;      /**< Поле Cpu#cmd_array хранит указатель на бинарный массив команд. */
+  int pc;               /**< Поле Cpu#pc хранит указатель на текущую команду в массиве команд */
+  arg_t regs[REG_SIZE]; /**< Поле Cpu#regs массив регистров процессора*/
+  arg_t mem[MEM_SIZE];  /**< Поле Cpu#mem оперативная память регистра*/
+} Cpu;
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
