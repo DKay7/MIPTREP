@@ -9,6 +9,7 @@ DEF_ERR_CODE (CPU_INTERNAL_STACK_ERR, 0x004, "Internal stack error\n")
 DEF_ERR_CODE (CPU_UNKNOWN_CMD_ERR, 0x008, "Unknown command\n")
 DEF_ERR_CODE (CPU_ERROR_READING_BIN_FILE, 0x010, "Error reading binary file\n")
 DEF_ERR_CODE (CPU_CODE_END_REACHED, 0x020, "End of the code was reached\n")
-
+DEF_ERR_CODE (CPU_REGS_OVERFLOW, 0x040, "Accessing register which doesn't exist!\n")
+DEF_ERR_CODE (CPU_RAM_OVERFLOW, 0x080, "CPU RAM overflow!\n")
 
 

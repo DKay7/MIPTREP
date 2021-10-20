@@ -2,6 +2,7 @@
 #include "../libs/bin_text_lib/binlib.h"
 #include "../defines_and_setups/asm_setup.h"
 #include "../defines_and_setups/errors.h"
+#include "../defines_and_setups/cpu_setup.h"
 #include <malloc.h>
 #include <assert.h>
 #include <stdio.h>
@@ -117,19 +118,65 @@ int FindCmdArraySize (Text* code)
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
-int GetArg (AsmCompiler* acc, char* command, FILE* listing_file)
+int GetArg (AsmCompiler* acc, char* command, int arg_code, FILE* listing_file)
 {   
     arg_t arg = 0;
-    if (sscanf (command, " %lf", &arg) > 0)
+    char* reg_arg = NULL;
+    acc->ip -= sizeof (unsigned char);
+    unsigned char command_id = acc->cmd_array[acc->ip];
+    char* is_memory = NULL;
+    printf ("ARG_CODE: %X\n", arg_code);
+    if ((arg_code & RAM_VALUE_LOW) && (is_memory = strchr(command, '[')))
+    {
+        command = is_memory + 1;
+        char* mem_end = strchr(command, ']');
+        
+        if (!mem_end)
+        {
+            acc->asm_errno |= ASMCC_ERR_READING_CMD_ARGS;
+            return acc->asm_errno;
+        }
+
+        *mem_end = '\0';
+
+        command_id |= RAM_VALUE;
+    }
+
+    if ((arg_code & IMMEDIATE_CONST_LOW) && sscanf (command, " %lf", &arg) > 0)
     {   
+        command_id |= IMMEDIATE_CONST;
+        acc->cmd_array[acc->ip] = command_id;
+        acc->ip += sizeof (unsigned char);
+
         *(arg_t*) (acc->cmd_array + acc->ip) = arg;
         acc->ip += sizeof (arg_t);
         
+        fprintf (listing_file, "%02X\t|\t", command_id);
         PrintValToListing (listing_file, &arg, sizeof (arg_t));
+    }
+    else if ((arg_code & REGISTER_VALUE_LOW) && sscanf (command, " %ms", &reg_arg) > 0)
+    {   
+        command_id |= REGISTER_VALUE;
+        acc->cmd_array[acc->ip] = command_id;
+        acc->ip += sizeof (unsigned char);
+        fprintf (listing_file, "%02X\t|\t", command_id);
+
+        #include "compare_registers_defines.h"
+
+        free (reg_arg);
+    }
+    else if ((arg_code & 0x8) == 0)
+    {
+        // argument is optional
+        fprintf (listing_file, "%02X\t|\t", command_id);
         return acc->asm_errno;
     }
-    
-    return ASMCC_ERR_READING_CMD_ARGS;
+    else
+    {
+        acc->asm_errno |= ASMCC_ERR_READING_CMD_ARGS;
+    }
+
+    return acc->asm_errno;
 }
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
@@ -157,8 +204,8 @@ void AsmDumpFunction (AsmCompiler* acc, FILE* logfile)
 
     if (err_code != ASMCC_OK)
     {
-        fprintf (logfile, "One or more errors were reached while compiling code.\n"
-                    "Here the are:\n\n");
+        fprintf (logfile, "\nOne or more errors were reached while compiling code.\n"
+                    "Here they are:\n\n");
     }
 
     #include "dump_errors_defines.h"

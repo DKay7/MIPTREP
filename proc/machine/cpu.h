@@ -20,7 +20,7 @@ typedef struct
   Stack stack;    
   unsigned char* cmd_array;               
   arg_t* regs;
-  arg_t* mem;
+  arg_t* ram;
   int pc;
   int errno = CPU_OK;
 } Cpu;

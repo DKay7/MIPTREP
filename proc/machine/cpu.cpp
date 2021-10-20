@@ -12,7 +12,7 @@ int CpuExecute(Cpu* cpu)
 {
     assert (cpu);
     assert (cpu->cmd_array);
-    assert (cpu->mem);
+    assert (cpu->ram);
 
     while (cpu->cmd_array[cpu->pc] != HLT)
     {   
@@ -33,7 +33,7 @@ int CpuProcessComand (Cpu* cpu)
 {   
     assert (cpu);
     assert (cpu->cmd_array);
-    assert (cpu->mem);
+    assert (cpu->ram);
 
     #include "process_cmd_defines.h"
 
@@ -49,7 +49,7 @@ int CpuCtor (Cpu* cpu)
     StackCtor (&stack, STACK_INIT_SIZE);
     cpu->stack = stack;
 
-    cpu->mem = (arg_t*) calloc (MEM_SIZE, sizeof (arg_t));
+    cpu->ram = (arg_t*) calloc (RAM_SIZE, sizeof (arg_t));
     cpu->regs = (arg_t*) calloc (REG_SIZE, sizeof (arg_t));
 
     cpu->pc = 0;
@@ -70,7 +70,7 @@ int CpuDtor (Cpu* cpu)
         free (cpu->cmd_array);
     }
 
-    free (cpu->mem);
+    free (cpu->ram);
     free (cpu->regs);
 
     return CPU_OK;
@@ -105,8 +105,42 @@ int CpuOpenFile (Cpu* cpu, const char* filename)
 
 int CpuGetArgument (Cpu* cpu, arg_t* ret_value)
 {   
-    *ret_value = *(arg_t*)(cpu->cmd_array + cpu->pc + sizeof (unsigned char));
-    cpu->pc += sizeof (arg_t);
+    assert (cpu);
+    assert (ret_value);
+
+    int command_id = cpu->cmd_array[cpu->pc];
+
+    if (command_id & IMMEDIATE_CONST)
+    {
+        *ret_value = *(arg_t*)(cpu->cmd_array + cpu->pc + sizeof (unsigned char));
+        cpu->pc += sizeof (arg_t);
+    }
+
+    if (command_id & REGISTER_VALUE)
+    {   
+        int reg_id = cpu->cmd_array[cpu->pc + sizeof (unsigned char)];
+
+        if (reg_id >= REG_SIZE || reg_id < 0)
+        {
+            cpu->errno |= CPU_REGS_OVERFLOW;
+            return cpu->errno;
+        }
+
+        *ret_value = cpu->regs[reg_id];
+        cpu->pc += sizeof (unsigned char);
+    }
+
+    if (command_id & RAM_VALUE)
+    {
+        if (*ret_value >= RAM_SIZE || *ret_value  < 0)
+        {
+            cpu->errno |= CPU_RAM_OVERFLOW;
+            return cpu->errno;
+        }
+        
+        int ram_index = (int) *ret_value;
+        *ret_value = cpu->ram[ram_index];
+    }
 
     return cpu->errno;
 }
@@ -147,11 +181,11 @@ void CpuDumpFunction (Cpu* cpu, FILE* logfile, int line, const char* cpu_name, c
     }
 
     fprintf (logfile, "{\n"
-                      "\t-->Mem[%p]\n\t{\n", cpu->mem);
+                      "\t-->Mem[%p]\n\t{\n", cpu->ram);
     
-    for (int i = 0; i < MEM_SIZE; ++i)
+    for (int i = 0; i < RAM_SIZE; ++i)
     {
-        fprintf (logfile, "\t\t[%d]:\t{%lg}\n", i, cpu->mem[i]);
+        fprintf (logfile, "\t\t[%d]:\t{%lg}\n", i, cpu->ram[i]);
     }
 
     fprintf (logfile, "\t}\n\n"

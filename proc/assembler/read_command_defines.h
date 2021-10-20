@@ -1,17 +1,27 @@
-#define DEF_COMMAND(enum_name, n_args, id, str_cmd_name, ...)                           \
+#define DEF_COMMAND(enum_name, n_args, id, str_cmd_name, realization, arg_const ...)    \
     if (strcmp (cmd_name, str_cmd_name) == 0)                                           \
     {                                                                                   \
-        fprintf (listing_file, "%-32s\t|\t%04X\t|\t%04X\t|\t", command, acc->ip, id);   \
+        int arg = arg_const;                                                            \
+        fprintf (listing_file, "%-32s\t|\t%02X\t|\t", command, acc->ip);                \
         acc->cmd_array[acc->ip] = id;                                                   \
         acc->ip += sizeof (unsigned char);                                              \
                                                                                         \
-        for (int arg = 0; arg < n_args; arg++)                                          \
+        if (n_args == 0)                                                                \
         {                                                                               \
-            if (GetArg (acc, command + shift, listing_file) != ASMCC_OK)                \
+            fprintf (listing_file, "%02X\t|\t", id);                                    \
+        }                                                                               \
+                                                                                        \
+        for (int i = 0; i < n_args; i++)                                                \
+        {                                                                               \
+            int i_arg = arg & 0xF;                                                      \
+            printf ("CMD: :%s:, I_ARG: %X, ARG:%X\n", cmd_name, i_arg, arg);\
+            if (GetArg (acc, command + shift, i_arg, listing_file) != ASMCC_OK)         \
             {                                                                           \
                 acc->asm_errno |= ASMCC_ERR_READING_CMD_ARGS;                           \
                 return acc->asm_errno;                                                  \
             }                                                                           \
+                                                                                        \
+            arg = arg >> (4*i);                                                         \
         }                                                                               \
         fprintf (listing_file, "\n");                                                   \
     } else                                                                              \

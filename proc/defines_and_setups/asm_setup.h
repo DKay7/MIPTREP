@@ -24,8 +24,6 @@ enum COMMAND_MACHINE_CODES
   #include "../defines_and_setups/commands_defenitions.h"
 
   #undef DEF_COMMAND
-  #undef DEF_COMMAND_ARG
-
 };
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx

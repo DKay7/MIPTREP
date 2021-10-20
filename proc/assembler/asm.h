@@ -39,7 +39,7 @@ int FindCmdArraySize (Text* code);
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
-int GetArg (AsmCompiler* acc, char* command, FILE* listing_file);
+int GetArg (AsmCompiler* acc, char* command, int arg_code, FILE* listing_file);
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
