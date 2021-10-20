@@ -1,5 +1,0 @@
-<map id="strcat" name="strcat">
-<area shape="rect" id="node1" title="Функция добавляет копию строки srcptr в конец строки destptr." alt="" coords="120,31,179,57"/>
-<area shape="rect" id="node2" href="$onegin_8h.html#a440f1f43809a47271ee3ab544a9eb68b" title="Функция fgets считывает символы из потока и сохраняет их в виде строки в параметр string до тех пор п..." alt="" coords="11,5,66,32"/>
-<area shape="rect" id="node3" href="$onegin_8h.html#afbe0f6088732259cab829274f9c96859" title="Функция считывает целую строку, сохраняя адрес буфера, содержащего текст, в *lineptr." alt="" coords="5,56,72,83"/>
-</map>

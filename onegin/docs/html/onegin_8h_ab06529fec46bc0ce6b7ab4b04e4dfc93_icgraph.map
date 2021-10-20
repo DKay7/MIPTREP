@@ -1,8 +1,0 @@
-<map id="strlen" name="strlen">
-<area shape="rect" id="node1" title="Функция выводит длину строки без учета символа конца строки" alt="" coords="235,81,293,108"/>
-<area shape="rect" id="node2" href="$onegin_8h.html#a519b17729ce1d5a92b6ffe800dd49b88" title="Функция добавляет копию строки srcptr в конец строки destptr." alt="" coords="124,31,183,57"/>
-<area shape="rect" id="node5" href="$onegin_8h.html#a86e0df1bf9e434074f958434e0af7581" title="Функция strdup дублирует строку, на которую указывает аргумент str. Память под дубликат строки выделя..." alt="" coords="122,81,185,108"/>
-<area shape="rect" id="node6" href="$onegin_8h.html#a11235e9690d2b3aebb81a550d77bd284" title="Функция добавляет первые num символов строки srcptr к концу строки destptr." alt="" coords="120,132,187,159"/>
-<area shape="rect" id="node3" href="$onegin_8h.html#a440f1f43809a47271ee3ab544a9eb68b" title="Функция fgets считывает символы из потока и сохраняет их в виде строки в параметр string до тех пор п..." alt="" coords="11,5,66,32"/>
-<area shape="rect" id="node4" href="$onegin_8h.html#afbe0f6088732259cab829274f9c96859" title="Функция считывает целую строку, сохраняя адрес буфера, содержащего текст, в *lineptr." alt="" coords="5,56,72,83"/>
-</map>
