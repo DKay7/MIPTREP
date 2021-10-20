@@ -113,7 +113,7 @@ DEF_COMMAND (OUT, 0, 7, "out",
 DEF_COMMAND (IN, 0, 8, "in",
 	{
 		arg_t element = STACK_DATA_POISON;
-		scanf ("%lg ", &element);
+		scanf ("%lg", &element);
 		int stack_code = StackPush (&cpu->stack, element);
 		CHECK_STACK (cpu, stack_code)
 	}
