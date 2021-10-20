@@ -28,7 +28,7 @@
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
 /// Макрос для функции \link StackDumpFunc, \endlink который автоматически подставляет строку, имя функции, имя файла и имя переменной.
-#define StackDump(stack) StackDumpFunc (stack, __LINE__, __PRETTY_FUNCTION__, __FILE__, #stack)
+#define StackDump(stack, file) StackDumpFunc (stack, file, __LINE__, __PRETTY_FUNCTION__, __FILE__, #stack)
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
@@ -234,9 +234,10 @@ int StackDecrease (Stack* stack);
 *   @param [in] line Номер строки, в которой вызвана данная функция.
 *   @param [in] func_name Имя функции, в которой вызвана данная функция.
 *   @param [in] file_name Имя файла, из которого вызвана данная функция.
+*   @param [in] logfile Файл для записи ошибки.
 *   @return Один из кодов \link RETURN_CODES \endlink.
 */
-int StackDumpFunc (Stack* stack, const int line, const char* func_name, const char* file_name, const char* stack_name);
+int StackDumpFunc (Stack* stack, FILE* logfile, const int line, const char* func_name, const char* file_name, const char* stack_name);
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
@@ -275,8 +276,9 @@ unsigned long long StackHashSum(Stack* stack);
 *   @brief Функция StackPrintExitCode .
 *   
 *   @param [in] stack Указатель на объект стека.
+*   @param [in] logfile Файл для записи ошибки.
 */
-int StackPrintExitCode(Stack* stack);
+int StackPrintExitCode(Stack* stack, FILE* logfile);
 
 /**
 *   @brief Функция UnitTest проводит тестирование стака.

@@ -1,7 +1,7 @@
 #define DEF_FUNC_CODE(enum_name, id, text) \
     if (func_code & id)                    \
     {                                      \
-        printf (RED_COLOR(text));          \
+        fprintf (logfile, RED_COLOR(text));\
         func_code -= id;                   \
     }                                      \
 

@@ -123,7 +123,6 @@ int StackPush (Stack* stack, stack_type element)
 
     if ((err_code = StackValidate (stack, STACK_PUSH_CODE)) != STACK_OK)
     {   
-        StackDump (stack);
         return err_code;
     }
 
@@ -156,7 +155,6 @@ int StackPop (Stack* stack, stack_type* out_element)
         stack->info.error_code |= err_code;
         stack->info.error_func_code |= STACK_POP_CODE;
 
-        StackDump (stack);
         return err_code;
     }
 
@@ -270,7 +268,7 @@ int StackValidate (Stack* stack, int func_code)
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
-int StackDumpFunc (Stack* stack, const int line, const char* func_name, const char* file_name, const char* stack_name)
+int StackDumpFunc (Stack* stack, FILE* logfile, const int line, const char* func_name, const char* file_name, const char* stack_name)
 {   
     assert (stack);
     assert (func_name);
@@ -281,23 +279,24 @@ int StackDumpFunc (Stack* stack, const int line, const char* func_name, const ch
 
     if (err_code == STACK_OK)
     {
-        printf (GREEN_COLOR("\nSTACK [OK]: "));
+        fprintf (logfile, GREEN_COLOR("\nSTACK [OK]: "));
     }
     
     else
     {
-        printf (RED_COLOR("\nSTACK [ERROR][ERR_CODE: 0x%X]"), err_code);
+        fprintf (logfile, RED_COLOR("\nSTACK [ERROR][ERR_CODE: 0x%X]"), err_code);
     }
 
-    printf ("[%p] \"%s\" was init. in func. %s line %d file %s \n"
+    fprintf (logfile, "[%p] \"%s\" was init. in func. %s line %d file %s \n"
             "Dump for \"%s\" called in func. %s, line %d, file %s'\n", &stack->data, stack->info.stack_name, stack->info.init_func, stack->info.line, stack->info.filename, stack_name, func_name, line, file_name);
  
     if(err_code != STACK_OK)
     {
-        StackPrintExitCode(stack);
+        StackPrintExitCode(stack, logfile);
     }
 
-    printf ("\n{\n"
+    fprintf (logfile, 
+            "\n{\n"
             " size = %lu \n"    
             " capacity = %lu\n"
             " hash_sum = %llX\n"
@@ -305,18 +304,18 @@ int StackDumpFunc (Stack* stack, const int line, const char* func_name, const ch
 
     for (size_t i = 0; i < stack->capacity; i++)
     {
-        printf ("\t");      
+        fprintf (logfile, "\t");      
 
         if (i < stack->size)
         {                      
-           printf  ("\t *");
+           fprintf  (logfile, "\t *");
         }
         else
         {                    
-            printf ("\t  ");
+            fprintf (logfile, "\t  ");
         }
 
-        printf  ("[%lu] = ", i);
+        fprintf  (logfile, "[%lu] = ", i);
 
         if (stack->info.print_function)
         {
@@ -328,49 +327,49 @@ int StackDumpFunc (Stack* stack, const int line, const char* func_name, const ch
 
             for (size_t j = 0; j < sizeof (stack_type); j++)
             {
-                printf ("%02X ", data_ptr[j]);
+                fprintf (logfile, "%02X ", data_ptr[j]);
             }
         }
 
-        printf  ("\n");
+        fprintf  (logfile, "\n");
     }
 
-    printf ("\t}\n}\n");
+    fprintf (logfile, "\t}\n}\n");
 
     return ValidateResult (stack, STACK_DUMP_CODE);
 }
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
-int StackPrintExitCode(Stack* stack)
+int StackPrintExitCode(Stack* stack, FILE* logfile)
 {   
     if (stack->info.error_code == STACK_OK)
     {
-        printf (GREEN_COLOR("No errors founded\n"));
+        fprintf (logfile, GREEN_COLOR("No errors founded\n"));
         return ValidateResult (stack, STACK_PRINT_EXIT_CODE_CODE);
     } 
 
     int err_code = stack->info.error_code;
     int func_code = stack->info.error_func_code;
-    printf ("\nThere are some errors in stack: \n");
+    fprintf (logfile, "\nThere are some errors in stack: \n");
 
     #include "defines/print_err_code_define.h"
 
     if (err_code != 0)
     {
-        printf (RED_COLOR("Unkwonw exception with code %X \n"), err_code);
+        fprintf (logfile, RED_COLOR("Unkwonw exception with code %X \n"), err_code);
     }
 
-    printf ("\nErrors were reached in next function(s): \n");
+    fprintf (logfile, "\nErrors were reached in next function(s): \n");
 
     #include "defines/print_func_code_define.h"
     
     if (func_code != 0)
     {
-        printf (RED_COLOR("Unkwonw function with code: %X\n"), func_code);
+        fprintf (logfile, RED_COLOR("Unkwonw function with code: %X\n"), func_code);
     }
 
-    printf ("\n");
+    fprintf (logfile, "\n");
 
     return ValidateResult (stack, STACK_PRINT_EXIT_CODE_CODE);
 }
@@ -429,9 +428,10 @@ unsigned long long StackHashSum(Stack* stack)
 int UnitTest ()
 {   
     Stack stack1 = {};
+    FILE* log = fopen ("stack.log", "wa+");
 
     StackCtor (&stack1, 1);
-    StackDump(&stack1);
+    StackDump(&stack1, log);
     
     printf ("%llX\n", stack1.hash);
     printf ("%llX\n", StackHashSum (&stack1));
@@ -439,10 +439,10 @@ int UnitTest ()
     StackPush(&stack1, 3078);
     StackPush(&stack1, 255);
     StackPush(&stack1, 3565);
-    StackDump(&stack1);
+    StackDump(&stack1, log);
 
     // stack1.capacity = 15;
-    StackDump(&stack1);
+    StackDump(&stack1, log);
     StackDtor (&stack1);
 
     return 0;
