@@ -118,7 +118,7 @@ int FillLinesArray (char* buffer, Line* lines, int lines_num)
 
             left_ptr = strchr (right_ptr, '\n');
 
-        } while (left_ptr && (left_ptr - right_ptr  < 1));
+        } while (left_ptr && (*left_ptr == '\r' || left_ptr - right_ptr  < 1));
 
         --empty_counter;
         lines_num -= empty_counter;
@@ -134,9 +134,8 @@ int FillLinesArray (char* buffer, Line* lines, int lines_num)
 
         else
         {   
-            right_ptr = left_ptr + 1;
-            left_ptr = strchr (right_ptr, '\0');
-            if (left_ptr && left_ptr - right_ptr)
+            left_ptr = strchr (right_ptr + 1, '\0');
+            if (left_ptr && (left_ptr - right_ptr - 1) > 0)
             {   
                 lines[i_line].ptr = right_ptr;
                 lines[i_line].len = left_ptr - right_ptr - 1;

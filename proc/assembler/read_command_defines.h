@@ -5,10 +5,13 @@
         acc->cmd_array[acc->ip] = id;                                                   \
         acc->ip += sizeof (unsigned char);                                              \
                                                                                         \
-        if (GetArg (acc, command + shift, n_args, listing_file) != ASMCC_OK)            \
+        for (int arg = 0; arg < n_args; arg++)                                          \
         {                                                                               \
-            acc->asm_errno |= ASMCC_ERR_READING_CMD_ARGS;                               \
-            return acc->asm_errno;                                                      \
+            if (GetArg (acc, command + shift, listing_file) != ASMCC_OK)                \
+            {                                                                           \
+                acc->asm_errno |= ASMCC_ERR_READING_CMD_ARGS;                           \
+                return acc->asm_errno;                                                  \
+            }                                                                           \
         }                                                                               \
         fprintf (listing_file, "\n");                                                   \
     } else                                                                              \
@@ -20,3 +23,5 @@
     acc->asm_errno |= ASMCC_INVALID_COMMAND;
     return acc->asm_errno;
 }
+
+#undef DEF_COMMAND

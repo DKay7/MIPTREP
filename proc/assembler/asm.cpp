@@ -10,10 +10,11 @@
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
-int CompileCode (Text* code, const char* filename, const char* listing_filename)
+int CompileCode (Text* code, const char* bin_filename, const char* listing_filename)
 {
     AsmCompiler acc = {};
-    AsmCompilerCtor (&acc, code->text_size);
+    int cmd_arr_size = FindCmdArraySize (code);
+    AsmCompilerCtor (&acc, cmd_arr_size);
 
     FILE* listing_file = fopen (listing_filename, "w");
 
@@ -41,7 +42,7 @@ int CompileCode (Text* code, const char* filename, const char* listing_filename)
 
     BinHeader bh = {};
     BinHeaderCtor (&bh, SIGNATURE, CC_VERSION);
-    WriteToBinary (&bh, acc.cmd_array, code->text_size, filename);
+    WriteToBinary (&bh, acc.cmd_array, cmd_arr_size, bin_filename);
     
     int asm_errno = acc.asm_errno;
     AsmCompilerDtor (&acc);
@@ -54,8 +55,7 @@ int AsmCompilerCtor (AsmCompiler* acc, int cmd_array_size)
 {
     acc->ip = 0;
     acc->asm_errno = ASMCC_OK;
-    acc->cmd_array = (unsigned char*) calloc(cmd_array_size, sizeof (unsigned char));
-
+    acc->cmd_array = (unsigned char*) calloc (1, cmd_array_size);
     return acc->asm_errno;
 }
 
@@ -82,9 +82,9 @@ int ParseCommand (AsmCompiler* acc, char* command, FILE* listing_file)
         *is_comment = '\0';
     }
 
-    char cmd_name[MAX_CMD_LEN] = "";
+    char* cmd_name;
     int shift = 0;
-    sscanf (command, " %s%n ", cmd_name, &shift);
+    sscanf (command, " %ms%n ", &cmd_name, &shift);
 
     if (*cmd_name == '\0')
     {
@@ -98,26 +98,50 @@ int ParseCommand (AsmCompiler* acc, char* command, FILE* listing_file)
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
-int GetArg (AsmCompiler* acc, char* command, int n_args, FILE* listing_file)
+int FindCmdArraySize (Text* code)
 {   
-    if (n_args > 0)
+    int num_bytes = 0;
+
+    for (size_t i = 0; i < code->non_empty_lines; ++i)
     {
-        arg_t arg = 0;
-        if (sscanf (command, " %lf", &arg) > 0)
-        {   
-            *(double*) (acc->cmd_array + acc->ip) = arg;
-            acc->ip += sizeof (arg_t);
-            
-            PrintValToListing (listing_file, &arg, sizeof (arg_t));
-            return acc->asm_errno;
+        char* is_comment = strchr (code->lines[i].ptr, COMMENT_SYMBOL);
+        if (is_comment)
+        {
+            *is_comment = '\0';
         }
-        
-        return ASMCC_ERR_READING_CMD_ARGS;
+
+        char* cmd_name;
+        sscanf (code->lines[i].ptr, " %ms ", &cmd_name);
+
+        if (*cmd_name == '\0')
+        {
+            continue;
+        }
+
+        #include "find_arr_size_defines.h"
     }
 
-    return acc->asm_errno;
+    return num_bytes;
 }
 
+//flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+int GetArg (AsmCompiler* acc, char* command, FILE* listing_file)
+{   
+    arg_t arg = 0;
+    if (sscanf (command, " %lf", &arg) > 0)
+    {   
+        *(arg_t*) (acc->cmd_array + acc->ip) = arg;
+        acc->ip += sizeof (arg_t);
+        
+        PrintValToListing (listing_file, &arg, sizeof (arg_t));
+        return acc->asm_errno;
+    }
+    
+    return ASMCC_ERR_READING_CMD_ARGS;
+}
+
+//flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
 void PrintValToListing (FILE* listing_file, void* val, size_t type_size)
 {   
