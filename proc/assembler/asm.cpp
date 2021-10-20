@@ -122,10 +122,11 @@ int GetArg (AsmCompiler* acc, char* command, int arg_code, FILE* listing_file)
 {   
     arg_t arg = 0;
     char* reg_arg = NULL;
+    char* is_memory = NULL;
+
     acc->ip -= sizeof (unsigned char);
     unsigned char command_id = acc->cmd_array[acc->ip];
-    char* is_memory = NULL;
-    printf ("ARG_CODE: %X\n", arg_code);
+
     if ((arg_code & RAM_VALUE_LOW) && (is_memory = strchr(command, '[')))
     {
         command = is_memory + 1;
@@ -168,11 +169,13 @@ int GetArg (AsmCompiler* acc, char* command, int arg_code, FILE* listing_file)
     else if ((arg_code & 0x8) == 0)
     {
         // argument is optional
+        acc->cmd_array[acc->ip] = command_id;
+        acc->ip += sizeof (unsigned char);
         fprintf (listing_file, "%02X\t|\t", command_id);
         return acc->asm_errno;
     }
     else
-    {
+    {   
         acc->asm_errno |= ASMCC_ERR_READING_CMD_ARGS;
     }
 

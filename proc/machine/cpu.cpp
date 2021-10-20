@@ -109,11 +109,19 @@ int CpuGetArgument (Cpu* cpu, arg_t* ret_value)
     assert (ret_value);
 
     int command_id = cpu->cmd_array[cpu->pc];
+    int return_type = 0;
 
+    if ((command_id & (IMMEDIATE_CONST | REGISTER_VALUE | RAM_VALUE)) == 0)
+    {
+        return return_type;
+    }
+     
     if (command_id & IMMEDIATE_CONST)
     {
         *ret_value = *(arg_t*)(cpu->cmd_array + cpu->pc + sizeof (unsigned char));
         cpu->pc += sizeof (arg_t);
+
+        return_type |= IMMEDIATE_CONST;
     }
 
     if (command_id & REGISTER_VALUE)
@@ -128,6 +136,8 @@ int CpuGetArgument (Cpu* cpu, arg_t* ret_value)
 
         *ret_value = cpu->regs[reg_id];
         cpu->pc += sizeof (unsigned char);
+
+        return_type |= REGISTER_VALUE;
     }
 
     if (command_id & RAM_VALUE)
@@ -140,9 +150,11 @@ int CpuGetArgument (Cpu* cpu, arg_t* ret_value)
         
         int ram_index = (int) *ret_value;
         *ret_value = cpu->ram[ram_index];
+
+        return_type |= RAM_VALUE;
     }
 
-    return cpu->errno;
+    return return_type;
 }
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx

@@ -14,7 +14,6 @@
         for (int i = 0; i < n_args; i++)                                                \
         {                                                                               \
             int i_arg = arg & 0xF;                                                      \
-            printf ("CMD: :%s:, I_ARG: %X, ARG:%X\n", cmd_name, i_arg, arg);\
             if (GetArg (acc, command + shift, i_arg, listing_file) != ASMCC_OK)         \
             {                                                                           \
                 acc->asm_errno |= ASMCC_ERR_READING_CMD_ARGS;                           \

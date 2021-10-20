@@ -37,10 +37,39 @@ DEF_COMMAND (PUSH, 1, 1, "push",
 DEF_COMMAND (POP, 1, 2, "pop",
 	{
 		CHECK_STACK_SIZE (cpu, cpu->stack.size, 1)
-		arg_t value = STACK_DATA_POISON;
-		int stack_code = StackPop (&cpu->stack, &value);
-		/*TODO add registers */
-		CHECK_STACK (cpu, stack_code)
+		int cmd_id = cpu->cmd_array[cpu->pc];
+		if (cmd_id & RAM_VALUE)
+		{	
+			cpu->pc += sizeof (unsigned char);
+
+			// if ram_id is immedeate const
+			int ram_id = cpu->cmd_array[cpu->pc];
+
+			// if ram_id is register
+			if (cmd_id & REGISTER_VALUE)
+			{
+				ram_id = cpu->regs[ram_id];
+			}
+			int stack_code = StackPop (&cpu->stack, &cpu->ram[ram_id]);
+			CHECK_STACK (cpu, stack_code)
+		}
+
+		else if (cmd_id & REGISTER_VALUE)
+		{	
+			cpu->pc += sizeof (unsigned char);
+			int reg_id = cpu->cmd_array[cpu->pc];
+			int stack_code = StackPop (&cpu->stack, &cpu->regs[reg_id]);
+			CHECK_STACK (cpu, stack_code)
+		}	
+
+		else
+		{	
+			// no args
+			arg_t value = 0;
+			int stack_code = StackPop (&cpu->stack, &value);
+			CHECK_STACK (cpu, stack_code)
+		}
+	
 	},
 	OPT_ARG (0, (RAM_VALUE_LOW | REGISTER_VALUE_LOW))
 )

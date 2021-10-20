@@ -3,9 +3,8 @@ case id:                                                                    \
     realization                                                             \
     break;                                                                  \
 
-switch (cpu->cmd_array[cpu->pc])
+switch (cpu->cmd_array[cpu->pc] & ~(IMMEDIATE_CONST | REGISTER_VALUE | RAM_VALUE))
 {
-
     #include "../defines_and_setups/commands_defenitions.h"
 
     default:
