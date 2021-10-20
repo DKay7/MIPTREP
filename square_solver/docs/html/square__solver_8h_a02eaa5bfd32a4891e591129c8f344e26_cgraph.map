@@ -1,5 +1,0 @@
-<map id="solve_square_equasion" name="solve_square_equasion">
-<area shape="rect" id="node1" title="Решает квадратное уравнение вида ax^2 + bx + c = 0." alt="" coords="5,5,180,32"/>
-<area shape="rect" id="node2" href="$square__solver_8h.html#aecd44c808389755e7178db097701c2d9" title="Проверяет, является ли число с плавающей точкой нулем" alt="" coords="443,5,561,32"/>
-<area shape="rect" id="node3" href="$square__solver_8h.html#a1bc66a6775cb590c468af77080dee299" title="Решает линейное уравнение вида ax + b = 0 Данная функция необходима, поскольку в некоторых случаях кв..." alt="" coords="228,31,395,57"/>
-</map>

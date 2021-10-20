@@ -1,7 +1,0 @@
-<map id="process_test" name="process_test">
-<area shape="rect" id="node1" title="Функция для проведения одного теста" alt="" coords="5,31,109,57"/>
-<area shape="rect" id="node2" href="$unit__test_8h.html#a7961d00673d7fd63b8cffcdc6a312c1d" title="Сверяет корни уравнения с эталонами Данная функция необходима для проверки на правильность полученных..." alt="" coords="411,5,515,32"/>
-<area shape="rect" id="node4" href="$square__solver_8h.html#a02eaa5bfd32a4891e591129c8f344e26" title="Решает квадратное уравнение вида ax^2 + bx + c = 0." alt="" coords="157,56,332,83"/>
-<area shape="rect" id="node3" href="$square__solver_8h.html#aecd44c808389755e7178db097701c2d9" title="Проверяет, является ли число с плавающей точкой нулем" alt="" coords="595,56,713,83"/>
-<area shape="rect" id="node5" href="$square__solver_8h.html#a1bc66a6775cb590c468af77080dee299" title="Решает линейное уравнение вида ax + b = 0 Данная функция необходима, поскольку в некоторых случаях кв..." alt="" coords="380,107,547,133"/>
-</map>
