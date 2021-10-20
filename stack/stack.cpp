@@ -184,7 +184,7 @@ int StackIncrease (Stack* stack)
 
     if (stack->size + 1 > stack->capacity)
     {
-        stack_type* tmp = (stack_type*) realloc (stack->data, STACK_INCREASE_COEFFICIENT (stack->size) * sizeof (stack_type));
+        stack_type* tmp = (stack_type*) realloc (stack->data, (int)((STACK_INCREASE_COEFFICIENT) * stack->capacity + 1) * sizeof (stack_type));
 
         if (!tmp)
         {
@@ -195,7 +195,7 @@ int StackIncrease (Stack* stack)
         }
 
         stack->data = tmp;
-        stack->capacity = STACK_INCREASE_COEFFICIENT (stack->size);
+        stack->capacity = (int)((STACK_INCREASE_COEFFICIENT) * stack->capacity + 1);
 
         StackPoison (stack, stack->size + 1, stack->capacity);
         stack->hash = StackHashSum (stack);
@@ -211,9 +211,9 @@ int StackDecrease (Stack* stack)
     assert (stack);
     assert (stack->data);
 
-    if (stack->size < STACK_DECREASE_COEFFICIENT (stack->capacity))
+    if (stack->size < (STACK_DECREASE_COEFFICIENT) * stack->capacity)
     {
-        stack_type* tmp = (stack_type*) realloc (stack->data, STACK_DECREASE_COEFFICIENT (stack->size) * sizeof (stack_type));
+        stack_type* tmp = (stack_type*) realloc (stack->data, (int)((STACK_DECREASE_COEFFICIENT) * stack->capacity + 1) * sizeof (stack_type));
 
         if (!tmp)
         {   
@@ -224,7 +224,7 @@ int StackDecrease (Stack* stack)
         }
 
         stack->data = tmp;
-        stack->capacity = STACK_DECREASE_COEFFICIENT (stack->size);
+        stack->capacity = (int)((STACK_DECREASE_COEFFICIENT) * stack->capacity + 1);
         stack->hash = StackHashSum (stack);
     }
 
@@ -326,7 +326,7 @@ int StackDumpFunc (Stack* stack, const int line, const char* func_name, const ch
         {   
             unsigned char* data_ptr = (unsigned char*) (stack->data + i);
 
-            for (size_t j = 0; j <  sizeof (stack_type); j++)
+            for (size_t j = 0; j < sizeof (stack_type); j++)
             {
                 printf ("%02X ", data_ptr[j]);
             }
@@ -354,77 +354,7 @@ int StackPrintExitCode(Stack* stack)
     int func_code = stack->info.error_func_code;
     printf ("\nThere are some errors in stack: \n");
 
-    if (err_code & STACK_MEM_ALLOCK_ERR)
-    {
-        printf (RED_COLOR("Memory allocation error\n"));
-        err_code -= STACK_MEM_ALLOCK_ERR;
-    }
-
-    if (err_code & STACK_INCORRECT_DATA_PTR)
-    {
-        printf (RED_COLOR("Incorrect pointer to start of buffer founded\n"));
-        err_code -= STACK_INCORRECT_DATA_PTR;
-    }
-
-    if (err_code & STACK_WRONG_START_HUMMINGBIRD)
-    {
-        printf (RED_COLOR("Changes in start hummingbird founded\n"));
-        err_code -= STACK_WRONG_START_HUMMINGBIRD;
-    }
-
-    if (err_code & STACK_WRONG_END_HUMMINGBIRD)
-    {
-        printf (RED_COLOR("Changes in end hummingbird founded\n")); 
-        err_code -= STACK_WRONG_END_HUMMINGBIRD;
-    }
-
-    if (err_code & STACK_WRONG_HASH_SUM)
-    {
-        printf (RED_COLOR("Mismacth of hash sum founded\n"));
-        err_code -= STACK_WRONG_HASH_SUM;
-    }
-
-    if (err_code & STACK_CTOR_DBL_CALL)
-    {
-        printf (RED_COLOR("Stack constructor was called twice\n"));
-        err_code -= STACK_CTOR_DBL_CALL;
-    }
-
-    if (err_code & STACK_DTOR_DBL_CALL)
-    {
-        printf (RED_COLOR("Stack destructor was called twice\n"));
-        err_code -= STACK_DTOR_DBL_CALL;
-    }
-
-    if (err_code & STACK_INCORRECT_CAPACITY)
-    {
-        printf (RED_COLOR("Stack capcity is incorrect\n"));
-        err_code -= STACK_INCORRECT_CAPACITY;
-    }
-
-    if (err_code & STACK_INCORRECT_SIZE)
-    {
-        printf (RED_COLOR("Stack size is incorrect\n"));
-        err_code -= STACK_INCORRECT_SIZE;
-    }
-
-    if (err_code & STACK_INCREASE_ERR)
-    {
-        printf (RED_COLOR("Error while increasing stack\n"));
-        err_code -= STACK_INCREASE_ERR;
-    }
-
-    if (err_code & STACK_DECREASE_ERR)
-    {
-        printf (RED_COLOR("Error while decreasing stack\n"));
-        err_code -= STACK_DECREASE_ERR;
-    }
-    
-    if (err_code & STACK_NOT_CREATED)
-    {
-        printf (RED_COLOR("Stack was descructed and wasn't created\n"));
-        err_code -= STACK_NOT_CREATED;
-    }
+    #include "defines/print_err_code_define.h"
 
     if (err_code != 0)
     {
@@ -433,78 +363,8 @@ int StackPrintExitCode(Stack* stack)
 
     printf ("\nErrors were reached in next function(s): \n");
 
-    if (func_code & STACK_CTOR_CODE)
-    {
-        printf (RED_COLOR("StackCtor()\n"));
-        func_code -= STACK_CTOR_CODE;
-    }
-
-    if (func_code & STACK_DTOR_CODE)
-    {
-        printf (RED_COLOR("StackDtor()\n"));
-        func_code -= STACK_DTOR_CODE;
-    }
-
-    if (func_code & STACK_PUSH_CODE)
-    {
-        printf (RED_COLOR("StackPush()\n"));
-        func_code -= STACK_PUSH_CODE;
-    }
-
-    if (func_code & STACK_POP_CODE)
-    {
-        printf (RED_COLOR("StackPop()\n"));
-        func_code -= STACK_POP_CODE;
-    }
-
-    if (func_code & STACK_INCREASE_CODE)
-    {
-        printf (RED_COLOR("StackIncrease()\n"));
-        func_code -= STACK_INCREASE_CODE;
-    }
-
-    if (func_code & STACK_DECREASE_CODE)
-    {
-        printf (RED_COLOR("StackDecrease()\n"));
-        func_code -= STACK_DECREASE_CODE;
-    }
-
-    if (func_code & STACK_DUMP_CODE)
-    {
-        printf (RED_COLOR("StackDump()\n"));
-        func_code -= STACK_DUMP_CODE;
-    }
-
-    if (func_code & STACK_UNIT_TEST_CODE)
-    {
-        printf (RED_COLOR("UnitTest()\n"));
-        func_code -= STACK_UNIT_TEST_CODE;
-    }
-
-    if (func_code & STACK_SET_PRINTER_CODE)
-    {
-        printf (RED_COLOR("SetStackPrinter()\n"));
-        func_code -= STACK_SET_PRINTER_CODE;
-    }
-
-    if (func_code & STACK_PRINT_EXIT_CODE_CODE)
-    {
-        printf (RED_COLOR("PrintExitCode()\n"));
-        func_code -= STACK_PRINT_EXIT_CODE_CODE;
-    }
-
-    if (func_code & STACK_VALIDATE_CODE)
-    {
-        printf (RED_COLOR("StackValidate()\n"));
-        func_code -= STACK_VALIDATE_CODE;
-    }
-
-    if (func_code & STACK_EXTERNAL_FUNC_CODE)
-    {
-        printf (RED_COLOR("Some external function\n"));
-        func_code -= STACK_EXTERNAL_FUNC_CODE;
-    }
-
+    #include "defines/print_func_code_define.h"
+    
     if (func_code != 0)
     {
         printf (RED_COLOR("Unkwonw function with code: %X\n"), func_code);
@@ -581,12 +441,9 @@ int UnitTest ()
     StackPush(&stack1, 3565);
     StackDump(&stack1);
 
-
-
-    stack1.capacity = 15;
+    // stack1.capacity = 15;
     StackDump(&stack1);
     StackDtor (&stack1);
-
 
     return 0;
 }

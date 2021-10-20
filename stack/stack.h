@@ -9,13 +9,21 @@
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
+#ifndef GREEN_COLOR
 /// Макрос для окраски текста в зеленый цвет
 #define GREEN_COLOR(text) ("\033[92m" text "\033[0m")
+#endif
+
+
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
 /// Макрос для окраски текста в красный цвет
-#define RED_COLOR(text) ("\033[91m" text "\033[0m")
+#ifndef RED_COLOR
+/// Макрос для окраски текста в красный цвет
+#define RED_COLOR(text) "\033[91m" text "\033[0m"
+#endif
+
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
@@ -46,11 +54,11 @@
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
-#define STACK_INCREASE_COEFFICIENT(stack_size) 2 * stack_size + 1
+#define STACK_INCREASE_COEFFICIENT 2
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
-#define STACK_DECREASE_COEFFICIENT(stack_size) stack_size / 4 + 1
+#define STACK_DECREASE_COEFFICIENT 1.0 / 4.0
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
@@ -102,19 +110,12 @@ typedef struct Stack
 */
 enum RETURN_CODES
 {
-    STACK_OK =                          0x00000000,      ///< Все ОК.
-    STACK_MEM_ALLOCK_ERR =              0x00000001,      ///< Ошибка аллоцирования / реаллоцирования памяти.
-    STACK_INCREASE_ERR =                0x00000002,      ///< Ошибка в функции увеличения размера стека.
-    STACK_DECREASE_ERR =                0x00000004,      ///< Ошибка в функции уменьшения размера стека.
-    STACK_CTOR_DBL_CALL =               0x00000008,      ///< Двойной вызов конструктора.
-    STACK_DTOR_DBL_CALL =               0x00000010,      ///< Двойной вызов деструктора.
-    STACK_INCORRECT_DATA_PTR =          0x00000020,      ///< Неверный указатель на данные.
-    STACK_WRONG_START_HUMMINGBIRD =     0x00000040,      ///< Неверная начальная канарейка.
-    STACK_WRONG_END_HUMMINGBIRD =       0x00000080,      ///< Неверная конечная канарейка.
-    STACK_INCORRECT_SIZE =              0x00000100,      ///< Неверный размер стека.
-    STACK_INCORRECT_CAPACITY =          0x00000200,      ///< Неверный размер стека.
-    STACK_WRONG_HASH_SUM =              0x00000400,      ///< Неверный размер стека.
-    STACK_NOT_CREATED =                 0x00000800,      ///< Стек еще не создан.
+    #define DEF_ERR_CODE(enum_name, id, text)  \
+        enum_name = id,                         \
+    
+    #include "defines/err_code_defines.h"
+
+    #undef DEF_ERR_CODE
 };
 
 /**
@@ -122,18 +123,12 @@ enum RETURN_CODES
 */
 enum FUNC_CODES
 {
-    STACK_CTOR_CODE  =           0x00000001,    ///< #StackCtorFunc()
-    STACK_DTOR_CODE =            0x00000002,    ///< #StackDtor()
-    STACK_PUSH_CODE =            0x00000004,    ///< #StackPush()
-    STACK_POP_CODE =             0x00000008,    ///< #StackPop()
-    STACK_INCREASE_CODE =        0x00000010,    ///< #StackIncrease()
-    STACK_DECREASE_CODE =        0x00000020,    ///< #StackDecrease()
-    STACK_DUMP_CODE =            0x00000040,    ///< #StackDumpFunc()
-    STACK_UNIT_TEST_CODE =       0x00000080,    ///< #UnitTest()
-    STACK_SET_PRINTER_CODE =     0x00000100,    ///< #SetStackPrinterFunc()
-    STACK_PRINT_EXIT_CODE_CODE = 0x00000200,    ///< #StackPrintExitCode()
-    STACK_VALIDATE_CODE =        0x00000400,    ///< #StackValidate()
-    STACK_EXTERNAL_FUNC_CODE =   0x00000800,    ///< Любая внешняя функция
+    #define DEF_FUNC_CODE(enum_name, id, text)  \
+        enum_name = id,                         \
+    
+    #include "defines/func_code_defines.h"
+
+    #undef DEF_FUNC_CODE
 };
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx

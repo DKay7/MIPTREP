@@ -1,7 +1,0 @@
-<map id="StackHashSum" name="StackHashSum">
-<area shape="rect" id="node1" title="Функция StackHashSum считает хэш&#45;сумму стека." alt="" coords="328,56,448,83"/>
-<area shape="rect" id="node2" href="$stack_8h.html#a5db47013632928286c41af8572d932d7" title="Функция SetStackPrinterFunc уничтожает объект стака." alt="" coords="128,5,280,32"/>
-<area shape="rect" id="node4" href="$stack_8h.html#ad860aa0269fe26a78980b6cb41643fb0" title="Функция StackPush попит элемент из стака." alt="" coords="163,56,245,83"/>
-<area shape="rect" id="node5" href="$stack_8h.html#a4332c388fb68c9c14c172a6731b0b0d9" title="Функция StackPush пушит элемент в стак." alt="" coords="159,107,249,133"/>
-<area shape="rect" id="node3" href="$stack_8h.html#af46f08780595717ea5bdb292bf645b8e" title="Функция UnitTest проводит тестирование стака." alt="" coords="5,56,80,83"/>
-</map>
