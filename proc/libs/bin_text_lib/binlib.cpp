@@ -1,6 +1,8 @@
-#include <stdio.h>
 #include "../text_lib/texlib.h"
 #include "binlib.h"
+#include <stdio.h>
+#include <malloc.h>
+#include <assert.h>
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
@@ -15,7 +17,10 @@ void BinHeaderCtor (BinHeader* bh, int signature, double version)
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
 int WriteToBinary (BinHeader* bh, unsigned char* data, int data_size, const char* filename)
-{
+{   
+    assert (bh);
+    assert (data);
+    assert (filename);
 
     FILE* file = fopen (filename, "wb");
     CHECK_FILE_OPENED (file, "WriteToBinary", -1);
@@ -30,7 +35,37 @@ int WriteToBinary (BinHeader* bh, unsigned char* data, int data_size, const char
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
-int ReadFromBinary (unsigned char* data, const char* filename)
+int ReadFromBinary (BinHeader* correct_bh, unsigned char** data, const char* filename)
 {   
+    assert (correct_bh);
+    assert (filename);
+
+    FILE* file = fopen (filename, "rb");
+    CHECK_FILE_OPENED (file, "ReadFromBinary", -1);
+
+    BinHeader actual_bh = {};
+    fread (&actual_bh, 1, sizeof (actual_bh), file);
+
+    if (!CheckHeader (correct_bh, actual_bh))
+    {
+        return -1;
+    }
+
+    int data_size = CountSize (file);
+    *data = (unsigned char*) calloc (data_size, sizeof (unsigned char*));
+    CHECK_POINTER (*data, "ReadFromBinary", -1);
+
+    fread (*data, sizeof (unsigned char), data_size, file);
+
+
+    CLOSE_FILE (file, "ReadFromBinary", -1);
+
     return 0;
+}
+
+//flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+int CheckHeader (BinHeader* correct, BinHeader actual)
+{
+    return correct->signature == actual.signature && correct->version == actual.version;
 }

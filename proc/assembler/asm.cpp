@@ -1,52 +1,38 @@
 #include "asm.h"
 #include "../libs/bin_text_lib/binlib.h"
-#include "../defines_and_setups/cmd_setup.h"
-#include "../defines_and_setups/proc_errors.h"
+#include "../defines_and_setups/asm_setup.h"
+#include "../defines_and_setups/errors.h"
 #include <malloc.h>
 #include <assert.h>
 #include <stdio.h>
-#include <cstddef>
 #include <string.h>
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
-int CompileCode (Text* code, const char* bin_filename, const char* listing_filename)
+int CompileCode (AsmCompiler* acc, Text* code, const char* bin_filename, const char* listing_filename)
 {
-    AsmCompiler acc = {};
-    int cmd_arr_size = FindCmdArraySize (code);
-    AsmCompilerCtor (&acc, cmd_arr_size);
-
     FILE* listing_file = fopen (listing_filename, "w");
 
     if (ferror (listing_file) || listing_file == NULL)
     {   
-        acc.asm_errno |= ASMCC_ERR_OPENING_FILE;
-        
-        int asm_errno = acc.asm_errno;
-        AsmCompilerDtor (&acc);
-        return asm_errno;
+        acc->asm_errno |= ASMCC_FILE_OPENING_ERR;
+        return acc->asm_errno;
     }
 
     for (size_t i = 0; i < code->non_empty_lines; i++)
     {   
-        if (ParseCommand (&acc, code->lines[i].ptr, listing_file) != ASMCC_OK)
+        if (ParseCommand (acc, code->lines[i].ptr, listing_file) != ASMCC_OK)
         {   
-            // TODO AsmDump to listing file
-            fprintf (listing_file, "\nERROR!\nERROR NUM: %08X", acc.asm_errno);
-
-            int asm_errno = acc.asm_errno;
-            AsmCompilerDtor (&acc);
-            return asm_errno;
+            AsmDumpFunction (acc, listing_file);
+            return acc->asm_errno;
         }
     }
 
     BinHeader bh = {};
     BinHeaderCtor (&bh, SIGNATURE, CC_VERSION);
-    WriteToBinary (&bh, acc.cmd_array, cmd_arr_size, bin_filename);
+    WriteToBinary (&bh, acc->cmd_array, acc->cmd_array_size, bin_filename);
     
-    int asm_errno = acc.asm_errno;
-    AsmCompilerDtor (&acc);
-    return asm_errno;
+    return acc->asm_errno;
 }   
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
@@ -56,6 +42,8 @@ int AsmCompilerCtor (AsmCompiler* acc, int cmd_array_size)
     acc->ip = 0;
     acc->asm_errno = ASMCC_OK;
     acc->cmd_array = (unsigned char*) calloc (1, cmd_array_size);
+    acc->cmd_array_size = cmd_array_size;
+
     return acc->asm_errno;
 }
 
@@ -86,13 +74,14 @@ int ParseCommand (AsmCompiler* acc, char* command, FILE* listing_file)
     int shift = 0;
     sscanf (command, " %ms%n ", &cmd_name, &shift);
 
-    if (*cmd_name == '\0')
+    if (cmd_name == NULL || *cmd_name == '\0')
     {
         return acc->asm_errno;
     }
 
     #include "read_command_defines.h"
 
+    free (cmd_name);
     return acc->asm_errno;
 }
 
@@ -110,15 +99,17 @@ int FindCmdArraySize (Text* code)
             *is_comment = '\0';
         }
 
-        char* cmd_name;
-        sscanf (code->lines[i].ptr, " %ms ", &cmd_name);
+        char* cmd_name = NULL;
+        sscanf (code->lines[i].ptr, " %ms", &cmd_name);
 
-        if (*cmd_name == '\0')
+        if (cmd_name == NULL || *cmd_name == '\0')
         {
             continue;
         }
 
         #include "find_arr_size_defines.h"
+
+        free (cmd_name);    
     }
 
     return num_bytes;
@@ -154,15 +145,47 @@ void PrintValToListing (FILE* listing_file, void* val, size_t type_size)
 
     return;
 }
+
+//flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+void AsmDumpFunction (AsmCompiler* acc, FILE* logfile)
+{   
+    assert (acc);
+    assert (logfile);
+
+    int err_code = acc->asm_errno;
+
+    if (err_code != ASMCC_OK)
+    {
+        fprintf (logfile, "One or more errors were reached while compiling code.\n"
+                    "Here the are:\n\n");
+    }
+
+    #include "dump_errors_defines.h"
+
+    if (err_code != 0)
+    {
+        fprintf (logfile, "Unknown error with code %X", err_code);
+    }
+
+    return;
+}
+
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
 int AsmUnitTest ()
 {   
     Text code = {};
     TextCtor (&code, "asm_file.asm");
-    CompileCode (&code, "asm_result.mc", "asm.lst");
+
+    AsmCompiler acc = {};
+    int cmd_arr_size = FindCmdArraySize (&code);
+    AsmCompilerCtor (&acc, cmd_arr_size);
+
+    CompileCode (&acc, &code, "asm_result.mc", "asm.lst");
 
     TextDtor (&code);
+    AsmCompilerDtor (&acc);
 
     return 0;
 }

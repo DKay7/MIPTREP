@@ -1,5 +1,6 @@
 #include "texlib.h"
 #include <string.h>
+#include <sys/stat.h>
 #include <assert.h>
 #include <malloc.h>
 
@@ -37,12 +38,10 @@ void TextDtor (Text* text)
 int CountSize (FILE* file)
 {   
     assert (file);
-    
-    fseek (file, 0, SEEK_END);
-    int num_sumbols = ftell (file);
-    fseek (file, 0, SEEK_SET);
 
-    return num_sumbols;
+    struct stat buff;
+    fstat (fileno (file), &buff);
+    return buff.st_size;
 }
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx

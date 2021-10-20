@@ -1,11 +1,12 @@
 #include "assembler/asm.h"
-
+#include "machine/cpu.h"
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
 int main ()
 {   
     AsmUnitTest ();
-    // ProcUnitTest ();
+    
+    CpuUnitTest ();
     
     return 0;
 }

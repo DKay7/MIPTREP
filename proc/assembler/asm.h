@@ -5,16 +5,16 @@
 *   @brief Файл содержит в себе прототипы функций для процессорного ассемблера.
 */
 #include "../libs/text_lib/texlib.h"
-#include <cstddef>
 #include <stdio.h>
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
 typedef struct
 {   
-    int asm_errno;
     unsigned char* cmd_array;
     int ip;
+    int cmd_array_size;
+    int asm_errno;
 } AsmCompiler;
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
@@ -31,7 +31,7 @@ int ParseCommand (AsmCompiler* acc, char* command, FILE* listing_file);
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
-int CompileCode (Text* code, const char* filemame);
+int CompileCode (AsmCompiler* acc, Text* code, const char* bin_filename, const char* listing_filename);
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
@@ -44,6 +44,10 @@ int GetArg (AsmCompiler* acc, char* command, FILE* listing_file);
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
 void PrintValToListing (FILE* listing_file, void* val, size_t type_size);
+
+//flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+void AsmDumpFunction (AsmCompiler* acc, FILE* logfile);
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 

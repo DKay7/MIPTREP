@@ -13,6 +13,7 @@
 #define MAX_CMD_LEN 32
 #define SIGNATURE 'WOEM'
 #define CC_VERSION 2.1
+
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
 enum COMMAND_MACHINE_CODES
@@ -29,7 +30,7 @@ enum COMMAND_MACHINE_CODES
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
-typedef stack_type arg_t;
+typedef double arg_t;
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 #endif
