@@ -10,7 +10,7 @@
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
 #define COMMENT_SYMBOL ';'
-#define MAX_CMD_LEN 32
+#define MAX_CMD_LEN 64
 #define SIGNATURE 'WOEM'
 #define CC_VERSION 2.1
 

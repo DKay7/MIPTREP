@@ -14,7 +14,8 @@ int CpuExecute(Cpu* cpu)
     assert (cpu->cmd_array);
     assert (cpu->ram);
 
-    while (cpu->cmd_array[cpu->pc] != HLT)
+    int iter_cmd = 0;
+    while (cpu->cmd_array[cpu->pc] != HLT && iter_cmd < cpu->cmd_array_size)
     {   
         CpuProcessComand (cpu);
 
@@ -22,6 +23,8 @@ int CpuExecute(Cpu* cpu)
         {
             break;
         }
+
+        ++iter_cmd;
     }
 
     return cpu->errno;
@@ -53,6 +56,7 @@ int CpuCtor (Cpu* cpu)
     cpu->regs = (arg_t*) calloc (REG_SIZE, sizeof (arg_t));
 
     cpu->pc = 0;
+    cpu->cmd_array_size = 0;
     cpu->errno = CPU_OK;
 
     return cpu->errno;
@@ -90,7 +94,7 @@ int CpuOpenFile (Cpu* cpu, const char* filename)
 
     BinHeader correct_bh = {};
     BinHeaderCtor (&correct_bh, SIGNATURE, CC_VERSION);
-    int code = ReadFromBinary (&correct_bh, &cpu->cmd_array, filename);
+    int code = ReadFromBinary (&correct_bh, &cpu->cmd_array, &cpu->cmd_array_size, filename);
 
     if (code != 0)
     {   

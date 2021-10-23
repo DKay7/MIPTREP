@@ -17,7 +17,7 @@ int WriteToBinary (BinHeader* bh, unsigned char* data, int data_size, const char
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
-int ReadFromBinary (BinHeader* correct_bh, unsigned char** data, const char* filename);
+int ReadFromBinary (BinHeader* correct_bh, unsigned char** data, int* size, const char* filename);
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 

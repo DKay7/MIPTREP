@@ -150,6 +150,20 @@ int FillLinesArray (char* buffer, Line* lines, int lines_num)
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
+int SaveToFile (char* buffer, const char* filename)
+{   
+    FILE* file = fopen (filename, "w");
+    CHECK_FILE_OPENED (file, "SaveToFile", -1);
+
+    int num_writed = fprintf (file, "%s", buffer);
+
+    CLOSE_FILE (file, "SaveToFile", -1);
+
+    return num_writed;
+}
+
+//flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
 void PrintErrorFunc (const char* file, const int line, const char* current_function, const char* failed_function, const char* error_text, FILE* log_file)
 {   
     assert (file);

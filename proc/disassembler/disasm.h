@@ -1,53 +1,50 @@
-#ifndef ASM_H
-#define ASM_H
-
-#include "../libs/text_lib/texlib.h"
-#include <stdio.h>
+#ifndef DISASM_H
+#define DISASM_H
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
 typedef struct
 {   
     unsigned char* cmd_array;
+    char* buffer;
+    char* buf_ptr;
     int ip;
     int cmd_array_size;
-    int asm_errno;
-} AsmCompiler;
+    int buf_size;
+    int errno;
+} AsmDecompiler;
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
-int AsmCompilerCtor (AsmCompiler* acc, int cmd_array_size);
+int DisAsmCtor (AsmDecompiler* adc);
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
-void AsmCompilerDtor (AsmCompiler* acc);
+void DisAsmDtor (AsmDecompiler* adc);
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
-int ParseCommand (AsmCompiler* acc, char* command, FILE* listing_file);
+int DisAsmOpenFile (AsmDecompiler* adc, const char* filename);
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
-int CompileCode (AsmCompiler* acc, Text* code, const char* bin_filename, const char* listing_filename);
+int DisAsmParseArg(AsmDecompiler* adc);
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
-int FindCmdArraySize (Text* code);
+int DisAcmProcessFile (AsmDecompiler* adc, const char* filename);
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
-int GetArg (AsmCompiler* acc, char* command, int arg_code, FILE* listing_file);
+int DisAsmAllocateBuf (AsmDecompiler* adc);
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
-void PrintValToListing (FILE* listing_file, void* val, size_t type_size);
+int DisAsmWriteOutput (AsmDecompiler* adc, const char* format,  ...);
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
-void AsmDumpFunction (AsmCompiler* acc, FILE* logfile);
 
-//flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-
-int AsmUnitTest ();
+int DisAsmUnitTest ();
 
 #endif

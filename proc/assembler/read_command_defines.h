@@ -13,7 +13,7 @@
                                                                                         \
         for (int i = 0; i < n_args; i++)                                                \
         {                                                                               \
-            int i_arg = arg & 0xF;                                                      \
+            int i_arg = arg & ARG_MASK;                                                 \
             if (GetArg (acc, command + shift, i_arg, listing_file) != ASMCC_OK)         \
             {                                                                           \
                 acc->asm_errno |= ASMCC_ERR_READING_CMD_ARGS;                           \

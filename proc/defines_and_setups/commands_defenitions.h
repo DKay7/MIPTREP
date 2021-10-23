@@ -6,9 +6,10 @@
 
 // Optional and required arguments.
 // Figured out by high bit (1 -- required, 0 -- optional)
-#define ARG(number, type) (((0x1 << 4) | (type)) << (number * 4))
-#define OPT_ARG(number, type) (((0x0 << 4) | (type)) << (number * 4))
-#define NO_ARGS (0x0 << 4)
+#define ARG(number, type) ((0x1 | (type)) << (number * 4))
+#define OPT_ARG(number, type) ((0x0 | (type)) << (number * 4))
+#define NO_ARGS (0x0)
+#define ARG_MASK 0xFF
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
@@ -29,7 +30,7 @@ DEF_COMMAND (PUSH, 1, 1, "push",
 		int stack_code = StackPush (&cpu->stack, value);
 		CHECK_STACK (cpu, stack_code)
 	}, 
-	ARG (0, (RAM_VALUE_LOW | REGISTER_VALUE_LOW | IMMEDIATE_CONST_LOW))
+	ARG (0, (RAM_VALUE | REGISTER_VALUE | IMMEDIATE_CONST))
 )
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
@@ -40,16 +41,23 @@ DEF_COMMAND (POP, 1, 2, "pop",
 		int cmd_id = cpu->cmd_array[cpu->pc];
 		if (cmd_id & RAM_VALUE)
 		{	
-			cpu->pc += sizeof (unsigned char);
+			int arg_pc = cpu->pc + sizeof (unsigned char);
+			int ram_id = 0;
 
 			// if ram_id is immedeate const
-			int ram_id = cpu->cmd_array[cpu->pc];
+			if (cmd_id & IMMEDIATE_CONST)
+			{
+				ram_id = *(arg_t*)(cpu->cmd_array + arg_pc);
+				cpu->pc += sizeof (arg_t);
+			}
 
 			// if ram_id is register
-			if (cmd_id & REGISTER_VALUE)
+			else if (cmd_id & REGISTER_VALUE)
 			{
-				ram_id = cpu->regs[ram_id];
+				ram_id = cpu->regs[cpu->cmd_array[arg_pc]];
+				cpu->pc += sizeof (unsigned char);
 			}
+
 			int stack_code = StackPop (&cpu->stack, &cpu->ram[ram_id]);
 			CHECK_STACK (cpu, stack_code)
 		}
@@ -71,7 +79,7 @@ DEF_COMMAND (POP, 1, 2, "pop",
 		}
 	
 	},
-	OPT_ARG (0, (RAM_VALUE_LOW | REGISTER_VALUE_LOW))
+	OPT_ARG (0, (RAM_VALUE | REGISTER_VALUE))
 )
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx

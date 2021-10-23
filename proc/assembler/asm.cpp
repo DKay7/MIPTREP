@@ -127,23 +127,24 @@ int GetArg (AsmCompiler* acc, char* command, int arg_code, FILE* listing_file)
     acc->ip -= sizeof (unsigned char);
     unsigned char command_id = acc->cmd_array[acc->ip];
 
-    if ((arg_code & RAM_VALUE_LOW) && (is_memory = strchr(command, '[')))
-    {
+    if ((arg_code & RAM_VALUE) && (is_memory = strchr(command, '[')))
+    {   
         command = is_memory + 1;
         char* mem_end = strchr(command, ']');
         
         if (!mem_end)
-        {
+        {   
             acc->asm_errno |= ASMCC_ERR_READING_CMD_ARGS;
             return acc->asm_errno;
         }
 
         *mem_end = '\0';
 
+        arg_code |= IMMEDIATE_CONST;
         command_id |= RAM_VALUE;
     }
 
-    if ((arg_code & IMMEDIATE_CONST_LOW) && sscanf (command, " %lf", &arg) > 0)
+    if ((arg_code & IMMEDIATE_CONST) && sscanf (command, " %lf", &arg) > 0)
     {   
         command_id |= IMMEDIATE_CONST;
         acc->cmd_array[acc->ip] = command_id;
@@ -155,7 +156,7 @@ int GetArg (AsmCompiler* acc, char* command, int arg_code, FILE* listing_file)
         fprintf (listing_file, "%02X\t|\t", command_id);
         PrintValToListing (listing_file, &arg, sizeof (arg_t));
     }
-    else if ((arg_code & REGISTER_VALUE_LOW) && sscanf (command, " %ms", &reg_arg) > 0)
+    else if ((arg_code & REGISTER_VALUE) && sscanf (command, " %ms", &reg_arg) > 0)
     {   
         command_id |= REGISTER_VALUE;
         acc->cmd_array[acc->ip] = command_id;
@@ -166,7 +167,7 @@ int GetArg (AsmCompiler* acc, char* command, int arg_code, FILE* listing_file)
 
         free (reg_arg);
     }
-    else if ((arg_code & 0x8) == 0)
+    else if ((arg_code & OPTIONAL_ARG) == 0)
     {
         // argument is optional
         acc->cmd_array[acc->ip] = command_id;

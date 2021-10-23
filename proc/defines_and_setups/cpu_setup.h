@@ -15,14 +15,9 @@ enum CpuRegisters
 };
 
 enum ByteMasks
-{
+{   
+    OPTIONAL_ARG        = 0x01,
     IMMEDIATE_CONST     = 0x20,
-    IMMEDIATE_CONST_LOW = 0x01,
-
     REGISTER_VALUE      = 0x40,
-    REGISTER_VALUE_LOW  = 0x02,
-
     RAM_VALUE           = 0x80,
-    RAM_VALUE_LOW       = 0x04,
-
 };

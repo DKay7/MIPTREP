@@ -31,6 +31,17 @@ enum AsmCCReturnCodes
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
+enum DisAsmReturnCodes
+{
+    #define DEF_ERR_CODE(enum_name, id, text)  \
+            enum_name = id,                    \
+    
+    #include "disasm_errors_defenitions.h"
+
+    #undef DEF_ERR_CODE
+};
+
+//flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
 #ifndef CHECK_STACK
 #define CHECK_STACK(cpu, stack_code) {          \

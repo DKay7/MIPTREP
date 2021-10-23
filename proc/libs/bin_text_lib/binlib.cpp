@@ -35,7 +35,7 @@ int WriteToBinary (BinHeader* bh, unsigned char* data, int data_size, const char
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
-int ReadFromBinary (BinHeader* correct_bh, unsigned char** data, const char* filename)
+int ReadFromBinary (BinHeader* correct_bh, unsigned char** data, int* size, const char* filename)
 {   
     assert (correct_bh);
     assert (filename);
@@ -52,6 +52,7 @@ int ReadFromBinary (BinHeader* correct_bh, unsigned char** data, const char* fil
     }
 
     int data_size = CountSize (file);
+    *size = data_size;
     *data = (unsigned char*) calloc (data_size, sizeof (unsigned char*));
     CHECK_POINTER (*data, "ReadFromBinary", -1);
 

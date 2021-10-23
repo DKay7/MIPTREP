@@ -18,7 +18,8 @@
 typedef struct
 {
   Stack stack;    
-  unsigned char* cmd_array;               
+  unsigned char* cmd_array;      
+  int cmd_array_size;         
   arg_t* regs;
   arg_t* ram;
   int pc;
