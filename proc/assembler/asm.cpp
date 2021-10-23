@@ -14,7 +14,7 @@ int CompileCode (AsmCompiler* acc, Text* code, const char* bin_filename, const c
 {
     FILE* listing_file = fopen (listing_filename, "w");
 
-    if (ferror (listing_file) || listing_file == NULL)
+    if (ferror (listing_file) || listing_file == NULL) // TODO ...
     {   
         acc->asm_errno |= ASMCC_FILE_OPENING_ERR;
         return acc->asm_errno;
@@ -71,7 +71,7 @@ int ParseCommand (AsmCompiler* acc, char* command, FILE* listing_file)
         *is_comment = '\0';
     }
 
-    char* cmd_name;
+    char* cmd_name; // TODO 0
     int shift = 0;
     sscanf (command, " %ms%n ", &cmd_name, &shift);
 
@@ -140,7 +140,7 @@ int GetArg (AsmCompiler* acc, char* command, int arg_code, FILE* listing_file)
 
         *mem_end = '\0';
 
-        arg_code |= IMMEDIATE_CONST;
+        arg_code |= IMMEDIATE_CONST; // TODO
         command_id |= RAM_VALUE;
     }
 
