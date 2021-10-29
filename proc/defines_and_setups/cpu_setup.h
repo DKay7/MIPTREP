@@ -1,17 +1,15 @@
-
 #define REG_SIZE 4
 #define RAM_SIZE 32
 #define STACK_INIT_SIZE 16
 
-
 enum CpuRegisters
 {
-    #define DEF_REGISER(enum_name, id, str_name, ...)  \
-        enum_name = id,                                \
+    #define DEF_REGISTER(enum_name, ...)  \
+        enum_name,                        \
     
     #include "registers_defenitions.h"
 
-    #undef DEF_REGISER
+    #undef DEF_REGISTER
 };
 
 enum ByteMasks

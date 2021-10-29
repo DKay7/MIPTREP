@@ -1,5 +1,5 @@
-#define DEF_COMMAND(enum_name, n_arg, id, cmd_name, realization, ...)       \
-case id:                                                                    \
+#define DEF_COMMAND(enum_name, n_arg, cmd_name, realization, ...)           \
+case enum_name:                                                             \
     realization                                                             \
     break;                                                                  \
 

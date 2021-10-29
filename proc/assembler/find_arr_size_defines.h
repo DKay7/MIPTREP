@@ -1,4 +1,4 @@
-#define DEF_COMMAND(enum_name, n_args, id, str_cmd_name, ...)                           \
+#define DEF_COMMAND(enum_name, n_args, str_cmd_name, ...)                               \
     if (strcmp (cmd_name, str_cmd_name) == 0)                                           \
     {                                                                                   \
         num_bytes += sizeof (unsigned char) + n_args * sizeof (arg_t);                  \

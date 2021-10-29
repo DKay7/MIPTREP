@@ -107,58 +107,40 @@ int CpuOpenFile (Cpu* cpu, const char* filename)
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
-int CpuGetArgument (Cpu* cpu, arg_t* ret_value)
+arg_t* CpuGetArgument (Cpu* cpu)
 {   
     assert (cpu);
-    assert (ret_value);
 
-    int command_id = cpu->cmd_array[cpu->pc];
-    int return_type = 0;
 
-    if ((command_id & (IMMEDIATE_CONST | REGISTER_VALUE | RAM_VALUE)) == 0)
+    arg_t* ret_value = NULL;
+
+    int current_cmd = cpu->cmd_array[cpu->pc];
+    int arg_index =  cpu->pc + sizeof (unsigned char);
+
+    if (current_cmd & IMMEDIATE_CONST)
     {
-        return return_type;
-    }
-     
-    if (command_id & IMMEDIATE_CONST)
-    {
-        *ret_value = *(arg_t*)(cpu->cmd_array + cpu->pc + sizeof (unsigned char));
+        ret_value = (arg_t*)(cpu->cmd_array + arg_index);
         cpu->pc += sizeof (arg_t);
-
-        return_type |= IMMEDIATE_CONST;
     }
 
-    if (command_id & REGISTER_VALUE)
-    {   
-        int reg_id = cpu->cmd_array[cpu->pc + sizeof (unsigned char)];
-
-        if (reg_id >= REG_SIZE || reg_id < 0)
-        {
-            cpu->errno |= CPU_REGS_OVERFLOW;
-            return cpu->errno;
-        }
-
-        *ret_value = cpu->regs[reg_id];
-        cpu->pc += sizeof (unsigned char);
-
-        return_type |= REGISTER_VALUE;
-    }
-
-    if (command_id & RAM_VALUE)
+    if (current_cmd & REGISTER_VALUE)
     {
-        if (*ret_value >= RAM_SIZE || *ret_value  < 0)
-        {
-            cpu->errno |= CPU_RAM_OVERFLOW;
-            return cpu->errno;
-        }
-        
-        int ram_index = (int) *ret_value;
-        *ret_value = cpu->ram[ram_index];
+        arg_t reg_index = *(arg_t*)(cpu->cmd_array + arg_index);
+        ret_value = &cpu->regs[(int) reg_index];
 
-        return_type |= RAM_VALUE;
+        cpu->pc += sizeof (arg_t);
     }
 
-    return return_type;
+    if (current_cmd & RAM_VALUE)
+    {   
+        assert (current_cmd & IMMEDIATE_CONST || current_cmd & REGISTER_VALUE);
+ 
+        ret_value = (arg_t*) &cpu->cmd_array[(int) *ret_value];
+        cpu->pc += sizeof (arg_t);
+    }
+
+    return ret_value;
+
 }
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
@@ -200,8 +182,9 @@ void CpuDumpFunction (Cpu* cpu, FILE* logfile, int line, const char* cpu_name, c
                       "\t-->Mem[%p]\n\t{\n", cpu->ram);
     
     for (int i = 0; i < RAM_SIZE; ++i)
-    {
-        fprintf (logfile, "\t\t[%d]:\t{%lg}\n", i, cpu->ram[i]);
+    {   
+        if (cpu->ram[i] != 0)
+            fprintf (logfile, "\t\t[%d]:\t{%lg}\n", i, cpu->ram[i]);
     }
 
     fprintf (logfile, "\t}\n\n"

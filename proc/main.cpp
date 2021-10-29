@@ -6,9 +6,9 @@
 
 int main ()
 {   
-    // AsmUnitTest ();
+    AsmUnitTest ();
     
-    // CpuUnitTest ();
+    CpuUnitTest ();
     DisAsmUnitTest ();    
     
     return 0;

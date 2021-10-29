@@ -1,5 +1,5 @@
-#define DEF_COMMAND(enum_name, n_arg, id, cmd_name, realization, ...)       \
-case id:                                                                    \
+#define DEF_COMMAND(enum_name, n_arg, cmd_name, realization, ...)           \
+case enum_name:                                                             \
     DisAsmWriteOutput (adc, "%-16s\t", cmd_name);                           \
                                                                             \
     for (int i = 0; i < n_arg; ++i)                                         \

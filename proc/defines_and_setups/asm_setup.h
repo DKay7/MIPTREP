@@ -18,8 +18,8 @@
 
 enum COMMAND_MACHINE_CODES
 {
-  #define DEF_COMMAND(enum_name, n_args, id, ...)  \
-    enum_name = id,                                \
+  #define DEF_COMMAND(enum_name, ...)  \
+    enum_name,                         \
 
   #include "../defines_and_setups/commands_defenitions.h"
 

@@ -6,15 +6,18 @@
 
 // Optional and required arguments.
 // Figured out by high bit (1 -- required, 0 -- optional)
-#define ARG(number, type) ((0x1 | (type)) << (number * 4))
-#define OPT_ARG(number, type) ((0x0 | (type)) << (number * 4))
-#define NO_ARGS (0x0)
-#define ARG_MASK 0xFF
+#define ARG(    number, type)  ((0x1 | (type)) >> (number * 4))
+#define OPT_ARG(number, type)  ((0x0 | (type)) >> (number * 4))
+#define NO_ARGS                (0x0)
+#define ARG_MASK                0xFF
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+#define PUSH(arg)	StackPush (&cpu->stack, (arg))
+#define POP(adr)	StackPop (&cpu->stack, (adr))
+//flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
-// name, n_args, id, str_name, cmd_realization
-DEF_COMMAND (HLT, 0, 0, "hlt",
+// name, n_args, str_name, cmd_realization
+DEF_COMMAND (HLT, 0, "hlt",
 	{
 		cpu->errno |= CPU_CODE_END_REACHED;
 	}, 
@@ -23,11 +26,10 @@ DEF_COMMAND (HLT, 0, 0, "hlt",
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
-DEF_COMMAND (PUSH, 1, 1, "push",
+DEF_COMMAND (PUSH, 1, "push",
 	{	
-		arg_t value = STACK_DATA_POISON;
-		CpuGetArgument (cpu, &value);
-		int stack_code = StackPush (&cpu->stack, value);
+		arg_t* value =  CpuGetArgument (cpu);
+		int stack_code = PUSH (*value);
 		CHECK_STACK (cpu, stack_code)
 	}, 
 	ARG (0, (RAM_VALUE | REGISTER_VALUE | IMMEDIATE_CONST))
@@ -35,125 +37,112 @@ DEF_COMMAND (PUSH, 1, 1, "push",
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
-DEF_COMMAND (POP, 1, 2, "pop",
-	{
+DEF_COMMAND (POP, 1, "pop",
+	{	
 		CHECK_STACK_SIZE (cpu, cpu->stack.size, 1)
-		int cmd_id = cpu->cmd_array[cpu->pc];
-		if (cmd_id & RAM_VALUE)
-		{	
-			int arg_pc = cpu->pc + sizeof (unsigned char);
-			int ram_id = 0;
+		arg_t* value =  CpuGetArgument (cpu);
 
-			// if ram_id is immedeate const
-			if (cmd_id & IMMEDIATE_CONST)
-			{
-				ram_id = *(arg_t*)(cpu->cmd_array + arg_pc);
-				cpu->pc += sizeof (arg_t);
-			}
+		int stack_code = 0;
 
-			// if ram_id is register
-			else if (cmd_id & REGISTER_VALUE)
-			{
-				ram_id = cpu->regs[cpu->cmd_array[arg_pc]];
-				cpu->pc += sizeof (unsigned char);
-			}
-
-			int stack_code = StackPop (&cpu->stack, &cpu->ram[ram_id]);
-			CHECK_STACK (cpu, stack_code)
-		}
-
-		else if (cmd_id & REGISTER_VALUE)
-		{	
-			cpu->pc += sizeof (unsigned char);
-			int reg_id = cpu->cmd_array[cpu->pc];
-			int stack_code = StackPop (&cpu->stack, &cpu->regs[reg_id]);
-			CHECK_STACK (cpu, stack_code)
-		}	
-
-		else
+		if (!value)
 		{	
 			// no args
-			arg_t value = 0;
-			int stack_code = StackPop (&cpu->stack, &value);
-			CHECK_STACK (cpu, stack_code)
+			arg_t val = 0;
+			stack_code = POP (&val);
 		}
-	
+		
+		else
+		{
+			stack_code = POP (value);
+		}
+
+		CHECK_STACK (cpu, stack_code)
+
 	},
 	OPT_ARG (0, (RAM_VALUE | REGISTER_VALUE))
 )
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
-DEF_COMMAND (ADD, 0, 3, "add",
+// DEF_COMMAND (JMP, 1, "jmp",
+// 	{
+
+// 	},
+// 	ARG (0, (RAM_VALUE | REGISTER_VALUE | IMMEDIATE_CONST))
+// )
+
+//flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+DEF_COMMAND (ADD, 0, "add",
 	{
 		CHECK_STACK_SIZE (cpu, cpu->stack.size, 2)
 		arg_t fisrt_term = STACK_DATA_POISON;
 		arg_t second_term = STACK_DATA_POISON;
-		int stack_code1 = StackPop (&cpu->stack, &fisrt_term);
-		int stack_code2 = StackPop (&cpu->stack, &second_term);
+		int stack_code1 = POP (&fisrt_term);
+		int stack_code2 = POP (&second_term);
 		CHECK_STACK (cpu, stack_code1)
 		CHECK_STACK (cpu, stack_code2)
-		StackPush (&cpu->stack, fisrt_term + second_term);
+		PUSH (fisrt_term + second_term);
 	},
 	NO_ARGS
 )
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
-DEF_COMMAND (SUB, 0, 4, "sub", 
+DEF_COMMAND (SUB, 0, "sub", 
 	{
 		CHECK_STACK_SIZE (cpu, cpu->stack.size, 2)
 		arg_t fisrt_term = STACK_DATA_POISON;
 		arg_t second_term = STACK_DATA_POISON;
-		int stack_code1 = StackPop (&cpu->stack, &fisrt_term);
-		int stack_code2 = StackPop (&cpu->stack, &second_term);
+		int stack_code1 = POP (&fisrt_term);
+		int stack_code2 = POP (&second_term);
 		CHECK_STACK (cpu, stack_code1)
 		CHECK_STACK (cpu, stack_code2)
-		StackPush (&cpu->stack, fisrt_term - second_term);
+		PUSH (fisrt_term - second_term);
 	},
 	NO_ARGS
 )	
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
-DEF_COMMAND (DIV, 0, 5, "div", 
+DEF_COMMAND (DIV, 0, "div", 
 	{
 		CHECK_STACK_SIZE (cpu, cpu->stack.size, 2)
 		arg_t fisrt_term = STACK_DATA_POISON;
 		arg_t second_term = STACK_DATA_POISON;
-		int stack_code1 = StackPop (&cpu->stack, &fisrt_term);
-		int stack_code2 = StackPop (&cpu->stack, &second_term);
+		int stack_code1 = POP (&fisrt_term);
+		int stack_code2 = POP (&second_term);
 		CHECK_STACK (cpu, stack_code1)
 		CHECK_STACK (cpu, stack_code2)
 		CHECK_ZERO_VALUE (cpu, second_term)
-		StackPush (&cpu->stack, fisrt_term / second_term);
+		PUSH (fisrt_term / second_term);
 	},
 	NO_ARGS
 )
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
-DEF_COMMAND (MUL, 0, 6, "mul", 
+DEF_COMMAND (MUL, 0, "mul", 
 	{
 		CHECK_STACK_SIZE (cpu, cpu->stack.size, 2)
 		arg_t fisrt_term = STACK_DATA_POISON;
 		arg_t second_term = STACK_DATA_POISON;
-		int stack_code1 = StackPop (&cpu->stack, &fisrt_term);
-		int stack_code2 = StackPop (&cpu->stack, &second_term);
+		int stack_code1 = POP (&fisrt_term);
+		int stack_code2 = POP (&second_term);
 		CHECK_STACK (cpu, stack_code1)
 		CHECK_STACK (cpu, stack_code2)
-		StackPush (&cpu->stack, fisrt_term * second_term);
+		PUSH (fisrt_term * second_term);
 	},
 	NO_ARGS
 )
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
-DEF_COMMAND (OUT, 0, 7, "out",
+DEF_COMMAND (OUT, 0, "out",
 	{
 		CHECK_STACK_SIZE (cpu, cpu->stack.size, 1)
 		arg_t element = STACK_DATA_POISON;
-		int stack_code = StackPop (&cpu->stack, &element);
+		int stack_code = POP (&element);
 		CHECK_STACK (cpu, stack_code)
 		printf ("%lg\n", element);
 	},
@@ -162,11 +151,11 @@ DEF_COMMAND (OUT, 0, 7, "out",
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
-DEF_COMMAND (IN, 0, 8, "in",
+DEF_COMMAND (IN, 0, "in",
 	{
 		arg_t element = STACK_DATA_POISON;
 		scanf ("%lg", &element);
-		int stack_code = StackPush (&cpu->stack, element);
+		int stack_code = PUSH (element);
 		CHECK_STACK (cpu, stack_code)
 	},
 	NO_ARGS
@@ -174,7 +163,7 @@ DEF_COMMAND (IN, 0, 8, "in",
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
-DEF_COMMAND (DUMP, 0, 9, "dump",
+DEF_COMMAND (DUMP, 0, "dump",
 	{
 	    CpuDump (cpu, stdout); 
 	},
@@ -183,7 +172,7 @@ DEF_COMMAND (DUMP, 0, 9, "dump",
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
-DEF_COMMAND (DUMP_STK, 0, 10, "dumpstk",
+DEF_COMMAND (DUMP_STK, 0, "dumpstk",
 	{
 	    StackDump (&cpu->stack, stdout); 
 	},
@@ -192,9 +181,15 @@ DEF_COMMAND (DUMP_STK, 0, 10, "dumpstk",
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
-DEF_COMMAND (VALIDATE, 0, 11, "validate", 
+DEF_COMMAND (VALIDATE, 0, "validate", 
   	{
 	    StackValidate (&cpu->stack, STACK_EXTERNAL_FUNC_CODE);
 	},
 	NO_ARGS
 )
+
+//flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+#ifdef DEF_COMMAND(...)
+#undef DEF_COMMAND
+#endif

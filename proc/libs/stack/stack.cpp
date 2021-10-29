@@ -182,7 +182,7 @@ int StackIncrease (Stack* stack)
 
     if (stack->size + 1 > stack->capacity)
     {
-        stack_type* tmp = (stack_type*) realloc (stack->data, (int)((STACK_INCREASE_COEFFICIENT) * stack->capacity + 1) * sizeof (stack_type));
+        stack_type* tmp = (stack_type*) realloc (stack->data, ((STACK_INCREASE_COEFFICIENT) * stack->capacity + 1) * sizeof (stack_type));
 
         if (!tmp)
         {
@@ -193,7 +193,7 @@ int StackIncrease (Stack* stack)
         }
 
         stack->data = tmp;
-        stack->capacity = (int)((STACK_INCREASE_COEFFICIENT) * stack->capacity + 1);
+        stack->capacity = (STACK_INCREASE_COEFFICIENT) * stack->capacity + 1;
 
         StackPoison (stack, stack->size + 1, stack->capacity);
         stack->hash = StackHashSum (stack);
@@ -211,7 +211,7 @@ int StackDecrease (Stack* stack)
 
     if (stack->size < (STACK_DECREASE_COEFFICIENT) * stack->capacity)
     {
-        stack_type* tmp = (stack_type*) realloc (stack->data, (int)((STACK_DECREASE_COEFFICIENT) * stack->capacity + 1) * sizeof (stack_type));
+        stack_type* tmp = (stack_type*) realloc (stack->data, ((STACK_DECREASE_COEFFICIENT) * stack->capacity + 1) * sizeof (stack_type));
 
         if (!tmp)
         {   
@@ -222,7 +222,7 @@ int StackDecrease (Stack* stack)
         }
 
         stack->data = tmp;
-        stack->capacity = (int)((STACK_DECREASE_COEFFICIENT) * stack->capacity + 1);
+        stack->capacity = (STACK_DECREASE_COEFFICIENT) * stack->capacity + 1;
         stack->hash = StackHashSum (stack);
     }
 
@@ -231,7 +231,7 @@ int StackDecrease (Stack* stack)
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
-int StackValidate (Stack* stack, int func_code)
+int StackValidate (Stack* stack, unsigned int func_code)
 {
     assert (stack);
 
@@ -275,7 +275,7 @@ int StackDumpFunc (Stack* stack, FILE* logfile, const int line, const char* func
     assert (file_name);
     assert (stack_name);
 
-    int err_code = StackValidate (stack, STACK_DUMP_CODE);
+    unsigned int err_code = StackValidate (stack, STACK_DUMP_CODE);
 
     if (err_code == STACK_OK)
     {
@@ -349,8 +349,8 @@ int StackPrintExitCode(Stack* stack, FILE* logfile)
         return ValidateResult (stack, STACK_PRINT_EXIT_CODE_CODE);
     } 
 
-    int err_code = stack->info.error_code;
-    int func_code = stack->info.error_func_code;
+    unsigned int err_code = stack->info.error_code;
+    unsigned int func_code = stack->info.error_func_code;
     fprintf (logfile, "\nThere are some errors in stack: \n");
 
     #include "defines/print_err_code_define.h"
@@ -403,8 +403,8 @@ unsigned long long StackHashSum(Stack* stack)
     assert(stack);
 
     unsigned long long old_hash = stack->hash;
-    int stack_err_code = stack->info.error_code;
-    int stack_err_func_code = stack->info.error_func_code;
+    unsigned int stack_err_code = stack->info.error_code;
+    unsigned int stack_err_func_code = stack->info.error_func_code;
 
     stack->info.error_code = 0;
     stack->info.error_func_code = 0;

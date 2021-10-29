@@ -8,7 +8,7 @@ typedef struct
     unsigned char* cmd_array;
     char* buffer;
     char* buf_ptr;
-    int ip;
+    long unsigned ip;
     int cmd_array_size;
     int buf_size;
     int errno;

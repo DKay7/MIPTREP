@@ -78,8 +78,8 @@ const hummingbird_type HUMMINGBIRD = (hummingbird_type) 0xDEAD0DED;
 */
 typedef struct
 {       
-    int error_code;                         /**< Поле AdditionalInfo#error_code хранит код ошибки. */
-    int error_func_code;                    /**< Поле AdditionalInfo#error_code хранит код функции, в которой произошла ошибка. */
+    unsigned int error_code;                         /**< Поле AdditionalInfo#error_code хранит код ошибки. */
+    unsigned int error_func_code;                    /**< Поле AdditionalInfo#error_code хранит код функции, в которой произошла ошибка. */
     const char* filename;                   /**< Поле AdditionalInfo#filename хранит имя файла, в котором был проинициализирован стек. */
     int line;                               /**< Поле AdditionalInfo#line хранит номер строки, в которой был проинициализирован стек. */
     const char* stack_name;                 /**< Поле AdditionalInfo#stack_name хранит имя объекта стека. */
@@ -247,7 +247,7 @@ int StackDumpFunc (Stack* stack, FILE* logfile, const int line, const char* func
 *   @param [in, out] stack Указатель на структуру \link Stack \endlink.
 *   @return Один из кодов \link RETURN_CODES \endlink.
 */
-int StackValidate (Stack* stack, const int func_code);
+int StackValidate (Stack* stack, unsigned int func_code);
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 

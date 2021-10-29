@@ -9,14 +9,14 @@
 typedef struct
 {   
     unsigned char* cmd_array;
-    int ip;
-    int cmd_array_size;
+    long unsigned ip;
+    size_t cmd_array_size;
     int asm_errno;
 } AsmCompiler;
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
-int AsmCompilerCtor (AsmCompiler* acc, int cmd_array_size);
+int AsmCompilerCtor (AsmCompiler* acc, size_t cmd_array_size);
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
@@ -32,7 +32,7 @@ int CompileCode (AsmCompiler* acc, Text* code, const char* bin_filename, const c
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
-int FindCmdArraySize (Text* code);
+ssize_t FindCmdArraySize (Text* code);
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 

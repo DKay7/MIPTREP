@@ -14,7 +14,7 @@ int CompileCode (AsmCompiler* acc, Text* code, const char* bin_filename, const c
 {
     FILE* listing_file = fopen (listing_filename, "w");
 
-    if (ferror (listing_file) || listing_file == NULL) // TODO ...
+    if (listing_file == NULL || ferror (listing_file))
     {   
         acc->asm_errno |= ASMCC_FILE_OPENING_ERR;
         return acc->asm_errno;
@@ -38,7 +38,7 @@ int CompileCode (AsmCompiler* acc, Text* code, const char* bin_filename, const c
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
-int AsmCompilerCtor (AsmCompiler* acc, int cmd_array_size)
+int AsmCompilerCtor (AsmCompiler* acc, size_t cmd_array_size)
 {
     acc->ip = 0;
     acc->asm_errno = ASMCC_OK;
@@ -71,7 +71,7 @@ int ParseCommand (AsmCompiler* acc, char* command, FILE* listing_file)
         *is_comment = '\0';
     }
 
-    char* cmd_name; // TODO 0
+    char* cmd_name = NULL;
     int shift = 0;
     sscanf (command, " %ms%n ", &cmd_name, &shift);
 
@@ -88,9 +88,9 @@ int ParseCommand (AsmCompiler* acc, char* command, FILE* listing_file)
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
-int FindCmdArraySize (Text* code)
+ssize_t FindCmdArraySize (Text* code)
 {   
-    int num_bytes = 0;
+    ssize_t num_bytes = 0;
 
     for (size_t i = 0; i < code->non_empty_lines; ++i)
     {
@@ -123,8 +123,7 @@ int GetArg (AsmCompiler* acc, char* command, int arg_code, FILE* listing_file)
     arg_t arg = 0;
     char* reg_arg = NULL;
     char* is_memory = NULL;
-
-    acc->ip -= sizeof (unsigned char);
+    acc->ip -= sizeof (unsigned char); // back to last command id
     unsigned char command_id = acc->cmd_array[acc->ip];
 
     if ((arg_code & RAM_VALUE) && (is_memory = strchr(command, '[')))
@@ -140,7 +139,9 @@ int GetArg (AsmCompiler* acc, char* command, int arg_code, FILE* listing_file)
 
         *mem_end = '\0';
 
-        arg_code |= IMMEDIATE_CONST; // TODO
+        arg_code |= IMMEDIATE_CONST; // if it's ram then arg may be IM or REGVAL even
+        arg_code |= REGISTER_VALUE;  // if it couldn't be IM or REGVAL without RAM
+
         command_id |= RAM_VALUE;
     }
 
@@ -148,25 +149,27 @@ int GetArg (AsmCompiler* acc, char* command, int arg_code, FILE* listing_file)
     {   
         command_id |= IMMEDIATE_CONST;
         acc->cmd_array[acc->ip] = command_id;
-        acc->ip += sizeof (unsigned char);
 
-        *(arg_t*) (acc->cmd_array + acc->ip) = arg;
-        acc->ip += sizeof (arg_t);
+        *(arg_t*) (acc->cmd_array + acc->ip + sizeof (unsigned char)) = arg;
+        acc->ip += sizeof (unsigned char) + sizeof (arg_t);
         
         fprintf (listing_file, "%02X\t|\t", command_id);
         PrintValToListing (listing_file, &arg, sizeof (arg_t));
     }
+
     else if ((arg_code & REGISTER_VALUE) && sscanf (command, " %ms", &reg_arg) > 0)
     {   
         command_id |= REGISTER_VALUE;
         acc->cmd_array[acc->ip] = command_id;
         acc->ip += sizeof (unsigned char);
+
         fprintf (listing_file, "%02X\t|\t", command_id);
 
         #include "compare_registers_defines.h"
 
         free (reg_arg);
     }
+
     else if ((arg_code & OPTIONAL_ARG) == 0)
     {
         // argument is optional
@@ -175,6 +178,7 @@ int GetArg (AsmCompiler* acc, char* command, int arg_code, FILE* listing_file)
         fprintf (listing_file, "%02X\t|\t", command_id);
         return acc->asm_errno;
     }
+    
     else
     {   
         acc->asm_errno |= ASMCC_ERR_READING_CMD_ARGS;
@@ -230,7 +234,7 @@ int AsmUnitTest ()
     TextCtor (&code, "asm_file.asm");
 
     AsmCompiler acc = {};
-    int cmd_arr_size = FindCmdArraySize (&code);
+    long unsigned int cmd_arr_size = FindCmdArraySize (&code);
     AsmCompilerCtor (&acc, cmd_arr_size);
 
     CompileCode (&acc, &code, "asm_result.mc", "asm.lst");

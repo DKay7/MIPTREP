@@ -22,7 +22,7 @@ typedef struct
   int cmd_array_size;         
   arg_t* regs;
   arg_t* ram;
-  int pc;
+  long unsigned pc;
   int errno = CPU_OK;
 } Cpu;
 
@@ -48,7 +48,7 @@ int CpuOpenFile (Cpu* cpu, const char* filename);
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
-int CpuGetArgument (Cpu* cpu, arg_t* ret_value);
+arg_t* CpuGetArgument (Cpu* cpu);
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
