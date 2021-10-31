@@ -14,8 +14,7 @@ int CpuExecute(Cpu* cpu)
     assert (cpu->cmd_array);
     assert (cpu->ram);
 
-    int iter_cmd = 0;
-    while (cpu->cmd_array[cpu->pc] != HLT && iter_cmd < cpu->cmd_array_size)
+    while (1)
     {   
         CpuProcessComand (cpu);
 
@@ -23,8 +22,6 @@ int CpuExecute(Cpu* cpu)
         {
             break;
         }
-
-        ++iter_cmd;
     }
 
     return cpu->errno;
@@ -40,7 +37,6 @@ int CpuProcessComand (Cpu* cpu)
 
     #include "process_cmd_defines.h"
 
-    cpu->pc += sizeof (unsigned char);
     return cpu->errno;
 }
 
@@ -115,10 +111,10 @@ arg_t* CpuGetArgument (Cpu* cpu)
     arg_t* ret_value = NULL;
 
     int current_cmd = cpu->cmd_array[cpu->pc];
-    int arg_index =  cpu->pc + sizeof (unsigned char);
+    long unsigned arg_index =  cpu->pc + sizeof (unsigned char);
 
     if (current_cmd & IMMEDIATE_CONST)
-    {
+    {   
         ret_value = (arg_t*)(cpu->cmd_array + arg_index);
         cpu->pc += sizeof (arg_t);
     }

@@ -9,8 +9,8 @@ typedef struct
     char* buffer;
     char* buf_ptr;
     long unsigned ip;
-    int cmd_array_size;
-    int buf_size;
+    long unsigned cmd_array_size;
+    long unsigned buf_size;
     int errno;
 } AsmDecompiler;
 

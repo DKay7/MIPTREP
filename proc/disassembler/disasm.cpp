@@ -55,9 +55,9 @@ int DisAsmOpenFile (AsmDecompiler* adc, const char* filename)
 
     BinHeader correct_bh = {};
     BinHeaderCtor (&correct_bh, SIGNATURE, CC_VERSION);
-    int code = ReadFromBinary (&correct_bh, &adc->cmd_array, &adc->cmd_array_size, filename);
+    int ret_code = ReadFromBinary (&correct_bh, &adc->cmd_array, &adc->cmd_array_size, filename);
 
-    if (code != 0)
+    if (ret_code != 0)
     {   
         adc->errno |= DISASM_ERR_READING_BIN_FILE;
         return adc->errno;
@@ -94,7 +94,8 @@ int DisAsmParseArg (AsmDecompiler* adc)
     if (command_id & REGISTER_VALUE)
     {   
         #include "disasm_regs_defines.h"
-        adc->ip += sizeof (unsigned char);
+        adc->ip += sizeof (arg_t);
+
     }
 
     else if (command_id & IMMEDIATE_CONST)
@@ -117,14 +118,11 @@ int DisAsmParseArg (AsmDecompiler* adc)
 
 int DisAcmProcessFile (AsmDecompiler* adc, const char* filename)
 {   
-    int iter_cmd = 0;
-    int last_ip = adc->ip;
-    while (adc->cmd_array[last_ip] != HLT && iter_cmd < adc->cmd_array_size)
-    {
+
+    while (adc->ip < adc->cmd_array_size)
+    {   
         #include "disasm_cmd_defines.h"
-        last_ip = adc->ip;
-        ++iter_cmd;
-        ++adc->ip;
+        adc->ip += sizeof (unsigned char);
     }
 
     SaveToFile (adc->buffer, filename);

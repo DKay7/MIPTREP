@@ -12,7 +12,7 @@ all: $(SOURCES) $(EXECUTABLE)
 $(EXECUTABLE): $(SOURCES)
 	$(CC) $(SOURCES) $(CFLAGS) -o $(EXECUTABLE)
 db: $(SOURCES)
-	$(CC) $(SOURCES) $(DBFLAGS) $(CFLAGS) -o $@ 2> db_compilation.log
+	$(CC) $(SOURCES) $(DBFLAGS) $(CFLAGS) -o $@
 
 create_docs:
 	doxygen docs/doxy_config

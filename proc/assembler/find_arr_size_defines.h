@@ -7,8 +7,8 @@
 #include "../defines_and_setups/commands_defenitions.h"
 
 /*else*/
-{
-    return -1;
+{   
+    continue;
 }
 
 #undef DEF_COMMAND

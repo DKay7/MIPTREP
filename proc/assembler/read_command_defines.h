@@ -28,9 +28,14 @@
 #include "../defines_and_setups/commands_defenitions.h"
 
 /*else*/
-{
-    acc->asm_errno |= ASMCC_INVALID_COMMAND;
-    return acc->asm_errno;
+{   
+    int result = CheckAndProcessLabel (acc, command, listing_file);
+    
+    if (!result)
+    {
+        acc->asm_errno |= ASMCC_INVALID_COMMAND;
+        return acc->asm_errno;
+    }
 }
 
 #undef DEF_COMMAND

@@ -43,31 +43,29 @@ enum DisAsmReturnCodes
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
-#ifndef CHECK_STACK
+#define EPSILON 1e-5
+
 #define CHECK_STACK(cpu, stack_code) {          \
     if (stack_code != STACK_OK)                 \
     {                                           \
         cpu->errno |= CPU_INTERNAL_STACK_ERR;   \
         return cpu->errno;                      \
     }}
-#endif
 
-#ifndef CHECK_STACK_SIZE
 #define CHECK_STACK_SIZE(cpu, stack_size, required_stack_size)      \
     if (stack_size < required_stack_size)                          	\
     {                                                              	\
         cpu->errno |= CPU_NOT_ENOUGH_VALUES_IN_STACK; 	   			\
         return cpu->errno;                                    		\
     }
-#endif
 
-#ifndef CHECK_ZERO_VALUE
-#define CHECK_ZERO_VALUE(cpu, value)                        \
-    if (fabs (value) < 1e-5)                       		    \
+#define CHECK_ZERO_DIVISION(cpu, value)                     \
+    if (fabs (value) < EPSILON)                       		\
     {                                                       \
         cpu->errno |= CPU_ZERO_DIVISION_ERR;   			    \
         return cpu->errno;                                  \
     }
-#endif
+
+
 
 #endif

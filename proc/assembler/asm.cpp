@@ -7,40 +7,67 @@
 #include <assert.h>
 #include <stdio.h>
 #include <string.h>
+#include <ctype.h>
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
 int CompileCode (AsmCompiler* acc, Text* code, const char* bin_filename, const char* listing_filename)
-{
+{   
     FILE* listing_file = fopen (listing_filename, "w");
+    CHECK_FILE_OPENED (listing_file, "CompileCode", acc->asm_errno);
 
-    if (listing_file == NULL || ferror (listing_file))
+    for (int num_runnings = 0; num_runnings < TOTAL_NUM_RUNS; ++num_runnings)
     {   
-        acc->asm_errno |= ASMCC_FILE_OPENING_ERR;
+        for (size_t i = 0; i < code->non_empty_lines; i++)
+        {   
+            if (ParseCommand (acc, code->lines[i].ptr, listing_file) != ASMCC_OK)
+            {   
+                AsmDumpFunction (acc, listing_file);
+                return acc->asm_errno;
+            }
+        }
+
+        fseek (listing_file, 0, SEEK_SET);
+        acc->ip = 0;
+    }
+
+    if (CheckAllLabelsResoled (acc) != ASMCC_OK)
+    {       
+        AsmDumpFunction (acc, listing_file);
         return acc->asm_errno;
     }
 
-    for (size_t i = 0; i < code->non_empty_lines; i++)
-    {   
-        if (ParseCommand (acc, code->lines[i].ptr, listing_file) != ASMCC_OK)
-        {   
-            AsmDumpFunction (acc, listing_file);
-            return acc->asm_errno;
-        }
-    }
+
+    CLOSE_FILE (listing_file, "CompileCode",  acc->asm_errno);
 
     BinHeader bh = {};
     BinHeaderCtor (&bh, SIGNATURE, CC_VERSION);
     WriteToBinary (&bh, acc->cmd_array, acc->cmd_array_size, bin_filename);
-    
+
     return acc->asm_errno;
 }   
+
+//flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+int CheckAllLabelsResoled (AsmCompiler* acc)
+{
+    for (long unsigned i = 0; i < acc->cur_label_index; i++)
+    {
+        if (acc->labels_table[i].ip < 0)
+        {   
+            acc->asm_errno |= ASMCC_LABEL_NOT_RESOLWED;
+        }
+    }
+
+    return acc->asm_errno;
+}
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
 int AsmCompilerCtor (AsmCompiler* acc, size_t cmd_array_size)
 {
     acc->ip = 0;
+    acc->cur_label_index = 0;
     acc->asm_errno = ASMCC_OK;
     acc->cmd_array = (unsigned char*) calloc (1, cmd_array_size);
     acc->cmd_array_size = cmd_array_size;
@@ -58,6 +85,7 @@ void AsmCompilerDtor (AsmCompiler* acc)
     free (acc->cmd_array);
 }
 
+
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
 int ParseCommand (AsmCompiler* acc, char* command, FILE* listing_file)
@@ -74,7 +102,6 @@ int ParseCommand (AsmCompiler* acc, char* command, FILE* listing_file)
     char* cmd_name = NULL;
     int shift = 0;
     sscanf (command, " %ms%n ", &cmd_name, &shift);
-
     if (cmd_name == NULL || *cmd_name == '\0')
     {
         return acc->asm_errno;
@@ -103,8 +130,9 @@ ssize_t FindCmdArraySize (Text* code)
         char* cmd_name = NULL;
         sscanf (code->lines[i].ptr, " %ms", &cmd_name);
 
-        if (cmd_name == NULL || *cmd_name == '\0')
-        {
+        if (cmd_name == NULL || *cmd_name == '\0' || strchr (cmd_name, ':'))
+        {   
+            free (cmd_name);    
             continue;
         }
 
@@ -123,11 +151,16 @@ int GetArg (AsmCompiler* acc, char* command, int arg_code, FILE* listing_file)
     arg_t arg = 0;
     char* reg_arg = NULL;
     char* is_memory = NULL;
+    int is_label = 0;
+    char* label = NULL;
+
+
     acc->ip -= sizeof (unsigned char); // back to last command id
     unsigned char command_id = acc->cmd_array[acc->ip];
 
     if ((arg_code & RAM_VALUE) && (is_memory = strchr(command, '[')))
     {   
+        // ram value
         command = is_memory + 1;
         char* mem_end = strchr(command, ']');
         
@@ -147,10 +180,11 @@ int GetArg (AsmCompiler* acc, char* command, int arg_code, FILE* listing_file)
 
     if ((arg_code & IMMEDIATE_CONST) && sscanf (command, " %lf", &arg) > 0)
     {   
+        // immediate const value
         command_id |= IMMEDIATE_CONST;
         acc->cmd_array[acc->ip] = command_id;
 
-        *(arg_t*) (acc->cmd_array + acc->ip + sizeof (unsigned char)) = arg;
+        *(arg_t*) &(acc->cmd_array[acc->ip + sizeof (unsigned char)]) = arg;
         acc->ip += sizeof (unsigned char) + sizeof (arg_t);
         
         fprintf (listing_file, "%02X\t|\t", command_id);
@@ -159,6 +193,7 @@ int GetArg (AsmCompiler* acc, char* command, int arg_code, FILE* listing_file)
 
     else if ((arg_code & REGISTER_VALUE) && sscanf (command, " %ms", &reg_arg) > 0)
     {   
+        // register value
         command_id |= REGISTER_VALUE;
         acc->cmd_array[acc->ip] = command_id;
         acc->ip += sizeof (unsigned char);
@@ -169,22 +204,108 @@ int GetArg (AsmCompiler* acc, char* command, int arg_code, FILE* listing_file)
 
         free (reg_arg);
     }
+    
+    else if ((is_label = sscanf (command, "%ms", &label)) > 0)
+    {   
+        // label (jump) case
+        arg_t new_ip = (arg_t) GetLabelNum (acc, label);
+        command_id |= IMMEDIATE_CONST;
+        acc->cmd_array[acc->ip] = command_id;
+        *(arg_t*)(acc->cmd_array + acc->ip + sizeof (unsigned char)) = new_ip;
+        acc->ip += sizeof (unsigned char) + sizeof (arg_t);
+
+        fprintf (listing_file, "%02X\t|\t", command_id);
+        PrintValToListing (listing_file, &new_ip, sizeof (arg_t));
+
+        free (label);
+    }
 
     else if ((arg_code & OPTIONAL_ARG) == 0)
     {
-        // argument is optional
+        // argument is optional 
         acc->cmd_array[acc->ip] = command_id;
         acc->ip += sizeof (unsigned char);
         fprintf (listing_file, "%02X\t|\t", command_id);
         return acc->asm_errno;
-    }
-    
+    }   
+
     else
     {   
         acc->asm_errno |= ASMCC_ERR_READING_CMD_ARGS;
     }
 
     return acc->asm_errno;
+}
+
+//flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+int CheckAndProcessLabel (AsmCompiler* acc, char* command, FILE* listing_file)
+{   
+    char* is_label = NULL;
+    if ((is_label = strchr (command, ':')))
+    {   
+        *is_label = '\0';
+
+        if (!isspace (*command))
+        {   
+            fprintf (listing_file, "%-32s\t|\t%02lX\t|\tLB\t|\t\n", command, acc->ip);
+            WriteLabelToTable (acc, command, acc->ip);
+            *is_label = ':';
+            return 1;
+        }
+    }
+
+    return -1;
+}
+
+//flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+int  GetLabelNum (AsmCompiler* acc, char* label_name)
+{
+    int lbl_index = GetLabelByName (acc, label_name);
+    
+    if (lbl_index < 0)
+    {
+        WriteLabelToTable (acc, label_name, -1);
+        return -1;
+    }
+    
+    return acc->labels_table[lbl_index].ip;
+}
+
+//flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+void WriteLabelToTable (AsmCompiler* acc, char* label_name, int ip)
+{   
+    int lbl_index = GetLabelByName (acc, label_name);
+    
+    if (lbl_index < 0)
+    {   
+        Label lbl = {};
+        strcpy (lbl.label, label_name);
+        lbl.ip = ip;
+        acc->labels_table [acc->cur_label_index] = lbl;
+        acc->cur_label_index += 1;
+        return;
+    }
+
+    acc->labels_table [lbl_index].ip = ip;
+    return;
+}
+
+//flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+int  GetLabelByName (AsmCompiler* acc, char* label_name)
+{
+    for (unsigned int i = 0; i < acc->cur_label_index; i++)
+    {
+        if (strcmp  (label_name, acc->labels_table[i].label) == 0)
+        {
+            return i;
+        }
+    }
+
+    return -1;
 }
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
@@ -210,6 +331,11 @@ void AsmDumpFunction (AsmCompiler* acc, FILE* logfile)
 
     int err_code = acc->asm_errno;
 
+    if (err_code == ASMCC_OK)
+    {
+        fprintf (logfile, "\nAssembler is OK!\n");
+    }
+
     if (err_code != ASMCC_OK)
     {
         fprintf (logfile, "\nOne or more errors were reached while compiling code.\n"
@@ -222,6 +348,16 @@ void AsmDumpFunction (AsmCompiler* acc, FILE* logfile)
     {
         fprintf (logfile, "Unknown error with code %X", err_code);
     }
+
+    if (acc->asm_errno & ASMCC_LABEL_NOT_RESOLWED)
+    {   
+        fprintf (logfile, "\nLabels table:\n");
+        for (long unsigned i = 0; i < acc->cur_label_index; i ++)
+        {
+            fprintf (logfile, "\tLabel: %s, ip: %ld\n", acc->labels_table[i].label, acc->labels_table[i].ip);
+        }
+    }
+
 
     return;
 }

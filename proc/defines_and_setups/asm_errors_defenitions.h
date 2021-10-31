@@ -10,5 +10,6 @@ DEF_ERR_CODE (ASMCC_WRONG_NUM_OF_CMD_ARGS, 0x008, "Wrong number of command argum
 DEF_ERR_CODE (ASMCC_FILE_OPENING_ERR, 0x010, "Error while opening file\n")
 DEF_ERR_CODE (ASMCC_ERR_ALLOCATING_MEMORY, 0x020, "Error while allocating memory\n")
 DEF_ERR_CODE (ASMCC_UNKNOWN_REG_NAME_ERR, 0x040, "Unknown register name\n")
+DEF_ERR_CODE (ASMCC_LABEL_NOT_RESOLWED, 0x080, "Label wasn't resolved!\n")
 
 

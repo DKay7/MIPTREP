@@ -35,14 +35,14 @@ int WriteToBinary (BinHeader* bh, unsigned char* data, int data_size, const char
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
-int ReadFromBinary (BinHeader* correct_bh, unsigned char** data, int* size, const char* filename)
+int ReadFromBinary (BinHeader* correct_bh, unsigned char** data, unsigned long* size, const char* filename)
 {   
     assert (correct_bh);
     assert (filename);
 
     FILE* file = fopen (filename, "rb");
     CHECK_FILE_OPENED (file, "ReadFromBinary", -1);
-
+   *size = CountSize (file);
     BinHeader actual_bh = {};
     fread (&actual_bh, 1, sizeof (actual_bh), file);
 
@@ -51,13 +51,11 @@ int ReadFromBinary (BinHeader* correct_bh, unsigned char** data, int* size, cons
         return -1;
     }
 
-    int data_size = CountSize (file);
-    *size = data_size;
-    *data = (unsigned char*) calloc (data_size, sizeof (unsigned char*));
+    *size = CountSize (file) - sizeof (BinHeader);
+    *data = (unsigned char*) calloc (*size, sizeof (unsigned char));
     CHECK_POINTER (*data, "ReadFromBinary", -1);
 
-    fread (*data, sizeof (unsigned char), data_size, file);
-
+    fread ((*data), sizeof (unsigned char), (*size), file);
 
     CLOSE_FILE (file, "ReadFromBinary", -1);
 

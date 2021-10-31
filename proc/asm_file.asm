@@ -1,44 +1,20 @@
-in              ; вводим a
-;dump
+push 16
+pop bx
 
-pop     ax      ; записываем в регистр ax
+push 0
+pop ax
+lol:
+    push ax
+    push ax
+    mul
+    out
+    push 1
+    push ax
+    add
+    pop ax
 
-;dump
+    push ax
+    push bx
+jbe lol
 
-
-in              ; вводим b
-pop     bx      ; записываем в регистр bx
-;dump
-
-
-in              ; вводим c
-pop     cx      ; записываем в регистр cx
-
-dump
-
-
-push    cx      ; возвращаем из регистра сх
-
-push    ax      ; возвращаем из регистра aх
-push    4       ; для 4*a*c
-dump
-
-mul             ; получаем 4*a
-mul             ; получаем 4*a*c
-
-dump
-
-
-push    bx      ; возвращаем из регистра bх
-push    bx      ; возвращаем из регистра bх
-
-;dump
-
-mul             ; b^2
-
-sub             ; b^2 - 4*a*c
-
-
-out             ; выводим результат
-;dump
-hlt             ; термнируем программу
+hlt

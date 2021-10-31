@@ -12,6 +12,7 @@
 #define COMMENT_SYMBOL ';'
 #define MAX_CMD_LEN 64
 #define SIGNATURE 'WOEM'
+#define TOTAL_NUM_RUNS 2
 #define CC_VERSION 2.1
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
