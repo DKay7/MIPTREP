@@ -1,9 +1,16 @@
-push 16
+in
 pop bx
 
 push 0
 pop ax
-lol:
+for_cycle:
+    call SqrFinder
+    push ax
+    push bx
+jbe for_cycle
+hlt
+
+SqrFinder:
     push ax
     push ax
     mul
@@ -12,9 +19,4 @@ lol:
     push ax
     add
     pop ax
-
-    push ax
-    push bx
-jbe lol
-
-hlt
+    ret
