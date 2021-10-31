@@ -6,10 +6,10 @@
 
 // Optional and required arguments.
 // Figured out by high bit (1 -- required, 0 -- optional)
-#define ARG(    number, type)  ((0x1 | (type)) >> (number * 4))
-#define OPT_ARG(number, type)  ((0x0 | (type)) >> (number * 4))
+#define ARG(    number, type)  ((0x10 | (type)) >> (number * 4))
+#define OPT_ARG(number, type)  ((0x00 | (type)) >> (number * 4))
 #define NO_ARGS                (0x0)
-#define ARG_MASK                0xFF
+#define ARG_MASK                0xF0
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
@@ -238,6 +238,23 @@ DEF_COMMAND (RET, 0, "ret",
 	NO_ARGS
 )
 
+//flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+DEF_COMMAND (SCR, 2, "scr",
+	{	
+		printf("PC1 %d\n", cpu->pc);
+		arg_t* width = CpuGetArgument (cpu);
+		arg_t* height = CpuGetArgument (cpu);
+		printf("WIDTH %lg %lg", width, height);
+	    cpu->pc += sizeof (unsigned char);
+		printf("PC2 %d\n", cpu->pc);
+
+		
+	},
+	ARG (0, IMMEDIATE_CONST) | ARG (1, IMMEDIATE_CONST)
+
+
+)
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
 DEF_COMMAND (ADD, 0, "add",

@@ -47,7 +47,7 @@ ssize_t FindCmdArraySize (Text* code);
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
-int GetArg (AsmCompiler* acc, char* command, int arg_code, FILE* listing_file);
+int GetArg (AsmCompiler* acc, char* command, int arg_code, int num_args, FILE* listing_file);
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 

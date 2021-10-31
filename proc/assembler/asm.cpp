@@ -146,92 +146,117 @@ ssize_t FindCmdArraySize (Text* code)
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
-int GetArg (AsmCompiler* acc, char* command, int arg_code, FILE* listing_file)
+int GetArg (AsmCompiler* acc, char* command, int total_arg_code, int num_args, FILE* listing_file)
 {   
-    arg_t arg = 0;
-    char* reg_arg = NULL;
-    char* is_memory = NULL;
-    int is_label = 0;
-    char* label = NULL;
-
-
+    int arg_shift = 0;
+    int arg_code = total_arg_code;
     acc->ip -= sizeof (unsigned char); // back to last command id
     unsigned char command_id = acc->cmd_array[acc->ip];
 
-    if ((arg_code & RAM_VALUE) && (is_memory = strchr(command, '[')))
-    {   
-        // ram value
-        command = is_memory + 1;
-        char* mem_end = strchr(command, ']');
-        
-        if (!mem_end)
+    for (int i = 0; i < num_args; i++)
+    {
+        arg_t arg = 0;
+        char* reg_arg = NULL;
+        char* is_memory = NULL;
+        int is_label = 0;
+        char* label = NULL;
+        arg_code &= ARG_MASK;
+
+        if ((arg_code & RAM_VALUE) && (is_memory = strchr(command, '[')))
         {   
-            acc->asm_errno |= ASMCC_ERR_READING_CMD_ARGS;
-            return acc->asm_errno;
+            // ram value
+            command = is_memory + 1;
+            char* mem_end = strchr(command, ']');
+            
+            if (!mem_end)
+            {   
+                acc->asm_errno |= ASMCC_ERR_READING_CMD_ARGS;
+                return acc->asm_errno;
+            }
+
+            *mem_end = '\0';
+
+            arg_code |= IMMEDIATE_CONST; // if it's ram then arg may be IM or REGVAL even
+            arg_code |= REGISTER_VALUE;  // if it couldn't be IM or REGVAL without RAM
+
+            command_id |= RAM_VALUE;
         }
 
-        *mem_end = '\0';
+        if ((arg_code & IMMEDIATE_CONST) && sscanf (command, " %lf%n", &arg, &arg_shift) > 0)
+        {   
+            // immediate const value
+            command_id |= IMMEDIATE_CONST;
 
-        arg_code |= IMMEDIATE_CONST; // if it's ram then arg may be IM or REGVAL even
-        arg_code |= REGISTER_VALUE;  // if it couldn't be IM or REGVAL without RAM
+            if (i == 0)
+            {
+                acc->cmd_array[acc->ip] = command_id;
+                acc->ip += sizeof (unsigned char);
+                fprintf (listing_file, "%2X\t|\t", command_id);
+            }
 
-        command_id |= RAM_VALUE;
-    }
+            *(arg_t*) &(acc->cmd_array[acc->ip]) = arg;
+            acc->ip += sizeof (arg_t);
+            
+            PrintValToListing (listing_file, &arg, sizeof (arg_t));
+        }
 
-    if ((arg_code & IMMEDIATE_CONST) && sscanf (command, " %lf", &arg) > 0)
-    {   
-        // immediate const value
-        command_id |= IMMEDIATE_CONST;
-        acc->cmd_array[acc->ip] = command_id;
+        else if ((arg_code & REGISTER_VALUE) && sscanf (command, " %ms%n", &reg_arg, &arg_shift) > 0)
+        {   
+            // register value
+            command_id |= REGISTER_VALUE;
 
-        *(arg_t*) &(acc->cmd_array[acc->ip + sizeof (unsigned char)]) = arg;
-        acc->ip += sizeof (unsigned char) + sizeof (arg_t);
+            if (i == 0)
+            {
+                acc->cmd_array[acc->ip] = command_id;
+                acc->ip += sizeof (unsigned char);
+                fprintf (listing_file, "%2X\t|\t", command_id);
+            }
+
+            #include "compare_registers_defines.h"
+
+            free (reg_arg);
+        }
         
-        fprintf (listing_file, "%02X\t|\t", command_id);
-        PrintValToListing (listing_file, &arg, sizeof (arg_t));
-    }
+        else if ((is_label = sscanf (command, "%ms%n", &label, &arg_shift)) > 0)
+        {   
+            // label (jump) case
+            arg_t new_ip = (arg_t) GetLabelNum (acc, label);
+            command_id |= IMMEDIATE_CONST;
 
-    else if ((arg_code & REGISTER_VALUE) && sscanf (command, " %ms", &reg_arg) > 0)
-    {   
-        // register value
-        command_id |= REGISTER_VALUE;
-        acc->cmd_array[acc->ip] = command_id;
-        acc->ip += sizeof (unsigned char);
+            if (i == 0)
+            {
+                acc->cmd_array[acc->ip] = command_id;
+                acc->ip += sizeof (unsigned char);
+                fprintf (listing_file, "%2X\t|\t", command_id);
+            }
 
-        fprintf (listing_file, "%02X\t|\t", command_id);
+            *(arg_t*) (acc->cmd_array + acc->ip) = new_ip;
+            acc->ip += sizeof (arg_t);
 
-        #include "compare_registers_defines.h"
+            PrintValToListing (listing_file, &new_ip, sizeof (arg_t));
 
-        free (reg_arg);
-    }
-    
-    else if ((is_label = sscanf (command, "%ms", &label)) > 0)
-    {   
-        // label (jump) case
-        arg_t new_ip = (arg_t) GetLabelNum (acc, label);
-        command_id |= IMMEDIATE_CONST;
-        acc->cmd_array[acc->ip] = command_id;
-        *(arg_t*)(acc->cmd_array + acc->ip + sizeof (unsigned char)) = new_ip;
-        acc->ip += sizeof (unsigned char) + sizeof (arg_t);
+            free (label);
+        }
 
-        fprintf (listing_file, "%02X\t|\t", command_id);
-        PrintValToListing (listing_file, &new_ip, sizeof (arg_t));
+        else if ((arg_code & OPTIONAL_ARG) == 0)
+        {
+            // argument is optional 
+            if (i == 0)
+            {
+                acc->cmd_array[acc->ip] = command_id;
+                acc->ip += sizeof (unsigned char);
+                fprintf (listing_file, "%2X\t|\t", command_id);
+            }
+            return acc->asm_errno;
+        }   
 
-        free (label);
-    }
+        else
+        {   
+            acc->asm_errno |= ASMCC_ERR_READING_CMD_ARGS;
+        }
 
-    else if ((arg_code & OPTIONAL_ARG) == 0)
-    {
-        // argument is optional 
-        acc->cmd_array[acc->ip] = command_id;
-        acc->ip += sizeof (unsigned char);
-        fprintf (listing_file, "%02X\t|\t", command_id);
-        return acc->asm_errno;
-    }   
-
-    else
-    {   
-        acc->asm_errno |= ASMCC_ERR_READING_CMD_ARGS;
+        arg_code = arg_code << (4*i);
+        command += arg_shift;
     }
 
     return acc->asm_errno;
@@ -319,6 +344,7 @@ void PrintValToListing (FILE* listing_file, void* val, size_t type_size)
         fprintf (listing_file, "%02X ", data[i]);
     }
 
+    fprintf (listing_file, "\t|\t");
     return;
 }
 

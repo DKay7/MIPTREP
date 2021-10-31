@@ -103,7 +103,7 @@ int CpuOpenFile (Cpu* cpu, const char* filename)
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
-arg_t* CpuGetArgument (Cpu* cpu)
+arg_t* CpuGetArgument (Cpu* cpu, int current_cmd, int arg_index)
 {   
     assert (cpu);
 
