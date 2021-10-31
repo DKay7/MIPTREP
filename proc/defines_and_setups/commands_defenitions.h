@@ -79,7 +79,7 @@ DEF_COMMAND (JMP, 1, "jmp",
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
-DEF_COMMAND (JE, 1, "je",
+DEF_COMMAND (JEQ, 1, "je",
 	{	
 		CHECK_STACK_SIZE (cpu, cpu->stack.size, 2)
 		arg_t first_term = STACK_DATA_POISON;
@@ -108,7 +108,6 @@ DEF_COMMAND (JE, 1, "je",
 
 DEF_COMMAND (JA, 1, "ja",
 	{	
-		CHECK_STACK_SIZE (cpu, cpu->stack.size, 2)
 		arg_t first_term = STACK_DATA_POISON;
 		arg_t second_term = STACK_DATA_POISON;
 		int stack_code1 = POP (&first_term);
@@ -134,7 +133,6 @@ DEF_COMMAND (JA, 1, "ja",
 
 DEF_COMMAND (JAE, 1, "jae",
 	{	
-		CHECK_STACK_SIZE (cpu, cpu->stack.size, 2)
 		arg_t first_term = STACK_DATA_POISON;
 		arg_t second_term = STACK_DATA_POISON;
 		int stack_code1 = POP (&first_term);
@@ -160,7 +158,6 @@ DEF_COMMAND (JAE, 1, "jae",
 
 DEF_COMMAND (JB, 1, "jb",
 	{	
-		CHECK_STACK_SIZE (cpu, cpu->stack.size, 2)
 		arg_t first_term = STACK_DATA_POISON;
 		arg_t second_term = STACK_DATA_POISON;
 		int stack_code1 = POP (&first_term);
@@ -187,7 +184,6 @@ DEF_COMMAND (JB, 1, "jb",
 
 DEF_COMMAND (JBE, 1, "jbe",
 	{	
-		CHECK_STACK_SIZE (cpu, cpu->stack.size, 2)
 		arg_t first_term = STACK_DATA_POISON;
 		arg_t second_term = STACK_DATA_POISON;
 		int stack_code1 = POP (&first_term);
@@ -212,30 +208,26 @@ DEF_COMMAND (JBE, 1, "jbe",
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
 DEF_COMMAND (CALL, 1, "call",
-	{			
-		arg_t* new_pc = CpuGetArgument (cpu);
-		// CpuGetArgument has already moved pc on arg size so
-		// we only has to move pc on command size
-		int stack_code = PUSH (cpu->pc + sizeof (unsigned char));
-		CHECK_STACK (cpu, stack_code)
-		cpu->pc = ((unsigned long) (*new_pc));
+	{	
+		arg_t first_term = STACK_DATA_POISON;
+		arg_t second_term = STACK_DATA_POISON;
+		int stack_code1 = POP (&first_term);
+		int stack_code2 = POP (&second_term);
+		CHECK_STACK (cpu, stack_code1)
+		CHECK_STACK (cpu, stack_code2)
+
+		if (second_term <= first_term)
+		{			
+			arg_t* new_pc = CpuGetArgument (cpu);
+			cpu->pc = ((unsigned long) (*new_pc));
+		}
+		else
+		{
+	  	  cpu->pc += sizeof (unsigned char);
+		}
 
 	},
 	ARG (0, (IMMEDIATE_CONST))
-)
-
-//flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-
-DEF_COMMAND (RET, 0, "ret",
-	{	
-		CHECK_STACK_SIZE (cpu, cpu->stack.size, 1)
-		arg_t new_pc = -1;
-		int stack_code = POP (&new_pc);
-		CHECK_STACK (cpu, stack_code)
-
-		cpu->pc = ((unsigned long) (new_pc));
-	},
-	NO_ARGS
 )
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
@@ -259,7 +251,6 @@ DEF_COMMAND (SCR, 2, "scr",
 
 DEF_COMMAND (ADD, 0, "add",
 	{
-		CHECK_STACK_SIZE (cpu, cpu->stack.size, 2)
 		CHECK_STACK_SIZE (cpu, cpu->stack.size, 2)
 		arg_t first_term = STACK_DATA_POISON;
 		arg_t second_term = STACK_DATA_POISON;
