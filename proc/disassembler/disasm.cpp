@@ -145,12 +145,18 @@ int DisAsmWriteOutput (AsmDecompiler* adc, const char* format,  ...)
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
-int DisAsmUnitTest ()
-{
+int main (int argc, char** argv)
+{   
+    if (argc < 3)
+    {   
+        fprintf (stderr, "Not enough args\n");
+        return -1;
+    }
+
     AsmDecompiler adc = {};
     DisAsmCtor (&adc);
-    DisAsmOpenFile (&adc, "asm_result.mc");
-    DisAcmProcessFile (&adc, "disasm_result.asm");
+    DisAsmOpenFile (&adc, argv[1]);
+    DisAcmProcessFile (&adc, argv[2]);
     DisAsmDtor (&adc);
 
     return 0;

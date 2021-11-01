@@ -50,6 +50,9 @@ int CpuCtor (Cpu* cpu)
 
     cpu->ram = (arg_t*) calloc (RAM_SIZE, sizeof (arg_t));
     cpu->regs = (arg_t*) calloc (REG_SIZE, sizeof (arg_t));
+    cpu->vr.size_x = 0;
+    cpu->vr.size_y = 0;
+    cpu->vr.start_ptr = 0;
 
     cpu->pc = 0;
     cpu->cmd_array_size = 0;
@@ -103,7 +106,7 @@ int CpuOpenFile (Cpu* cpu, const char* filename)
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
-arg_t* CpuGetArgument (Cpu* cpu, int current_cmd, int arg_index)
+arg_t* CpuGetArgument (Cpu* cpu)
 {   
     assert (cpu);
 
@@ -205,7 +208,6 @@ void CpuDumpFunction (Cpu* cpu, FILE* logfile, int line, const char* cpu_name, c
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
-
 void PrinterFunc (stack_type* el)
 {
     printf ("%lf", *el);
@@ -213,12 +215,17 @@ void PrinterFunc (stack_type* el)
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
-int CpuUnitTest()
+int main (int argc, char** argv)
 {   
+    if (argc < 2)
+    {   
+        fprintf (stderr, "Not enough args\n");
+        return -1;
+    }
+
     Cpu cpu = {};
     CpuCtor (&cpu);
-    CpuOpenFile (&cpu, "asm_result.mc");
-    //printf ("%d", cpu.cmd_array[1]);
+    CpuOpenFile (&cpu, argv[1]);
     SetStackPrinterFunc (&cpu.stack, PrinterFunc);
     CpuExecute (&cpu);
     CpuDtor (&cpu);

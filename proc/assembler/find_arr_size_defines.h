@@ -2,7 +2,7 @@
     if (strcmp (cmd_name, str_cmd_name) == 0)                                           \
     {                                                                                   \
         num_bytes += sizeof (unsigned char) + n_args * sizeof (arg_t);                  \
-    } else                                                                              \
+    } else                                                                              
 
 #include "../defines_and_setups/commands_defenitions.h"
 

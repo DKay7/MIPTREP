@@ -17,11 +17,19 @@
 
 typedef struct
 {
+    size_t size_x = 0;
+    size_t size_y = 0;
+    size_t start_ptr = 0;
+} VR;
+
+typedef struct
+{
   Stack stack;    
   unsigned char* cmd_array;      
   size_t cmd_array_size;         
   arg_t* regs;
   arg_t* ram;
+  VR vr = {};
   long unsigned pc;
   int errno = CPU_OK;
 } Cpu;

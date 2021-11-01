@@ -72,7 +72,6 @@ DEF_COMMAND (JMP, 1, "jmp",
 	{
 		arg_t* new_pc = CpuGetArgument (cpu);
 		cpu->pc = (unsigned long) (*new_pc);
-		printf ("NEW PC: %lg\n", *new_pc);
 	},
 	ARG (0, (IMMEDIATE_CONST))
 )
@@ -108,6 +107,7 @@ DEF_COMMAND (JEQ, 1, "je",
 
 DEF_COMMAND (JA, 1, "ja",
 	{	
+		CHECK_STACK_SIZE (cpu, cpu->stack.size, 2)
 		arg_t first_term = STACK_DATA_POISON;
 		arg_t second_term = STACK_DATA_POISON;
 		int stack_code1 = POP (&first_term);
@@ -133,6 +133,7 @@ DEF_COMMAND (JA, 1, "ja",
 
 DEF_COMMAND (JAE, 1, "jae",
 	{	
+		CHECK_STACK_SIZE (cpu, cpu->stack.size, 2)
 		arg_t first_term = STACK_DATA_POISON;
 		arg_t second_term = STACK_DATA_POISON;
 		int stack_code1 = POP (&first_term);
@@ -158,6 +159,7 @@ DEF_COMMAND (JAE, 1, "jae",
 
 DEF_COMMAND (JB, 1, "jb",
 	{	
+		CHECK_STACK_SIZE (cpu, cpu->stack.size, 2)
 		arg_t first_term = STACK_DATA_POISON;
 		arg_t second_term = STACK_DATA_POISON;
 		int stack_code1 = POP (&first_term);
@@ -184,6 +186,7 @@ DEF_COMMAND (JB, 1, "jb",
 
 DEF_COMMAND (JBE, 1, "jbe",
 	{	
+		CHECK_STACK_SIZE (cpu, cpu->stack.size, 2)
 		arg_t first_term = STACK_DATA_POISON;
 		arg_t second_term = STACK_DATA_POISON;
 		int stack_code1 = POP (&first_term);
@@ -208,23 +211,13 @@ DEF_COMMAND (JBE, 1, "jbe",
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
 DEF_COMMAND (CALL, 1, "call",
-	{	
-		arg_t first_term = STACK_DATA_POISON;
-		arg_t second_term = STACK_DATA_POISON;
-		int stack_code1 = POP (&first_term);
-		int stack_code2 = POP (&second_term);
-		CHECK_STACK (cpu, stack_code1)
-		CHECK_STACK (cpu, stack_code2)
-
-		if (second_term <= first_term)
-		{			
-			arg_t* new_pc = CpuGetArgument (cpu);
-			cpu->pc = ((unsigned long) (*new_pc));
-		}
-		else
-		{
-	  	  cpu->pc += sizeof (unsigned char);
-		}
+	{			
+		arg_t* new_pc = CpuGetArgument (cpu);
+		// CpuGetArgument has already moved pc on arg size so
+		// we only has to move pc on command size
+		int stack_code = PUSH (cpu->pc + sizeof (unsigned char));
+		CHECK_STACK (cpu, stack_code)
+		cpu->pc = ((unsigned long) (*new_pc));
 
 	},
 	ARG (0, (IMMEDIATE_CONST))
@@ -232,21 +225,80 @@ DEF_COMMAND (CALL, 1, "call",
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
-DEF_COMMAND (SCR, 2, "scr",
+DEF_COMMAND (RET, 0, "ret",
 	{	
-		printf("PC1 %d\n", cpu->pc);
-		arg_t* width = CpuGetArgument (cpu);
-		arg_t* height = CpuGetArgument (cpu);
-		printf("WIDTH %lg %lg", width, height);
-	    cpu->pc += sizeof (unsigned char);
-		printf("PC2 %d\n", cpu->pc);
+		CHECK_STACK_SIZE (cpu, cpu->stack.size, 1)
+		arg_t new_pc = -1;
+		int stack_code = POP (&new_pc);
+		CHECK_STACK (cpu, stack_code)
 
-		
+		cpu->pc = ((unsigned long) (new_pc));
 	},
-	ARG (0, IMMEDIATE_CONST) | ARG (1, IMMEDIATE_CONST)
-
-
+	NO_ARGS
 )
+
+//flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+DEF_COMMAND (VRSETX, 1, "vrsetx",
+	{	
+		arg_t* vr_x_size = CpuGetArgument (cpu);
+		cpu->vr.size_x = *(vr_x_size);
+	    cpu->pc += sizeof (unsigned char);		
+	},
+	ARG (0, (RAM_VALUE | REGISTER_VALUE | IMMEDIATE_CONST))
+)
+
+//flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+DEF_COMMAND (VRSETY, 1, "vrsety",
+	{	
+		arg_t* vr_y_size = CpuGetArgument (cpu);
+		cpu->vr.size_y = *(vr_y_size);
+	    cpu->pc += sizeof (unsigned char);		
+	},
+	ARG (0, (RAM_VALUE | REGISTER_VALUE | IMMEDIATE_CONST))
+)
+
+//flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+DEF_COMMAND (VRSETSTART, 1, "vrsetstart",
+	{	
+		arg_t* vr_start_ptr = CpuGetArgument (cpu);
+		cpu->vr.start_ptr = *(vr_start_ptr);
+	    cpu->pc += sizeof (unsigned char);		
+	},
+	ARG (0, (RAM_VALUE | REGISTER_VALUE | IMMEDIATE_CONST))
+)
+
+//flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+DEF_COMMAND (SCRUPD, 0, "scrupd",
+	{	
+		system ("clear");
+
+		for (size_t y = 0; y < cpu->vr.size_y; y++)
+		{	
+			for (size_t x = 0; x < cpu->vr.size_x; x++)
+			{	
+				int symbol = cpu->ram [cpu->vr.start_ptr + y * cpu->vr.size_x + x];
+				
+				if (symbol == 0)
+                	printf ("?");
+
+            	if (symbol == '\n')
+                	printf ("!!!");
+				
+				else
+					printf ("%c", symbol);
+			}
+			printf ("\n");
+		}
+
+	    cpu->pc += sizeof (unsigned char);		
+	},
+	NO_ARGS
+)
+
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
 DEF_COMMAND (ADD, 0, "add",

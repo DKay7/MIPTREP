@@ -9,7 +9,8 @@
         {                                                                                                       \
             fprintf (listing_file, "%02d\t|\t", enum_name);                                                     \
         }                                                                                                       \
-        if (GetArg (acc, command + shift, arg_const, n_args, listing_file) != ASMCC_OK)                         \
+                                                                                                                \
+        if (GetArg (acc, command + shift, arg_const, listing_file) != ASMCC_OK)                                 \
         {                                                                                                       \
             acc->asm_errno |= ASMCC_ERR_READING_CMD_ARGS;                                                       \
             return acc->asm_errno;                                                                              \
