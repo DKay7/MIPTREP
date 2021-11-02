@@ -1,5 +1,5 @@
 #define REG_SIZE 4
-#define RAM_SIZE 32768
+#define RAM_SIZE 131072
 #define STACK_INIT_SIZE 16
 
 enum CpuRegisters

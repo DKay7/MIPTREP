@@ -23,6 +23,7 @@ int CompileCode (AsmCompiler* acc, Text* code, const char* bin_filename, const c
             if (ParseCommand (acc, code->lines[i].ptr, listing_file) != ASMCC_OK)
             {   
                 AsmDumpFunction (acc, listing_file);
+                CLOSE_FILE (listing_file, "CompileCode",  acc->asm_errno);
                 return acc->asm_errno;
             }
         }
@@ -34,6 +35,7 @@ int CompileCode (AsmCompiler* acc, Text* code, const char* bin_filename, const c
     if (CheckAllLabelsResoled (acc) != ASMCC_OK)
     {       
         AsmDumpFunction (acc, listing_file);
+        CLOSE_FILE (listing_file, "CompileCode",  acc->asm_errno);
         return acc->asm_errno;
     }
 
@@ -161,15 +163,15 @@ int GetArg (AsmCompiler* acc, char* command, int arg_code, FILE* listing_file)
     {   
         // ram value
         command = is_memory + 1;
-        char* mem_end = strchr(command, ']');
+        is_memory = strchr(command, ']'); // check memory end
         
-        if (!mem_end)
+        if (!is_memory)
         {   
             acc->asm_errno |= ASMCC_ERR_READING_CMD_ARGS;
             return acc->asm_errno;
         }
 
-        *mem_end = '\0';
+        *is_memory = '\0';
 
         arg_code |= IMMEDIATE_CONST; // if it's ram then arg may be IM or REGVAL even
         arg_code |= REGISTER_VALUE;  // if it couldn't be IM or REGVAL without RAM
@@ -197,10 +199,10 @@ int GetArg (AsmCompiler* acc, char* command, int arg_code, FILE* listing_file)
         command_id |= REGISTER_VALUE;
         acc->cmd_array[acc->ip] = command_id;
         acc->ip += sizeof (unsigned char);
+        fprintf (listing_file, "%2X\t|\t", command_id);
 
         #include "compare_registers_defines.h"
 
-        fprintf (listing_file, "%2X\t|\t", command_id);
         free (reg_arg);
     }
     
@@ -235,6 +237,11 @@ int GetArg (AsmCompiler* acc, char* command, int arg_code, FILE* listing_file)
         acc->asm_errno |= ASMCC_ERR_READING_CMD_ARGS;
     }
 
+    if (is_memory)
+    {
+        *is_memory = ']'; // return symbol back for further compilation iterations
+    }
+
     return acc->asm_errno;
 }
 
@@ -246,14 +253,19 @@ int CheckAndProcessLabel (AsmCompiler* acc, char* command, FILE* listing_file)
     if ((is_label = strchr (command, ':')))
     {   
         *is_label = '\0';
+        char* label_without_spaces = NULL;
+        sscanf (command, " %ms", &label_without_spaces);
 
-        if (!isspace (*command))
+        if (!isspace (*(is_label - 1)))
         {   
-            fprintf (listing_file, "%-32s\t|\t%02lX\t|\tLB\t|\t\n", command, acc->ip);
-            WriteLabelToTable (acc, command, acc->ip);
+            fprintf (listing_file, "%-32s:\t|\t%02lX\t|\tLB\t|\t\n", command, acc->ip);
+            WriteLabelToTable (acc, label_without_spaces, acc->ip);
             *is_label = ':';
+            free (label_without_spaces);
             return 1;
         }
+        
+        free (label_without_spaces);
     }
 
     return -1;
@@ -320,7 +332,6 @@ void PrintValToListing (FILE* listing_file, void* val, size_t type_size)
         fprintf (listing_file, "%02X ", data[i]);
     }
 
-    fprintf (listing_file, "\t|\t");
     return;
 }
 
@@ -366,12 +377,76 @@ void AsmDumpFunction (AsmCompiler* acc, FILE* logfile)
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
+int GetOutputFileNames (char* input, char* output, char* listing, int len)
+{
+    assert (input);
+    assert (output);
+    assert (listing);
+
+    strncpy (output, input, len - 3);
+    strncpy (listing, input, len - 3);
+    char* dot_output = strchr(output, '.');
+    char* dot_listing = strchr(listing, '.');
+
+    if (!dot_listing || !dot_output)
+    {
+        return -1;
+    }
+
+    *(dot_output + 1) = 'm';
+    *(dot_output + 2) = 'c';
+    *(dot_output + 3) = '\0';
+
+    *(dot_listing + 1) = 'l';
+    *(dot_listing + 2) = 's';
+    *(dot_listing + 3) = 't';
+    *(dot_listing + 4) = '\0';
+
+    return 1;
+}
+
+//flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
 int main (int argc, char** argv)
 {   
-    if (argc < 4)
+    if (argc < 2)
     {   
         fprintf (stderr, "Not enough args\n");
         return -1;
+    }
+
+    if (argc > 4)
+    {
+        fprintf (stderr, "Too much args\n");
+        return -1;
+    }
+
+    char* input_filename = argv[1];
+    int   input_filename_len = strlen (input_filename);
+    char*  output_filename = (char*) calloc (input_filename_len + 1, sizeof(char));  
+    char*  listing_filename = (char*) calloc (input_filename_len + 1, sizeof(char)); 
+    int was_names_created = 0;
+
+    if (argc < 4)
+    {   
+        int ret_code = GetOutputFileNames (input_filename, output_filename, listing_filename, input_filename_len);
+
+        if (!ret_code)
+        {
+            fprintf (stderr, "Can't create output filename. Maybe input filename is wrong.\n");
+            return -1;
+        }
+
+        was_names_created = 1;
+    }
+
+    else if (argc == 4)
+    {   
+        free (output_filename);
+        free (listing_filename);
+        
+        output_filename = argv[2];
+        listing_filename = argv[3];
     }
 
     Text code = {};
@@ -381,10 +456,17 @@ int main (int argc, char** argv)
     long unsigned int cmd_arr_size = FindCmdArraySize (&code);
     AsmCompilerCtor (&acc, cmd_arr_size);
 
-    CompileCode (&acc, &code, argv[2], argv[3]);
+    CompileCode (&acc, &code, output_filename, listing_filename);
 
+    AsmDumpFunction (&acc, stderr);
     TextDtor (&code);
     AsmCompilerDtor (&acc);
+
+    if (was_names_created)
+    {
+        free (output_filename);
+        free (listing_filename);
+    }
 
     return 0;
 }

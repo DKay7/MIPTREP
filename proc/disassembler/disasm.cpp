@@ -59,6 +59,7 @@ int DisAsmOpenFile (AsmDecompiler* adc, const char* filename)
 
     if (ret_code != 0)
     {   
+        adc->errno |= DISASM_INCOMPATIBLE_BIN_HEADER;
         adc->errno |= DISASM_ERR_READING_BIN_FILE;
         return adc->errno;
     }
@@ -145,6 +146,36 @@ int DisAsmWriteOutput (AsmDecompiler* adc, const char* format,  ...)
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
+void DisAsmDump (AsmDecompiler* adc, FILE* logfile)
+{
+    assert (adc);
+    assert (logfile);
+
+    int err_code = adc->errno;
+
+    if (err_code == DISASM_OK)
+    {
+        fprintf (logfile, "\nDisassembler is OK!\n");
+    }
+
+    if (err_code != DISASM_OK)
+    {
+        fprintf (logfile, "\nOne or more errors were reached while decompiling code.\n"
+                    "Here they are:\n\n");
+    }
+
+    #include "dump_errors_defines.h"
+
+    if (err_code != 0)
+    {
+        fprintf (logfile, "Unknown error with code %X", err_code);
+    }
+
+    return;
+}
+
+//flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
 int main (int argc, char** argv)
 {   
     if (argc < 3)
@@ -156,6 +187,14 @@ int main (int argc, char** argv)
     AsmDecompiler adc = {};
     DisAsmCtor (&adc);
     DisAsmOpenFile (&adc, argv[1]);
+    
+    if (adc.errno != DISASM_OK)
+    {
+        DisAsmDump(&adc, stderr);
+        DisAsmDtor (&adc);
+        return -1;
+    }
+
     DisAcmProcessFile (&adc, argv[2]);
     DisAsmDtor (&adc);
 

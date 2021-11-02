@@ -9,7 +9,7 @@ SOURCES_CPU= libs/stack/stack.cpp libs/text_lib/texlib.cpp libs/bin_text_lib/bin
 SOURCES_DISASM= libs/stack/stack.cpp libs/text_lib/texlib.cpp libs/bin_text_lib/binlib.cpp disassembler/disasm.cpp
 
 EXECUTABLE_ASM=acc
-EXECUTABLE_CPU=executer
+EXECUTABLE_CPU=exec
 EXECUTABLE_DISASM=disacc
 
 
@@ -17,13 +17,13 @@ EXECUTABLE_DISASM=disacc
 all: $(SOURCES_ASM) $(EXECUTABLE_CPU) $(EXECUTABLE_DISASM) $(EXECUTABLE_ASM)  $(EXECUTABLE_CPU)  $(EXECUTABLE_DISASM)
 
 $(EXECUTABLE_ASM): $(SOURCES_ASM)
-	$(CC) $(SOURCES_ASM) $(CFLAGS) -o $(EXECUTABLE_ASM)
+	$(CC) $(SOURCES_ASM)   $(DBFLAGS) $(CFLAGS) -o $(EXECUTABLE_ASM)
 
 $(EXECUTABLE_CPU): $(SOURCES_CPU)
 	$(CC) $(SOURCES_CPU)  $(DBFLAGS) $(CFLAGS) -o $(EXECUTABLE_CPU)
 	
 $(EXECUTABLE_DISASM): $(SOURCES_DISASM)
-	$(CC) $(SOURCES_DISASM) $(CFLAGS) -o $(EXECUTABLE_DISASM)
+	$(CC) $(SOURCES_DISASM)  $(DBFLAGS) $(CFLAGS) -o $(EXECUTABLE_DISASM)
 	
 
 db: $(SOURCES)

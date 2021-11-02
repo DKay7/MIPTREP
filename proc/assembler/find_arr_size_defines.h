@@ -8,6 +8,7 @@
 
 /*else*/
 {   
+    free (cmd_name);
     continue;
 }
 

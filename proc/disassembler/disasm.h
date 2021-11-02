@@ -1,6 +1,8 @@
 #ifndef DISASM_H
 #define DISASM_H
 
+#include<stdio.h>
+
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
 typedef struct
@@ -44,6 +46,9 @@ int DisAsmWriteOutput (AsmDecompiler* adc, const char* format,  ...);
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
+void DisAsmDump (AsmDecompiler adc, FILE* logfile);
+
+//flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
 int DisAsmUnitTest ();
 

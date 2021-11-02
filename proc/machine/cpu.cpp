@@ -16,26 +16,15 @@ int CpuExecute(Cpu* cpu)
 
     while (1)
     {   
-        CpuProcessComand (cpu);
+        #include "process_cmd_defines.h"
 
         if (cpu->errno != CPU_OK)
-        {
+        {   
+            CpuDump(cpu, stderr);
             break;
         }
+
     }
-
-    return cpu->errno;
-}
-
-//flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-
-int CpuProcessComand (Cpu* cpu)
-{   
-    assert (cpu);
-    assert (cpu->cmd_array);
-    assert (cpu->ram);
-
-    #include "process_cmd_defines.h"
 
     return cpu->errno;
 }
@@ -97,8 +86,10 @@ int CpuOpenFile (Cpu* cpu, const char* filename)
 
     if (code != 0)
     {   
+        cpu->errno |= CPU_INCOMPATIBLE_BIN_HEADER;
         cpu->errno |= CPU_ERROR_READING_BIN_FILE;
-        return CPU_ERROR_READING_BIN_FILE;
+
+        return cpu->errno;
     }
 
     return cpu->errno;
@@ -134,8 +125,7 @@ arg_t* CpuGetArgument (Cpu* cpu)
     {   
         assert (current_cmd & IMMEDIATE_CONST || current_cmd & REGISTER_VALUE);
  
-        ret_value = (arg_t*) &cpu->cmd_array[(int) *ret_value];
-        cpu->pc += sizeof (arg_t);
+        ret_value = (arg_t*) &cpu->ram[(int) *ret_value];
     }
 
     return ret_value;
@@ -226,6 +216,14 @@ int main (int argc, char** argv)
     Cpu cpu = {};
     CpuCtor (&cpu);
     CpuOpenFile (&cpu, argv[1]);
+
+    if (cpu.errno != CPU_OK)
+    {
+        CpuDump(&cpu, stderr);
+        CpuDtor (&cpu);
+        return -1;
+    }
+
     SetStackPrinterFunc (&cpu.stack, PrinterFunc);
     CpuExecute (&cpu);
     CpuDtor (&cpu);
