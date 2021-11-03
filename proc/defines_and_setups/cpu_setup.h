@@ -1,4 +1,4 @@
-#define REG_SIZE 4
+#define REG_SIZE 24
 #define RAM_SIZE 131072
 #define STACK_INIT_SIZE 16
 

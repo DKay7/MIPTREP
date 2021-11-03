@@ -13,7 +13,7 @@
 #include "../defines_and_setups/registers_defenitions.h"
 
 /*else*/
-{
+{   
     acc->asm_errno |= ASMCC_UNKNOWN_REG_NAME_ERR;
 }
 

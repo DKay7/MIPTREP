@@ -36,8 +36,7 @@ DEF_COMMAND (HLT, 0, "hlt",
 DEF_COMMAND (PUSH, 1, "push",
 	{	
 		arg_t* value =  CpuGetArgument (cpu);
-		int stack_code = PUSH (*value);
-		CHECK_STACK (cpu, stack_code)
+		PUSH (*value);
 	    cpu->pc += sizeof (unsigned char);
 	}, 
 	ARG (0, (RAM_VALUE | REGISTER_VALUE | IMMEDIATE_CONST))
@@ -47,24 +46,20 @@ DEF_COMMAND (PUSH, 1, "push",
 
 DEF_COMMAND (POP, 1, "pop",
 	{	
-		CHECK_STACK_SIZE (cpu, cpu->stack.size, 1)
 		arg_t* value =  CpuGetArgument (cpu);
-
-		int stack_code = 0;
 
 		if (!value)
 		{	
 			// no args
 			arg_t val = 0;
-			stack_code = POP (&val);
+			POP (&val);
 		}
 		
 		else
 		{
-			stack_code = POP (value);
+			POP (value);
 		}
 
-		CHECK_STACK (cpu, stack_code)
 	    cpu->pc += sizeof (unsigned char);
 	},
 	OPT_ARG (0, (RAM_VALUE | REGISTER_VALUE))
@@ -86,13 +81,10 @@ DEF_COMMAND (JMP, 1, "jmp",
 
 DEF_COMMAND (JEQ, 1, "je",
 	{	
-		CHECK_STACK_SIZE (cpu, cpu->stack.size, 2)
 		arg_t first_term = STACK_DATA_POISON;
 		arg_t second_term = STACK_DATA_POISON;
-		int stack_code1 = StackPop (&cpu->stack, &first_term);
-		int stack_code2 = StackPop (&cpu->stack, &second_term);
-		CHECK_STACK (cpu, stack_code1)
-		CHECK_STACK (cpu, stack_code2)
+		POP (&first_term);
+		POP (&second_term);
 		arg_t* new_pc = CpuGetArgument (cpu);
 
 		if (fabs (first_term - second_term) <= EPSILON)
@@ -113,13 +105,10 @@ DEF_COMMAND (JEQ, 1, "je",
 
 DEF_COMMAND (JNE, 1, "jne",
 	{	
-		CHECK_STACK_SIZE (cpu, cpu->stack.size, 2)
 		arg_t first_term = STACK_DATA_POISON;
 		arg_t second_term = STACK_DATA_POISON;
-		int stack_code1 = POP (&first_term);
-		int stack_code2 = POP (&second_term);
-		CHECK_STACK (cpu, stack_code1)
-		CHECK_STACK (cpu, stack_code2)
+		POP (&first_term);
+		POP (&second_term);
 		arg_t* new_pc = CpuGetArgument (cpu);
 
 		if (fabs (first_term - second_term) > EPSILON)
@@ -139,13 +128,10 @@ DEF_COMMAND (JNE, 1, "jne",
 
 DEF_COMMAND (JA, 1, "ja",
 	{	
-		CHECK_STACK_SIZE (cpu, cpu->stack.size, 2)
 		arg_t first_term = STACK_DATA_POISON;
 		arg_t second_term = STACK_DATA_POISON;
-		int stack_code1 = POP (&first_term);
-		int stack_code2 = POP (&second_term);
-		CHECK_STACK (cpu, stack_code1)
-		CHECK_STACK (cpu, stack_code2)
+		POP (&first_term);
+		POP (&second_term);
 		arg_t* new_pc = CpuGetArgument (cpu);
 
 		if (second_term > first_term)
@@ -165,13 +151,10 @@ DEF_COMMAND (JA, 1, "ja",
 
 DEF_COMMAND (JAE, 1, "jae",
 	{	
-		CHECK_STACK_SIZE (cpu, cpu->stack.size, 2)
 		arg_t first_term = STACK_DATA_POISON;
 		arg_t second_term = STACK_DATA_POISON;
-		int stack_code1 = POP (&first_term);
-		int stack_code2 = POP (&second_term);
-		CHECK_STACK (cpu, stack_code1)
-		CHECK_STACK (cpu, stack_code2)
+		POP (&first_term);
+		POP (&second_term);
 		arg_t* new_pc = CpuGetArgument (cpu);
 
 		if (second_term >= first_term)
@@ -191,13 +174,10 @@ DEF_COMMAND (JAE, 1, "jae",
 
 DEF_COMMAND (JB, 1, "jb",
 	{	
-		CHECK_STACK_SIZE (cpu, cpu->stack.size, 2)
 		arg_t first_term = STACK_DATA_POISON;
 		arg_t second_term = STACK_DATA_POISON;
-		int stack_code1 = POP (&first_term);
-		int stack_code2 = POP (&second_term);
-		CHECK_STACK (cpu, stack_code1)
-		CHECK_STACK (cpu, stack_code2)
+		POP (&first_term);
+		POP (&second_term);
 		arg_t* new_pc = CpuGetArgument (cpu);
 
 		if (second_term < first_term)
@@ -218,13 +198,10 @@ DEF_COMMAND (JB, 1, "jb",
 
 DEF_COMMAND (JBE, 1, "jbe",
 	{	
-		CHECK_STACK_SIZE (cpu, cpu->stack.size, 2)
 		arg_t first_term = STACK_DATA_POISON;
 		arg_t second_term = STACK_DATA_POISON;
-		int stack_code1 = POP (&first_term);
-		int stack_code2 = POP (&second_term);
-		CHECK_STACK (cpu, stack_code1)
-		CHECK_STACK (cpu, stack_code2)
+		POP (&first_term);
+		POP (&second_term);
 		arg_t* new_pc = CpuGetArgument (cpu);
 
 		if (second_term <= first_term)
@@ -248,7 +225,6 @@ DEF_COMMAND (CALL, 1, "call",
 		// CpuGetArgument has already moved pc on arg size so
 		// we only has to move pc on command size
 		int stack_code = PUSH (cpu->pc + sizeof (unsigned char));
-		CHECK_STACK (cpu, stack_code)
 		cpu->pc = ((unsigned long) (*new_pc));
 
 	},
@@ -259,10 +235,8 @@ DEF_COMMAND (CALL, 1, "call",
 
 DEF_COMMAND (RET, 0, "ret",
 	{	
-		CHECK_STACK_SIZE (cpu, cpu->stack.size, 1)
 		arg_t new_pc = -1;
 		int stack_code = POP (&new_pc);
-		CHECK_STACK (cpu, stack_code)
 
 		cpu->pc = ((unsigned long) (new_pc));
 	},
@@ -304,33 +278,65 @@ DEF_COMMAND (VRSETSTART, 1, "vrsetstart",
 	ARG (0, (RAM_VALUE | REGISTER_VALUE | IMMEDIATE_CONST))
 )
 
+
+//flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+// DEF_COMMAND (DELAY, 0, "delay",
+// 	{	
+// 		usleep (1000);
+// 	    cpu->pc += sizeof (unsigned char);		
+// 	},
+// 	NO_ARGS
+// )
+
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
 DEF_COMMAND (SCRUPD, 0, "scrupd",
 	{	
-		system ("clear");
+		printf ("\x1b[2J");
 
-		for (size_t y = 0; y < cpu->vr.size_y; y++)
-		{	
-			for (size_t x = 0; x < cpu->vr.size_x; x++)
+		for (size_t y = 0; y < cpu->vr.size_y; ++y)
+		{		
+			size_t y_shift = y * cpu->vr.size_x;
+
+			for (size_t x = 0; x < cpu->vr.size_x; ++x)
 			{	
-				int symbol = cpu->ram [cpu->vr.start_ptr + y * cpu->vr.size_x + x];
+				int symbol = cpu->ram [cpu->vr.start_ptr + y_shift + x];
 				
-				if (symbol == 0)
-                	printf ("?");
-
-            	if (symbol == '\n')
-                	printf ("!!!");
+				if (symbol == 0 || symbol == '\n')
+                	putchar (' ');
 				
 				else
-					printf ("%c", symbol);
+					putchar (symbol);
 			}
-			printf ("\n");
+			putchar ('\n');
 		}
+
+		printf ("\x1b[H");
 
 	    cpu->pc += sizeof (unsigned char);		
 	},
 	NO_ARGS
+)
+
+
+//flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+DEF_COMMAND (SCRCLR, 0, "scrclr",
+	{	
+		memset (cpu->ram + cpu->vr.start_ptr, 0, sizeof (arg_t) * cpu->vr.size_x * cpu->vr.size_y);
+	    cpu->pc += sizeof (unsigned char);		
+	},
+	NO_ARGS
+)
+
+DEF_COMMAND (CLRBUF, 1, "clrbuf",
+	{	
+		arg_t* clear_size = CpuGetArgument (cpu);
+		memset (cpu->ram, 0, sizeof (arg_t) * (*clear_size));
+	    cpu->pc += sizeof (unsigned char);
+	},
+	ARG (0, (IMMEDIATE_CONST))
 )
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
@@ -339,13 +345,10 @@ DEF_COMMAND (SCRUPD, 0, "scrupd",
 
 DEF_COMMAND (ADD, 0, "add",
 	{
-		CHECK_STACK_SIZE (cpu, cpu->stack.size, 2)
 		arg_t first_term = STACK_DATA_POISON;
 		arg_t second_term = STACK_DATA_POISON;
-		int stack_code1 = POP (&first_term);
-		int stack_code2 = POP (&second_term);
-		CHECK_STACK (cpu, stack_code1)
-		CHECK_STACK (cpu, stack_code2)
+		POP (&first_term);
+		POP (&second_term);
 		PUSH (first_term + second_term);
 	    cpu->pc += sizeof (unsigned char);
 	},
@@ -356,13 +359,10 @@ DEF_COMMAND (ADD, 0, "add",
 
 DEF_COMMAND (SUB, 0, "sub", 
 	{
-		CHECK_STACK_SIZE (cpu, cpu->stack.size, 2)
 		arg_t first_term = STACK_DATA_POISON;
 		arg_t second_term = STACK_DATA_POISON;
-		int stack_code1 = POP (&first_term);
-		int stack_code2 = POP (&second_term);
-		CHECK_STACK (cpu, stack_code1)
-		CHECK_STACK (cpu, stack_code2)
+		POP (&first_term);
+		POP (&second_term);
 		PUSH (second_term - first_term);
 	    cpu->pc += sizeof (unsigned char);
 	},
@@ -373,14 +373,11 @@ DEF_COMMAND (SUB, 0, "sub",
 
 DEF_COMMAND (DIV, 0, "div", 
 	{
-		CHECK_STACK_SIZE (cpu, cpu->stack.size, 2)
 		arg_t first_term = STACK_DATA_POISON;
 		arg_t second_term = STACK_DATA_POISON;
-		int stack_code1 = POP (&first_term);
-		int stack_code2 = POP (&second_term);
-		CHECK_STACK (cpu, stack_code1)
-		CHECK_STACK (cpu, stack_code2)
-		CHECK_ZERO_DIVISION (cpu, first_term)
+		POP (&first_term);
+		POP (&second_term);
+		// CHECK_ZERO_DIVISION (cpu, first_term)
 		PUSH (second_term / first_term);
 	    cpu->pc += sizeof (unsigned char);
 	},
@@ -391,13 +388,10 @@ DEF_COMMAND (DIV, 0, "div",
 
 DEF_COMMAND (MUL, 0, "mul", 
 	{
-		CHECK_STACK_SIZE (cpu, cpu->stack.size, 2)
 		arg_t first_term = STACK_DATA_POISON;
 		arg_t second_term = STACK_DATA_POISON;
-		int stack_code1 = POP (&first_term);
-		int stack_code2 = POP (&second_term);
-		CHECK_STACK (cpu, stack_code1)
-		CHECK_STACK (cpu, stack_code2)
+		POP (&first_term);
+		POP (&second_term);
 		PUSH (first_term * second_term);
 	    cpu->pc += sizeof (unsigned char);
 	},
@@ -408,10 +402,8 @@ DEF_COMMAND (MUL, 0, "mul",
 
 DEF_COMMAND (SQRT, 0, "sqrt", 
 	{
-		CHECK_STACK_SIZE (cpu, cpu->stack.size, 1)
 		arg_t term = STACK_DATA_POISON;
-		int stack_code = POP (&term);
-		CHECK_STACK (cpu, stack_code)
+		POP (&term);
 		PUSH (sqrt (term));
 	    cpu->pc += sizeof (unsigned char);
 	},
@@ -422,10 +414,8 @@ DEF_COMMAND (SQRT, 0, "sqrt",
 
 DEF_COMMAND (SIN, 0, "sin", 
 	{
-		CHECK_STACK_SIZE (cpu, cpu->stack.size, 1)
 		arg_t term = STACK_DATA_POISON;
-		int stack_code = POP (&term);
-		CHECK_STACK (cpu, stack_code)
+		POP (&term);
 		PUSH (sin (term));
 	    cpu->pc += sizeof (unsigned char);
 	},
@@ -436,11 +426,22 @@ DEF_COMMAND (SIN, 0, "sin",
 
 DEF_COMMAND (COS, 0, "cos", 
 	{
-		CHECK_STACK_SIZE (cpu, cpu->stack.size, 1)
 		arg_t term = STACK_DATA_POISON;
-		int stack_code = POP (&term);
-		CHECK_STACK (cpu, stack_code)
+		POP (&term);
 		PUSH (cos (term));
+	    cpu->pc += sizeof (unsigned char);
+	},
+	NO_ARGS
+)
+
+
+//flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+DEF_COMMAND (RND, 0, "rnd", 
+	{
+		arg_t term = STACK_DATA_POISON;
+		POP (&term);
+		PUSH (round (term));
 	    cpu->pc += sizeof (unsigned char);
 	},
 	NO_ARGS
@@ -480,9 +481,11 @@ DEF_COMMAND (OUT, 0, "out",
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
 DEF_COMMAND (DUMP, 0, "dump",
-	{
-	    CpuDump (cpu, stdout);
+	{	
+		FILE* f = fopen ("dump.lst", "w");
+	    CpuDump (cpu, f);
 	    cpu->pc += sizeof (unsigned char);
+		fclose (f);
 	},
 	NO_ARGS
 )

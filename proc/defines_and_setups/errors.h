@@ -43,7 +43,7 @@ enum DisAsmReturnCodes
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
-#define EPSILON 1e-5
+#define EPSILON 1e-7
 
 #define CHECK_STACK(cpu, stack_code) {          \
     if (stack_code != STACK_OK)                 \
