@@ -44,7 +44,11 @@ int StackCtorFunc (Stack* stack, size_t size, const char* stack_name, const char
     stack->info.error_code = STACK_OK;
     stack->info.error_func_code = 0;
 
+    #if STACK_SAFETY_LVL >= 1
     stack->hash = StackHashSum (stack);
+    #else
+    stack->hash = 0;
+    #endif
 
     return StackValidate (stack, STACK_CTOR_CODE);
 }
@@ -106,7 +110,10 @@ int SetStackPrinterFunc (Stack* stack, void (*printer_func)(stack_type*))
     assert (printer_func);
 
     stack->info.print_function = printer_func;
+    
+    #if STACK_SAFETY_LVL >= 1
     stack->hash = StackHashSum (stack);
+    #endif
 
     return ValidateResult (stack, SET_STACK_PRINTER_CODE);
 
@@ -136,7 +143,10 @@ int StackPush (Stack* stack, stack_type element)
 
     stack->data[stack->size] = element;
     stack->size++;
+    
+    #if STACK_SAFETY_LVL >= 1
     stack->hash = StackHashSum (stack);
+    #endif
 
     return ValidateResult (stack, STACK_PUSH_CODE);
 }
@@ -168,7 +178,10 @@ int StackPop (Stack* stack, stack_type* out_element)
 
     *out_element = stack->data[--stack->size];
     stack->data[stack->size] = STACK_DATA_POISON;
+    
+    #if STACK_SAFETY_LVL >= 1
     stack->hash = StackHashSum (stack);
+    #endif
 
     return ValidateResult (stack, STACK_POP_CODE);
 }
@@ -195,8 +208,10 @@ int StackIncrease (Stack* stack)
         stack->data = tmp;
         stack->capacity = (STACK_INCREASE_COEFFICIENT) * stack->capacity + 1;
 
+        #if STACK_SAFETY_LVL >= 1
         StackPoison (stack, stack->size + 1, stack->capacity);
         stack->hash = StackHashSum (stack);
+        #endif
     }
     
     return ValidateResult (stack, STACK_INCREASE_CODE);
@@ -223,7 +238,10 @@ int StackDecrease (Stack* stack)
 
         stack->data = tmp;
         stack->capacity = (STACK_DECREASE_COEFFICIENT) * stack->capacity + 1;
+
+        #if STACK_SAFETY_LVL >= 1
         stack->hash = StackHashSum (stack);
+        #endif
     }
 
     return ValidateResult (stack, STACK_DECREASE_CODE);
@@ -255,11 +273,13 @@ int StackValidate (Stack* stack, unsigned int func_code)
         stack->info.error_code |= STACK_INCORRECT_SIZE;
     }
 
+    #if STACK_SAFETY_LVL >= 1
     if(stack->hash != StackHashSum (stack))
     {   
         stack->info.error_code |= STACK_WRONG_HASH_SUM;
     }
-
+    #endif
+    
     stack->info.error_func_code = stack->info.error_func_code |  STACK_VALIDATE_CODE;
     stack->info.error_func_code   = stack->info.error_func_code |  func_code;
 
@@ -412,7 +432,7 @@ unsigned long long StackHashSum(Stack* stack)
 
     unsigned long long hash = HashSum (stack, sizeof(*stack));
 
-    #ifdef DATA_HASHING
+    #if STACK_SAFETY_LVL >= 2
     hash = HashSum (stack->data, stack->size * sizeof (stack_type), hash);
     #endif
     

@@ -42,9 +42,11 @@
 #define STACK_DATA_POISON 666
 #endif
 
+#define STACK_SAFETY_LVL 0
+
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
-#ifdef VALIDATE_ALL
+#if STACK_SAFETY_LVL >= 3
 /// Макрос для константы яда для данных в стеке. Если VALIDATE_ALL определено.
 #define ValidateResult(stack, func_code) StackValidate(stack, func_code)
 #else

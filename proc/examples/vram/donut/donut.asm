@@ -50,7 +50,7 @@ outer_cycle:
         call DrawDonutFrame
                 
         push ix
-        push 0.04
+        push 0.02
         add
         pop ix
 
@@ -59,7 +59,7 @@ outer_cycle:
         jb inner_cycle
 
         push jx
-        push 0.14
+        push 0.07
         add
         pop jx
         
@@ -86,28 +86,39 @@ DrawDonutFrame:
     push ix
     sin
     pop cx
-    push    
+    ;push cx
+    ;out
 
     push jx
     cos
     pop dx
+    ;push dx
+    ;out
 
     push ax
     sin
     pop ex
+    ;push ex
+    ;out
 
     push jx
     sin
     pop fx
+    ;push fx
+    ;out
 
     push ax
     cos
     pop gx
+    ;push gx
+    ;out
 
     push dx
     push 2
     add
     pop hx
+    ;push hx
+    ;out
 
     push 1
     push cx
@@ -123,19 +134,27 @@ DrawDonutFrame:
     add
     div
     pop qx
+    ;push qx
+    ;out
 
     push ix
     cos
     pop lx
+    ;push lx
+    ;out
 
     push bx
     cos
     pop mx
+    ;push mx
+    ;out
 
     push bx
     sin
     pop nx
-    
+    ;push nx
+    ;out
+
     push cx
     push hx
     push gx
@@ -146,6 +165,8 @@ DrawDonutFrame:
     mul
     sub
     pop tx
+    ;push tx
+    ;out
 
     push lx
     push hx
@@ -163,7 +184,9 @@ DrawDonutFrame:
     push 40
     add
     rnd
-    pop xx
+    pop xx ; wrong 2nd iteration
+    ;push xx
+    ;out
 
     push lx
     push hx
@@ -182,14 +205,18 @@ DrawDonutFrame:
     add
     rnd
     pop yx
+    ;push yx
+    ;out
 
     push yx
     push 80
     mul
     push xx
     add
-    pop ox
-    
+    pop ox ; wrong 2nd iteration
+    ;push ox
+    ;out
+
     push fx
     push ex
     mul
@@ -198,13 +225,13 @@ DrawDonutFrame:
     push gx
     mul
     mul
+    sub
     push mx
     mul
-    sub
     push cx
     push dx
     push ex
-    mulpop
+    mul
     mul
     sub
     push fx
@@ -221,22 +248,29 @@ DrawDonutFrame:
     mul
     rnd
     pop sx
+    
+    ;push sx
+    ;out
 
     push 22
     push yx
+    jbe end_loop
+
     push yx
     push 0
+    jbe end_loop
+
     push xx
     push 0
+    jbe end_loop
+
     push 80
     push xx
+    jbe end_loop
+
     push qx
     push [ox]
-    jb end_loop
-    jb end_loop    
-    jb end_loop
-    jb end_loop
-    jb end_loop
+    jbe end_loop
     
     ; in loop
     
@@ -267,4 +301,6 @@ DrawDonutFrame:
 
     end_loop:
         push retx
+        ;in
+        ;pop
         ret

@@ -293,7 +293,7 @@ DEF_COMMAND (VRSETSTART, 1, "vrsetstart",
 
 DEF_COMMAND (SCRUPD, 0, "scrupd",
 	{	
-		printf ("\x1b[2J");
+		printf ("\x1b[H");
 
 		for (size_t y = 0; y < cpu->vr.size_y; ++y)
 		{		
@@ -312,7 +312,7 @@ DEF_COMMAND (SCRUPD, 0, "scrupd",
 			putchar ('\n');
 		}
 
-		printf ("\x1b[H");
+		printf ("\x1b[2J");
 
 	    cpu->pc += sizeof (unsigned char);		
 	},
@@ -441,7 +441,7 @@ DEF_COMMAND (RND, 0, "rnd",
 	{
 		arg_t term = STACK_DATA_POISON;
 		POP (&term);
-		PUSH (round (term));
+		PUSH ((int) term);
 	    cpu->pc += sizeof (unsigned char);
 	},
 	NO_ARGS
