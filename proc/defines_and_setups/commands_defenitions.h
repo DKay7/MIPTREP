@@ -281,16 +281,6 @@ DEF_COMMAND (VRSETSTART, 1, "vrsetstart",
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
-// DEF_COMMAND (DELAY, 0, "delay",
-// 	{	
-// 		usleep (1000);
-// 	    cpu->pc += sizeof (unsigned char);		
-// 	},
-// 	NO_ARGS
-// )
-
-//flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-
 DEF_COMMAND (SCRUPD, 0, "scrupd",
 	{	
 		printf ("\x1b[H");
