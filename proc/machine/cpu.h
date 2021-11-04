@@ -60,7 +60,8 @@ void CpuDumpFunction (Cpu* cpu, FILE* logfile, int line, const char* cpu_name, c
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
-int CpuUnitTest();
+void StackPrinterFunc (stack_type* el);
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
 #endif

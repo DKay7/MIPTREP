@@ -283,7 +283,7 @@ DEF_COMMAND (VRSETSTART, 1, "vrsetstart",
 
 DEF_COMMAND (SCRUPD, 0, "scrupd",
 	{	
-		printf ("\x1b[H");
+		printf ("\x1b[2J");
 
 		for (size_t y = 0; y < cpu->vr.size_y; ++y)
 		{		
@@ -302,7 +302,7 @@ DEF_COMMAND (SCRUPD, 0, "scrupd",
 			putchar ('\n');
 		}
 
-		printf ("\x1b[2J");
+		printf ("\x1b[H");
 
 	    cpu->pc += sizeof (unsigned char);		
 	},

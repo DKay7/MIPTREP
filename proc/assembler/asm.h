@@ -69,17 +69,18 @@ void WriteLabelToTable (AsmCompiler* acc, char* label_name, int ip);
 
 int CheckAllLabelsResoled (AsmCompiler* acc);
 
-
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
 void PrintValToListing (FILE* listing_file, void* val, size_t type_size);
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
-void AsmDumpFunction (AsmCompiler* acc, FILE* logfile);
+int GetOutputFileNames (char* input, char* output, char* listing, int len);
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
-int AsmUnitTest ();
+void AsmDumpFunction (AsmCompiler* acc, FILE* logfile);
+
+//flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
 #endif
