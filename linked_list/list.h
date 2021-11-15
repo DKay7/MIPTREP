@@ -27,17 +27,17 @@ typedef double ll_type;
 #define NOT_EXISTS 0
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
-#define CHECK_EMTY_NODES(ll, ret)                     \
-            if (ll->empty_start == -1)                \
-            {                                         \
-                fprintf (stderr, "No empty nodes\n"); \
-                LLDump ((ll));                        \
-                LLDtor ((ll));                        \
-                exit   ((ret));                       \
+#define CHECK_EMTY_NODES(list, ret)                     \
+            if (list->empty_start == -1)                \
+            {                                           \
+                fprintf (stderr, "No empty nodes\n");   \
+                LLDump ((list));                        \
+                LLDtor ((list));                        \
+                return   ((ret));                       \
             } 
  
-#define MOVE_EMPTY_PTR(ll)                                    \
-            ll->empty_start = ll->list[ll->empty_start].next; \
+#define MOVE_EMPTY_PTR(list)                                    \
+            list->empty_start = list->list[list->empty_start].next; \
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
@@ -62,35 +62,35 @@ typedef struct
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
-int LLCtor (LinkedList* ll, int size);
+int LLCtor (LinkedList* list, int size);
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
-void LLDtor (LinkedList* ll);
+void LLDtor (LinkedList* list);
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
-int LLInsertAfter (LinkedList* ll, int addr, ll_type data);
+int LLInsertAfter (LinkedList* list, int addr, ll_type data);
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
-int LLInsertBefore (LinkedList* ll, int addr, ll_type data);
+int LLInsertBefore (LinkedList* list, int addr, ll_type data);
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
-void LLDelete (LinkedList* ll, int addr);
+void LLDelete (LinkedList* list, int addr);
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
-int LLDump (LinkedList* ll);
+int LLDump (LinkedList* list);
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
-int LLSort (LinkedList* ll);
+int LLSort (LinkedList* list);
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
-int LLFindPhysicAdrres (LinkedList* ll, int logical_adr);
+int LLFindPhysicAdrres (LinkedList* list, int logical_adr);
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 

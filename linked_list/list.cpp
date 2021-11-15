@@ -6,79 +6,82 @@
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
-int LLCtor (LinkedList* ll, int size)
+int LLCtor (LinkedList* list, int size)
 {
-    assert (ll);
+    assert (list);
     assert (size > 0);
 
-    ll->size = size;
+   list->size = size;
 
     Node* tmp = (Node*) calloc ((size_t) size, sizeof (*tmp));
 
     if (!tmp)
     {
-        ll->errno |= LL_MEM_ALLOC_ERROR;
-        return ll->errno; 
+        list->errno |= LL_MEM_ALLOC_ERROR;
+        return list->errno; 
     }
 
-    ll->list = tmp;
-    ll->empty_start = 1;
-    ll->sorted = 1;
-    ll->errno = LL_OK;
+    list->list = tmp;
+    list->empty_start = 1;
+    list->sorted = 1;
+    list->errno = LL_OK;
 
-    ll->list[0].next = 0;
-    ll->list[0].prev = 0;
-    ll->list[0].status = EMPTY;
-    ll->list[0].data = LL_DATA_POISON;
+    list->list[0].next = 0;
+    list->list[0].prev = 0;
+    list->list[0].status = EMPTY;
+    list->list[0].data = LL_DATA_POISON;
 
-    for (int i = 1; i < ll->size; i++)
+    for (int i = 1; i < list->size; i++)
     {
-        ll->list[i].next = (i + 1) % ll->size;
-        ll->list[i].prev = -1;
-        ll->list[i].status = EMPTY;
-        ll->list[i].data = LL_DATA_POISON;
+        list->list[i].next = (i + 1) % list->size;
+        list->list[i].prev = -1;
+        list->list[i].status = EMPTY;
+        list->list[i].data = LL_DATA_POISON;
     }
 
-    ll->list[ll->empty_start].prev = -1;
-    ll->list[ll->size - 1].next = -1;
+    list->list[list->empty_start].prev = -1;
+    list->list[list->size - 1].next = -1;
 
 
-    return ll->errno;
+    return list->errno;
 }
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
-void LLDtor (LinkedList* ll)
+void LLDtor (LinkedList* list)
 {
-    free (ll->list);
-    ll->list = NULL;
-    ll->size = -1;
-    ll->empty_start = -1;
-    ll->sorted = -1;
+    free (list->list);
+    list->list = NULL;
+    list->size = -1;
+    list->empty_start = -1;
+    list->sorted = -1;
 
     return;
 }
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
-int LLDump (LinkedList* ll)
+int LLDump (LinkedList* list)
 {   
-    assert (ll);
+    assert (list);
 
-    char* filename_dot = tmpnam (NULL);
-    char* filename_out = tmpnam (NULL);
+    char filename_dot[] = "/tmp/fileXXXXXX";
+    char filename_out[] = "/tmp/fileXXXXXX";
+
+    mkstemp (filename_dot);
+    mkstemp (filename_out);
 
     FILE* file = fopen (filename_dot, "w");
 
     if (file == NULL)
     {
-        ll->errno |= CANT_OPEN_DUMP_FILE;
-        return ll->errno;
+        list->errno |= CANT_OPEN_DUMP_FILE;
+        return list->errno;
     }
 
     fprintf (file,  "digraph { subgraph { rank=same \n");
 
-    for (int i = 1; i < ll->size; i++)
+    for (int i = 1; i < list->size; i++)
     {   
         fprintf (file, 
             R"(
@@ -109,31 +112,31 @@ int LLDump (LinkedList* ll)
                     >
                 ];
 
-            )", i, (unsigned) ll->list[i].status, i, ll->list[i].data, ll->list[i].prev, ll->list[i].next);
+            )", i, (unsigned) list->list[i].status, i, list->list[i].data, list->list[i].prev, list->list[i].next);
     }
 
-    for (int i = 1; i < ll->size; i++)
+    for (int i = 1; i < list->size; i++)
     {   
-        if (ll->list[i].next > 0)
+        if (list->list[i].next > 0)
         {
             fprintf (file,  "\nnode_%02d:<next> -> node_%02d;\n", 
-                    i, ll->list[i].next);
+                    i, list->list[i].next);
         }
         
-        if (ll->list[i].prev > 0)
+        if (list->list[i].prev > 0)
         {
             fprintf (file,  "\n node_%02d:<prev> -> node_%02d;\n", 
-                    i, ll->list[i].prev);
+                    i, list->list[i].prev);
         }
     }
     fprintf (file, "}\n");
 
-    if (ll->list[0].next == 0 || ll->list[0].prev == 0)
+    if (list->list[0].next == 0 || list->list[0].prev == 0)
     {
         fprintf (file, "node_00 [shape=rectangle, label=\"Terminating node\n(Node #0)\", style=\"filled\", fillcolor=grey];\n");
     }
     
-    if (ll->empty_start <= 0)
+    if (list->empty_start <= 0)
     {
         fprintf (file, "node_empty_start [shape=rectangle, label=\"Terminating free elements node\n(Node #-1)\", style=\"filled\", fillcolor=grey];\n"
         "empty_start [shape=rectangle]; empty_start  -> node_empty_start;\n");
@@ -141,17 +144,17 @@ int LLDump (LinkedList* ll)
 
     else
     {
-        fprintf (file, "empty_start [shape=rectangle]; empty_start -> node_%02d;\n", ll->empty_start);
+        fprintf (file, "empty_start [shape=rectangle]; empty_start -> node_%02d;\n", list->empty_start);
     }
 
     fprintf (file,  "head [shape=rectangle]; head -> node_%02d;\n"
                     "tail [shape=rectangle]; tail -> node_%02d;\n}",
-            ll->list[0].next, ll->list[0].prev);
+           list->list[0].next, list->list[0].prev);
 
     fclose (file);
 
-    char compile_cmd[2*L_tmpnam + 14];
-    char open_cmd[L_tmpnam + 9];
+    char compile_cmd[2*16 + 14];
+    char open_cmd[16 + 9];
 
 
     sprintf (compile_cmd, "dot -Tpng %s -o %s", filename_dot, filename_out);
@@ -160,38 +163,38 @@ int LLDump (LinkedList* ll)
     system (compile_cmd);
     system (open_cmd);
 
-    return ll->errno;
+    return list->errno;
 }
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
-int LLInsertAfter (LinkedList* ll, int addr, ll_type data)
+int LLInsertAfter (LinkedList* list, int addr,  ll_type data)
 {
-    assert (ll);
+    assert (list);
     assert (isnan (data));
 
-    if (ll->list[addr].status == EMPTY)
+    if (list->list[addr].status == EMPTY)
     {
-        addr = ll->list[0].prev;
+        addr = list->list[0].prev;
     }
 
-    CHECK_EMTY_NODES(ll, 0);
+    CHECK_EMTY_NODES(list, 0);
     
-    int insert_to = ll->empty_start;
+    int insert_to = list->empty_start;
     
-    MOVE_EMPTY_PTR (ll);
+    MOVE_EMPTY_PTR (list);
 
-    ll->list[insert_to].prev    = addr;
-    ll->list[insert_to].next    = ll->list[addr].next;
+   list->list[insert_to].prev    = addr;
+   list->list[insert_to].next    = list->list[addr].next;
+   list->list[insert_to].data    = data;
+   list->list[insert_to].status  = NOT_EMPTY;
 
-    ll->list[insert_to].data    = data;
-    ll->list[insert_to].status  = NOT_EMPTY;
-    ll->list[ll->list[addr].next].prev  = insert_to;
-    ll->list[addr].next                 = insert_to;
+   list->list[list->list[addr].next].prev   = insert_to;
+   list->list[addr].next                    = insert_to;
 
     if (insert_to != addr + 1)
     {
-        ll->sorted = 0;
+       list->sorted = 0;
     }
 
     return insert_to;
@@ -199,39 +202,39 @@ int LLInsertAfter (LinkedList* ll, int addr, ll_type data)
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
-int LLInsertBefore (LinkedList* ll, int addr, ll_type data)
+int LLInsertBefore (LinkedList* list, int addr, ll_type data)
 {
     assert (ll);
     assert (isnan (data));
     assert (addr >= 0);
 
-    return LLInsertAfter (ll, ll->list[addr].prev, data);    
+    return LLInsertAfter (list, list->list[addr].prev, data);    
 }
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
-void LLDelete (LinkedList* ll, int addr)
+void LLDelete (LinkedList* list, int addr)
 {
-    assert (ll);
+    assert (list);
     assert (addr > 0);
 
-    if (ll->list[addr].status == EMPTY)
+    if (list->list[addr].status == EMPTY)
     {
         return;
     }
 
-    ll->list[ll->list[addr].prev].next = ll->list[addr].next;
-    ll->list[ll->list[addr].next].prev = ll->list[addr].prev;
+   list->list[list->list[addr].prev].next = list->list[addr].next;
+   list->list[list->list[addr].next].prev = list->list[addr].prev;
 
-    ll->list[addr].data = LL_DATA_POISON;
-    ll->list[addr].prev = NOT_EXISTS;
-    ll->list[addr].next = ll->empty_start;
-    ll->list[addr].status = EMPTY;
-    ll->empty_start = addr;
+   list->list[addr].data = LL_DATA_POISON;
+   list->list[addr].prev = NOT_EXISTS;
+   list->list[addr].next =list->empty_start;
+   list->list[addr].status = EMPTY;
+   list->empty_start = addr;
 
-    if (addr != ll->empty_start - 1)
+    if (addr != list->empty_start - 1)
     {
-        ll->sorted = 0;
+       list->sorted = 0;
     }
 
     return;
@@ -239,26 +242,26 @@ void LLDelete (LinkedList* ll, int addr)
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
-int LLSort (LinkedList* ll)
+int LLSort (LinkedList*list)
 {   
 
     assert (ll);
 
-    Node* tmp_list = (Node*) calloc ((size_t) ll->size, sizeof(Node));
+    Node* tmp_list = (Node*) calloc ((size_t)list->size, sizeof(Node));
 
     if (!tmp_list)
     {
-        ll->errno |= LL_MEM_ALLOC_ERROR;
-        return ll->errno; 
+       list->errno |= LL_MEM_ALLOC_ERROR;
+        return list->errno; 
     }
     
     int ll_ptr = 0;
     int i = 1;
-    for (; i < ll->size; i++)
+    for (; i < list->size; i++)
     {   
-        ll_ptr = ll->list[ll_ptr].next;
+       ll_ptr = list->list[ll_ptr].next;
 
-        tmp_list[i]         = ll->list[ll_ptr];
+        tmp_list[i]         = list->list[ll_ptr];
         tmp_list[i].prev    = i - 1;
         tmp_list[i].next    = i + 1;
 
@@ -272,16 +275,16 @@ int LLSort (LinkedList* ll)
     tmp_list[0].next = 1;
     tmp_list[0].prev = i - 1;
 
-    ll_ptr = ll->empty_start;
-    ll->empty_start = i;
+   ll_ptr = list->empty_start;
+   list->empty_start = i;
 
-    for (; i < ll->size; i++)
+    for (; i < list->size; i++)
     {   
-        tmp_list[i]         = ll->list[ll_ptr];
+        tmp_list[i]         = list->list[ll_ptr];
         tmp_list[i].prev    = -1;
         tmp_list[i].next    = i + 1;
 
-        ll_ptr = ll->list[ll_ptr].next;
+       ll_ptr = list->list[ll_ptr].next;
 
         if (ll_ptr == -1)
         {
@@ -291,29 +294,29 @@ int LLSort (LinkedList* ll)
     
     tmp_list[i].next = -1;
 
-    free (ll->list);
-    ll->list = tmp_list;
-    ll->sorted = 1;
+    free (list->list);
+    list->list = tmp_list;
+    list->sorted = 1;
 
-    return ll->errno;
+    return list->errno;
 }
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
-int LLFindPhysicAdrres (LinkedList* ll, int logical_adr)
+int LLFindPhysicAdrres (LinkedList* list, int logical_adr)
 {   
-    assert (ll);
+    assert (list);
     assert (logical_adr > 0);
     
-    if (ll->sorted)
+    if (list->sorted)
     {
-        return (logical_adr < ll->empty_start) ? logical_adr : 0;
+        return (logical_adr < list->empty_start) ? logical_adr : 0;
     }
 
     int ll_ptr = 0;
     for (int i = 0; i < logical_adr; i++)
     {
-        ll_ptr = ll->list[ll_ptr].next;
+        ll_ptr = list->list[ll_ptr].next;
     }
 
     return ll_ptr;
@@ -323,40 +326,40 @@ int LLFindPhysicAdrres (LinkedList* ll, int logical_adr)
 
 void UnitTest ()
 {
-    LinkedList ll = {};
-    LLCtor (&ll, 10);
-    LLDump(&ll);
+    LinkedList list = {};
+    LLCtor (&list, 10);
+    LLDump(&list);
 
-    LLInsertAfter(&ll, 0, 11);
-    LLInsertAfter(&ll, 1, 12);
+    LLInsertAfter(&list, 0, 11);
+    LLInsertAfter(&list, 1, 12);
 
-    LLInsertAfter(&ll, 2, 13);
-    LLInsertAfter(&ll, 1, 14);
-    LLInsertAfter(&ll, 1, 15);
+    LLInsertAfter(&list, 2, 13);
+    LLInsertAfter(&list, 1, 14);
+    LLInsertAfter(&list, 1, 15);
     // LLInsertAfter(&ll, 1, 16);
     // LLInsertAfter(&ll, 1, 17);
 
 
-    printf("%d\n", LLFindPhysicAdrres (&ll, 5));
+    printf("%d\n", LLFindPhysicAdrres (&list, 5));
 
     //LLDump(&ll);
 
-    printf("%d\n", LLFindPhysicAdrres (&ll, 5));
+    printf("%d\n", LLFindPhysicAdrres (&list, 5));
 
-    LLInsertAfter(&ll, 7, 18);
+    LLInsertAfter(&list, 7, 18);
    // LLDump(&ll);
 
-    LLSort(&ll);
+    LLSort(&list);
 
-    LLInsertAfter(&ll, 8, 19);
-    LLInsertAfter(&ll, 8, 20);
-    LLInsertAfter(&ll, 8, 21);
+    LLInsertAfter(&list, 8, 19);
+    LLInsertAfter(&list, 8, 20);
+    LLInsertAfter(&list, 8, 21);
   
     //LLDump(&ll);
-    printf("%d\n", LLFindPhysicAdrres (&ll, 5));
+    printf("%d\n", LLFindPhysicAdrres (&list, 5));
 
 
-    LLDtor (&ll);
+    LLDtor (&list);
 
     return;
 }
