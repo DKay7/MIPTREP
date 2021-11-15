@@ -39,6 +39,13 @@ void DisAsmDtor (AsmDecompiler* adc)
     {
         free (adc->cmd_array);
     }
+    adc->cmd_array = NULL;
+    adc->buffer = NULL;
+    adc->buf_ptr = NULL;
+    adc->buf_size = 0;
+    adc->cmd_array_size = 0;
+    adc->ip = 0;
+    adc->errno = 0;
 }
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
@@ -64,15 +71,14 @@ int DisAsmOpenFile (AsmDecompiler* adc, const char* filename)
         return adc->errno;
     }
 
-    char* tmp = (char*) calloc (adc->cmd_array_size, MAX_CMD_LEN * (sizeof (char) + sizeof (arg_t)));
+    adc->buffer  = (char*) calloc (adc->cmd_array_size, MAX_CMD_LEN * (sizeof (char) + sizeof (arg_t)));
 
-    if (!tmp)
+    if (!adc->buffer)
     {
         adc->errno |= DISASM_ERR_ALLOCATING_MEMORY;
         return adc->errno;
     }
 
-    adc->buffer = tmp;
     adc->buf_ptr = adc->buffer;
     adc->buf_size = MAX_CMD_LEN * (sizeof (char) + sizeof (arg_t));
 

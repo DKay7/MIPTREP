@@ -30,15 +30,14 @@ int CompileCode (AsmCompiler* acc, Text* code, const char* bin_filename, const c
 
         fseek (listing_file, 0, SEEK_SET);
         acc->ip = 0;
-    }
 
-    if (CheckAllLabelsResoled (acc) != ASMCC_OK)
-    {       
-        AsmDumpFunction (acc, listing_file);
-        CLOSE_FILE (listing_file, "CompileCode",  acc->asm_errno);
-        return acc->asm_errno;
+        if (CheckAllLabelsResoled (acc) != ASMCC_OK)
+        {       
+            AsmDumpFunction (acc, listing_file);
+            CLOSE_FILE (listing_file, "CompileCode",  acc->asm_errno);
+            return acc->asm_errno;
+        }
     }
-
 
     CLOSE_FILE (listing_file, "CompileCode",  acc->asm_errno);
 
@@ -94,12 +93,12 @@ int ParseCommand (AsmCompiler* acc, char* command, FILE* listing_file)
 {
     assert (acc);
     assert (command);
-
+/* 
     char* is_comment = strchr (command, COMMENT_SYMBOL);
     if (is_comment)
     {
         *is_comment = '\0';
-    }
+    } */
 
     char* cmd_name = NULL;
     int shift = 0;
@@ -223,7 +222,7 @@ int GetArg (AsmCompiler* acc, char* command, int arg_code, FILE* listing_file)
         free (label);
     }
 
-    else if ((arg_code & OPTIONAL_ARG) == 0)
+    else if (arg_code & OPTIONAL_ARG)
     {
         // argument is optional 
         acc->cmd_array[acc->ip] = command_id;
