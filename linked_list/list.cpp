@@ -3,6 +3,7 @@
 #include <assert.h>
 #include <malloc.h>
 #include <stdlib.h>
+#include <unistd.h>
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
@@ -68,11 +69,11 @@ int LLDump (LinkedList* list)
     char filename_dot[] = "/tmp/fileXXXXXX";
     char filename_out[] = "/tmp/fileXXXXXX";
 
-    mkstemp (filename_dot);
-    mkstemp (filename_out);
+    int dot_fd = mkstemp (filename_dot);
+    close (mkstemp (filename_out));
 
-    FILE* file = fopen (filename_dot, "w");
-
+    FILE* file = fdopen (dot_fd, "w");
+    
     if (file == NULL)
     {
         list->errno |= CANT_OPEN_DUMP_FILE;
@@ -184,13 +185,13 @@ int LLInsertAfter (LinkedList* list, int addr,  ll_type data)
     
     MOVE_EMPTY_PTR (list);
 
-   list->list[insert_to].prev    = addr;
-   list->list[insert_to].next    = list->list[addr].next;
-   list->list[insert_to].data    = data;
-   list->list[insert_to].status  = NOT_EMPTY;
+    list->list[insert_to].prev    = addr;
+    list->list[insert_to].next    = list->list[addr].next;
+    list->list[insert_to].data    = data;
+    list->list[insert_to].status  = NOT_EMPTY;
 
-   list->list[list->list[addr].next].prev   = insert_to;
-   list->list[addr].next                    = insert_to;
+    list->list[list->list[addr].next].prev   = insert_to;
+    list->list[addr].next                    = insert_to;
 
     if (insert_to != addr + 1)
     {
