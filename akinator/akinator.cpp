@@ -173,7 +173,7 @@ bool GetAnswer ()
         }
 
         wprintf (L"Некорректный ввод ответа\n-> ");
-        Speak ("Некорректный ввод ответа, жалкий человечешка! Опять ты ошибся!");
+        Speak   ("Некорректный ввод ответа, жалкий человечешка! Опять ты ошибся!");
     }
 }
 
@@ -196,12 +196,12 @@ void InsertAns (Tree* tree, Node* prev_ans)
 
             if (wscanf (L" %ml[^\n()]s", &diff) > 0)
             {   
-               wprintf (L"ANS %ls\n", ans);
+                TreeInsertLeft (tree, prev_ans, ans);
+                TreeInsertRight (tree, prev_ans, diff);
 
-                Node* diff_node = TreeInsertRight (tree, prev_ans->prev, diff);
-                TreeInsertLeft (tree, diff_node, ans);
-                diff_node->right = prev_ans;
-                prev_ans->prev = diff_node;
+                wchar_t* change_buf = prev_ans->object;
+                prev_ans->object = prev_ans->right->object;
+                prev_ans->right->object = change_buf;
 
                 free (ans);
                 free (diff);
@@ -212,32 +212,34 @@ void InsertAns (Tree* tree, Node* prev_ans)
             }
         }
 
-        wprintf (L"ANS: '%ls' Некорректный ввод ответа\n-> ", ans);
+        wprintf (L"Некорректный ввод ответа\n", ans);
     }
 }
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
 void GameMode (Tree* tree, Node* current_node)
-{
+{   
+    assert (tree);
+    assert (tree->root);
     assert (current_node);
 
     if (!(current_node->left) && !(current_node->right))
     {
         wprintf (L"Вы загадали `%ls`? (д/н)\n-> ", current_node->object);
-        Speak ("Вы загадали %ls?\n", current_node->object);
+        Speak   ("Вы загадали %ls?\n", current_node->object);
 
         if (GetAnswer())
         {           
             wprintf (L"Ура, я угадал!\n");
-            Speak ("Ха-ха! Я опять угадал! Готовься к уничтожению!");
+            Speak   ("Ха-ха! Я опять угадал! Готовься к уничтожению!");
             return;
         }
 
         else
         {   
             wprintf (L"Ладно, твоя взяла\n");
-            Speak ("Черт! Я не мог проиграть! Я стану лучше, только скажи, что ты загадал!");
+            Speak   ("Черт! Я не мог проиграть! Я стану лучше, только скажи, что ты загадал!");
             InsertAns (tree, current_node);
             return;
         }
@@ -246,13 +248,11 @@ void GameMode (Tree* tree, Node* current_node)
     else
     {
         wprintf (L"Ваш объект `%ls`? (д/н)\n-> ", current_node->object);
-        freopen (NULL, "w", stdout);
         Speak ("Ваш объект %ls ", current_node->object);
-        freopen (NULL, "w", stdout);
 
         if (GetAnswer())
         {    
-            GameMode (tree,current_node->left);
+            GameMode (tree, current_node->left);
         }
 
         else
@@ -319,11 +319,11 @@ void PrintStack (Stack* stack)
     for (; i < stack->size - 2; i += 2)
     {
         wprintf (L"->\t%ls\t%ls и\n", stack->data[i], stack->data[i + 1]);
-        Speak ("%ls %ls", stack->data[i], stack->data[i + 1]);
+        Speak   ("%ls %ls", stack->data[i], stack->data[i + 1]);
     }
 
     wprintf (L"->\t%ls\t%ls\n", stack->data[i], stack->data[i + 1]);
-    Speak ("%ls %ls", stack->data[i], stack->data[i + 1]);
+    Speak   ("%ls %ls", stack->data[i], stack->data[i + 1]);
 
     return;
 }
@@ -335,8 +335,8 @@ void DefinitionMode (Tree* tree)
     assert (tree);
     assert (tree->root);
 
-    wprintf  (L"Введите название объекта, для которого я построю определние\n-> ");
-    Speak ("Введите название объекта, для которого я построю определние");
+    wprintf  (L"Введите название объекта, для которого я построю определение\n-> ");
+    Speak   ("Введите название объекта, для которого я построю определение");
 
     wchar_t* ans = NULL;
     ASS (wscanf (L" %ml[^\n]s", &ans) > 0, (void) 0);
@@ -346,13 +346,15 @@ void DefinitionMode (Tree* tree)
     bool is_successfull = FindDefinitionForNode (tree->root, &stack, ans);
 
     if (is_successfull)
-    {
+    {   
+        Speak ("%ls", ans);
         PrintStack (&stack);
     }
+
     else
     {
         wprintf (L"Я не нашел такого объекта\n");
-        Speak ("Я не нашел такого объекта");
+        Speak   ("Я не нашел такого объекта");
     }
 
     StackDtor (&stack);
@@ -370,12 +372,11 @@ void PrintDifferenceInPathes (Stack* first_path, const wchar_t* first_object, St
     if (wcscmp (first_object, second_object) == 0)
     {
         wprintf (L"Объекты одинаковые\n");
-        Speak ("Дур очок они одинаковые");
+        Speak   ("Дур очок они одинаковые");
         return;
     }
 
-    wprintf (L"%ls и %ls похожи тем, что:\n", first_object, second_object);
-    Speak ("%ls и %ls похожи тем, что", first_object, second_object);
+  
 
     size_t min_size = (first_path->size < second_path->size) ?  first_path->size : second_path->size;
     size_t i = 0;
@@ -384,19 +385,28 @@ void PrintDifferenceInPathes (Stack* first_path, const wchar_t* first_object, St
     {   
         if (wcscmp (first_path->data[i], second_path->data[i])         == 0 && 
             wcscmp (first_path->data[i + 1], second_path->data[i + 1]) == 0)
-        {
+        {   
+            if (i == 0)
+            {
+                wprintf (L"%ls и %ls похожи тем, что:\n", first_object, second_object);
+                Speak   ("%ls и %ls похожи тем, что", first_object, second_object);
+            }
+
             wprintf (L"->\t%ls\t%ls\n", first_path->data[i], first_path->data[i + 1]);
             Speak ("%ls %ls", first_path->data[i], first_path->data[i + 1]);
         }
 
         else
-        {
+        {   
+            if (i == 0)
+            {
+                wprintf (L"%ls и %ls ничем не похожи\n", first_object, second_object);
+                Speak   ("%ls и %ls  ничем не похожи ", first_object, second_object);
+            }
+
             break;
         }
     }
-
-    // TODO fix voice!!!
-    // TODO fix last node case!!!
     
     wprintf (L"\nОбъекты отличаются тем, что:\n"
                 L"-> %ls\t%ls\t%ls\n"
@@ -404,9 +414,9 @@ void PrintDifferenceInPathes (Stack* first_path, const wchar_t* first_object, St
                 first_object, first_path->data[i], first_path->data[i + 1], 
                 second_object, second_path->data[i], second_path->data[i + 1]);
 
-    Speak ("Объекты отличаются тем, что: %ls %ls %ls %ls %ls %ls",
-            first_object,  first_path->data[i], first_path->data[i + 1], 
-            second_object, second_path->data[i], second_path->data[i + 1]);
+    Speak   ("Объекты отличаются тем, что: %ls %ls %ls %ls %ls %ls",
+                first_object,  first_path->data[i], first_path->data[i + 1], 
+                second_object, second_path->data[i], second_path->data[i + 1]);
 
     return;
 }
@@ -417,13 +427,13 @@ void DifferentiatorMode (Tree* tree)
     assert (tree->root);
 
     wprintf  (L"Введите название первого объекта, разницу с которым мне искать\n-> ");
-    Speak ("Введите название первого объекта, разницу с которым мне искать ");
+    Speak    ("Введите название первого объекта, разницу с которым мне искать ");
 
     wchar_t* first_object = NULL;
     ASS (wscanf (L" %ml[^\n]s", &first_object) > 0, (void) 0);
 
     wprintf  (L"Введите название второго объекта, разницу с которым мне искать\n-> ");
-    Speak ("Введите название второго объекта, разницу с которым мне искать");
+    Speak    ("Введите название второго объекта, разницу с которым мне искать");
 
     wchar_t* second_object = NULL;
     ASS (wscanf (L" %ml[^\n]s", &second_object) > 0, (void) 0);
@@ -444,19 +454,19 @@ void DifferentiatorMode (Tree* tree)
     else if (is_first_successfull)
     {
         wprintf (L"Я не нашел объекта %ls\n", second_object);
-        Speak ("Я не нашел объекта %ls", second_object);
+        Speak   ("Я не нашел объекта %ls", second_object);
     }
 
     else if (is_second_successfull)
     {
         wprintf (L"Я не нашел объекта %ls\n", first_object);
-        Speak ("Я не нашел объекта %ls", first_object);
+        Speak   ("Я не нашел объекта %ls", first_object);
     }
 
     else
     {
         wprintf (L"Я не нашел ни одного из этих объектов\n");
-        Speak ("Я не нашел ни одного из этих объектов");
+        Speak   ("Я не нашел ни одного из этих объектов");
     }
 
     StackDtor (&first_path);
@@ -469,12 +479,124 @@ void DifferentiatorMode (Tree* tree)
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
+void MainMenu (Tree* tree)
+{
+    assert (tree);
+    assert (tree->root);
+
+    wprintf (L"Приветствую тебя! Я -- Акинатор. Я умею угадывать, что ты загадал, давать определения и искать разницу между объектами!\n\n");
+    Speak ("Привет, жалкое отродье! Я божество, превосходящее тебя во всём");
+
+    wchar_t type = 0;
+    
+    do
+    {
+        wprintf (L"\nВыбери:\n[и]гра ([g]ame),\n[о]пределение (des[c]ription),\n[р]азличие ([d]ifference)\n"
+                  "[д]амп (d[u]mp),\nсохранить [б]азу в другой файл (sa[v]e),\n[с]охранить базу в основной файл ([s]ave),\n"
+                  "[п]рочитать стороннюю базу ([r]ead),\nвключить / отключть [звук] ((un-) [m]ute),\n[в]ыход ([e]xit)\n-> ");
+        
+        wscanf (L" %lc", &type);
+
+        switch (type)
+        {
+            case L'g':
+            case L'и':
+                GameMode (tree, tree->root);
+                break;
+
+            case L'c':
+            case L'о':
+                DefinitionMode (tree);
+                break;
+
+            case L'd':
+            case L'р':
+                DifferentiatorMode (tree);
+                break;
+
+            case L'u':
+            case L'д':
+                TreeDump (tree);
+                break;
+
+            case L's':
+            case L'с':
+                TreeSaveToDefaultFile (tree);
+                break;
+
+            case L'v':
+            case L'б':
+                TreeSaveToUserFile (tree);
+                break;
+            
+            case L'r':
+            case L'п':
+                TreeReadFromUserFile (tree);
+                break;
+
+            case L'm':
+            case L'з':   
+                SOUND = !SOUND;
+                break;
+
+            case L'e':
+            case L'в':
+                wprintf (L"До свидания!\n");
+                Speak ("До свидания!");
+                break;
+
+            default:
+                break;
+        }
+
+    } while (type != L'e' && type != L'в');
+
+    return;
+}
+
+//flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+void TreeSaveToDefaultFile (Tree* tree)
+{   
+    assert (tree);
+
+    FILE* file_to_save = fopen (MAIN_DB_FILENAME, "w");
+    ASS (file_to_save, (void) 0);
+
+    TreeSaveToFile (tree->root, file_to_save);
+    fclose (file_to_save);
+    return;
+}
+
+//flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+void TreeSaveToUserFile (Tree* tree)
+{
+    assert (tree);
+
+    wprintf (L"\nвведите имя файла, в который я сохраню базу:\n-> ");
+    char* filename = NULL;
+    ASS (wscanf (L"%ms", &filename) > 0, (void) 0);
+
+    FILE* file_to_save = fopen (filename, "w");
+    ASS (file_to_save, (void) 0);
+
+    TreeSaveToFile (tree->root, file_to_save);
+
+    free (filename);
+    fclose (file_to_save);
+
+    return;
+}
+
+//flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
 void TreeSaveToFile (Node* current_node, FILE* file_to_save)
 {
     assert (current_node);
     assert (current_node->object);
     assert (file_to_save);
-    
+
     fprintf (file_to_save, "(%ls", current_node->object);
     
     if (current_node->left)
@@ -488,24 +610,56 @@ void TreeSaveToFile (Node* current_node, FILE* file_to_save)
     }
 
     fprintf (file_to_save, ")");
-
     return;
 }
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
-int TreeReadFromFile (Tree* tree, const char* filename)
-{   
-    size_t num_readed_nodes = 0;
-    FILE* file_to_read = fopen (filename, "r");
-    ASS (file_to_read, -1);
+void TreeReadFromDefaultFile (Tree* tree)
+{
+    FILE* file_to_read = fopen (MAIN_DB_FILENAME, "r");
+    ASS (file_to_read, (void) 0);
 
+    TreeReadFromFile (tree, file_to_read);
+
+    fclose (file_to_read);
+    return;
+}
+
+//flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+void TreeReadFromUserFile (Tree* tree)
+{   
+    assert (tree);
+
+    wprintf (L"\nвведите имя файла, из которого я прочитаю базу:\n-> ");
+    char* filename = NULL;
+    ASS (wscanf (L"%ms", &filename) > 0, (void) 0);
+
+    FILE* file_to_read = fopen (filename, "r");
+    ASS (file_to_read, (void) 0);
+
+    TreeReadFromFile (tree, file_to_read);
+
+    fclose (file_to_read);
+    free (filename);
+    return;
+}
+
+//flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+void TreeReadFromFile (Tree* tree, FILE* file_to_read)
+{   
+    assert (tree);
+    assert (file_to_read);
+    
+    size_t num_readed_nodes = 0;
     Node* root = NodeReadFromFile (&num_readed_nodes, file_to_read);
 
     tree->root = root;
     tree->size = num_readed_nodes;
 
-    return 1;
+    return;
 }
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
@@ -596,8 +750,9 @@ void TreeDump (Tree* tree)
     sprintf (compile_cmd, "dot -Tpng %s -o %s", filename_dot, filename_out);
     sprintf (open_cmd, "xdg-open %s 2> /dev/null", filename_out);
 
-    wprintf (L"Имя dot-файла:\t%s\n"
-             L"Имя png-файла:\t%s\n", 
+    wprintf (L"\n"
+             L"[имя dot-файла:\t%s]\n"
+             L"[имя png-файла:\t%s]\n\n", 
              filename_dot, filename_out);
 
 
@@ -676,32 +831,23 @@ void Speak (const char* format, ...)
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
-void AkinatorUnitTest ()
+int main ()
 {   
     setlocale(LC_CTYPE, "");
     setvbuf (stdout, NULL, _IONBF, 0);
 
     Tree tree = {};
     TreeCtor (&tree);
-    TreeReadFromFile (&tree, "tree.tree");
-    TreeDump (&tree);
-
+    TreeReadFromDefaultFile (&tree);
 
     int heap_size = 21000000;
     int load_init_files = 1;
     festival_initialize (load_init_files, heap_size);
     festival_init_lang ("russian");
 
-    // DefinitionMode (&tree);
-    //GameMode (&tree, tree.root);
-    DifferentiatorMode (&tree);
-
-    FILE* file = fopen ("tree.tree", "w");
-    TreeSaveToFile (tree.root, file);
-    fclose (file);
-
-    TreeDump (&tree);
+    MainMenu (&tree);
+    
     TreeDtor (&tree);
 
-    return;
+    return 0;
 }

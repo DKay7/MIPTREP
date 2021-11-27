@@ -5,7 +5,7 @@ DBFLAGS=-g -D NDEBUG -ggdb3 -O0 -std=c++14 -Wall -Wextra -Weffc++ -Waggressive-l
 FASTFLAGS= -O3 $(CFLAGS) -std=c++14
 IFLAGS=  -l Festival -I/usr/include/festival  -I/usr/lib/speech_tools/include -l eststring -l estools -l estbase
 
-SOURCES=akinator.cpp main.cpp libs/stack/stack.cpp
+SOURCES=akinator.cpp libs/stack/stack.cpp
 EXECUTABLE=main
 
 
