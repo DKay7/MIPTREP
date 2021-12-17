@@ -12,6 +12,14 @@ enum TREE_ERRORS
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
+enum SUBTREE
+{
+    LEFT    = -1,
+    RIGHT   =  1
+};
+
+//flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
 #define ROOT_OBJ         "Неизвестно кто" 
 #define MAIN_DB_FILENAME "tree.tree"
 
@@ -71,11 +79,7 @@ void NodeDump (Node* node, FILE* dump_file);
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
-Node* TreeInsertRoot (Tree* tree, const char* data);
-
-//flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-
-Node* TreeInsertLeft (Tree* tree, Node* node_to_ins_after, const char* data);
+Node* TreeInsert (Tree* tree, Node* node_to_ins_after, const wchar_t* data, SUBTREE subtree);
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 

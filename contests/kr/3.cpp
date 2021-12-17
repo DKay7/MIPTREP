@@ -14,8 +14,17 @@ struct Rect {
 
 struct Rect transform (struct Rect r)
 {  
-    
-    return r;
+    struct Point common = { r.lt.x, r.rb.y };
+
+    struct Rect transformed = {
+      {
+          common.x - (r.lt.y - common.y),
+          common.y + (r.rb.x - common.x)
+      },
+      common
+    };
+
+    return transformed;
 }
 
 int main()

@@ -11,7 +11,30 @@
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
-int SOUND = true;
+bool SOUND = true;
+
+//flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+int main ()
+{   
+    setlocale(LC_CTYPE, "");
+    setvbuf (stdout, NULL, _IONBF, 0);
+
+    Tree tree = {};
+    TreeCtor (&tree);
+    TreeReadFromDefaultFile (&tree);
+
+    int heap_size = 21000000;
+    int load_init_files = 1;
+    festival_initialize (load_init_files, heap_size);
+    festival_init_lang ("russian");
+
+    MainMenu (&tree);
+    
+    TreeDtor (&tree);
+
+    return 0;
+}
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
@@ -26,9 +49,6 @@ Node* NodeCtor (const wchar_t* data)
     ASS (node->object != NULL, NULL);
 
     wcscpy (node->object, data);
-    node->left  = NULL;
-    node->right = NULL;
-    node->prev  = NULL;
 
     return node;
 } 
@@ -77,7 +97,7 @@ int TreeCtor (Tree* tree)
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
-void TreeDtor (Tree* tree)
+void TreeDtor (Tree* t  ree)
 {
     assert (tree);
 
@@ -108,7 +128,7 @@ Node* TreeInsertRoot (Tree* tree, const wchar_t* data)
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
-Node* TreeInsertLeft (Tree* tree, Node* node_to_ins_after, const wchar_t* data)
+Node* TreeInsert (Tree* tree, Node* node_to_ins_after, const wchar_t* data, SUBTREE subtree)
 {   
     assert (data);                     
     assert (tree);                     
@@ -119,36 +139,26 @@ Node* TreeInsertLeft (Tree* tree, Node* node_to_ins_after, const wchar_t* data)
 
     Node* new_node = NodeCtor (data);
     ASS (new_node, NULL);
-
-    node_to_ins_after->left = new_node;
-    new_node->prev = node_to_ins_after;
+    
     tree->size += 1;
+
+    if (subtree == SUBTREE::LEFT)
+    {
+        node_to_ins_after->left = new_node;
+    }
+    
+    else if (subtree == SUBTREE::RIGHT)
+    {
+        node_to_ins_after->right = new_node;
+    }
+
+    new_node->prev = node_to_ins_after;
 
     return new_node; 
 }
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
-Node* TreeInsertRight (Tree* tree, Node* node_to_ins_after, const wchar_t* data)
-{
-    assert (data);                     
-    assert (tree);                     
-    assert (tree->root);               
-    assert (tree->size > 0);           
-    assert (node_to_ins_after);        
-    assert (node_to_ins_after->object);
-
-    Node* new_node = NodeCtor (data);
-    ASS (new_node, NULL);
-
-    node_to_ins_after->right = new_node;
-    new_node->prev = node_to_ins_after;
-    tree->size += 1;
-
-    return new_node;
-}
-
-//flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 bool GetAnswer ()
 {   
     while (true)
@@ -173,7 +183,7 @@ bool GetAnswer ()
         }
 
         wprintf (L"Некорректный ввод ответа\n-> ");
-        Speak   ("Некорректный ввод ответа, жалкий человечешка! Опять ты ошибся!");
+        Speak   ("Некорректный ввод ответа, жалкий человечишка! Опять ты ошибся!");
     }
 }
 
@@ -196,8 +206,8 @@ void InsertAns (Tree* tree, Node* prev_ans)
 
             if (wscanf (L" %ml[^\n()]s", &diff) > 0)
             {   
-                TreeInsertLeft (tree, prev_ans, ans);
-                TreeInsertRight (tree, prev_ans, diff);
+                TreeInsert (tree, prev_ans, ans,  SUBTREE::LEFT);
+                TreeInsert (tree, prev_ans, diff, SUBTREE::RIGHT);
 
                 wchar_t* change_buf = prev_ans->object;
                 prev_ans->object = prev_ans->right->object;
@@ -336,7 +346,7 @@ void DefinitionMode (Tree* tree)
     assert (tree->root);
 
     wprintf  (L"Введите название объекта, для которого я построю определение\n-> ");
-    Speak   ("Введите название объекта, для которого я построю определение");
+    Speak    ("Введите название объекта, для которого я построю определение");
 
     wchar_t* ans = NULL;
     ASS (wscanf (L" %ml[^\n]s", &ans) > 0, (void) 0);
@@ -376,15 +386,13 @@ void PrintDifferenceInPathes (Stack* first_path, const wchar_t* first_object, St
         return;
     }
 
-  
-
     size_t min_size = (first_path->size < second_path->size) ?  first_path->size : second_path->size;
     size_t i = 0;
 
     for (; i < (min_size - 3); i += 2)
     {   
-        if (wcscmp (first_path->data[i], second_path->data[i])         == 0 && 
-            wcscmp (first_path->data[i + 1], second_path->data[i + 1]) == 0)
+        if (first_path->data[i]     == second_path->data[i] && 
+            first_path->data[i + 1] == second_path->data[i + 1])
         {   
             if (i == 0)
             {
@@ -541,8 +549,8 @@ void MainMenu (Tree* tree)
 
             case L'e':
             case L'в':
-                wprintf (L"До свидания!\n");
-                Speak ("До свидания!");
+                wprintf (L"До связи!\n");
+                Speak ("До связи!");
                 break;
 
             default:
@@ -827,27 +835,4 @@ void Speak (const char* format, ...)
     va_end (speech_args_for_size);
 
     return;
-}
-
-//flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-
-int main ()
-{   
-    setlocale(LC_CTYPE, "");
-    setvbuf (stdout, NULL, _IONBF, 0);
-
-    Tree tree = {};
-    TreeCtor (&tree);
-    TreeReadFromDefaultFile (&tree);
-
-    int heap_size = 21000000;
-    int load_init_files = 1;
-    festival_initialize (load_init_files, heap_size);
-    festival_init_lang ("russian");
-
-    MainMenu (&tree);
-    
-    TreeDtor (&tree);
-
-    return 0;
 }
