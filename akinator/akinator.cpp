@@ -97,7 +97,7 @@ int TreeCtor (Tree* tree)
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
-void TreeDtor (Tree* t  ree)
+void TreeDtor (Tree* tree)
 {
     assert (tree);
 

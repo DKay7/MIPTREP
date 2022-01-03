@@ -49,6 +49,8 @@ typedef struct {
     int     errno_;
 } Tree;
 
+void MainMenu (Tree* tree);
+
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 void GameMode (Tree* tree, Node* current_node);
 void DefinitionMode (Tree* tree);
