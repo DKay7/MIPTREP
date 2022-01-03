@@ -4,9 +4,12 @@ pop ax
 push 1
 pop bx
 call factorial
-
+dumpstk
 push bx
-out      
+dumpstk
+
+out  
+hlt
 
 
 factorial:
