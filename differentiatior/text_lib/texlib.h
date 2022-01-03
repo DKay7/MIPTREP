@@ -89,7 +89,8 @@ int FillLinesArray (char *buffer, Line *lines, int lines_num);
 
 // flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
-int SaveToFile (Text* text, FILE* file);
+int SaveToFile (char* buffer, const char* filename);
+int SaveLinesToFile (Text* text, FILE* file);
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 

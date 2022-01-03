@@ -55,7 +55,7 @@ void InitTexPrint (Latex* latex, Node* node)
     getrandom (&seed, sizeof (seed), GRND_NONBLOCK);
     srand(seed);
 
-    SaveToFile (&latex->init, latex->print_to);
+    SaveLinesToFile (&latex->init, latex->print_to);
     
     char replacement_letter = 'A';
     int depth = 0;
@@ -103,7 +103,7 @@ void EndTexPrint (Latex* latex, Node* node)
         fprintf (latex->print_to, "\n\n");
     }
 
-    SaveToFile (&latex->close, latex->print_to);
+    SaveLinesToFile (&latex->close, latex->print_to);
 
     printf("\n[имя latex-файла:\t%s]\n", latex->filename);
 
