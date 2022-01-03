@@ -1,0 +1,32 @@
+\documentclass[a4paper, 12pt]{article}
+\usepackage{geometry}
+\geometry{a4paper,
+total={170mm,257mm},left=2cm,right=2cm,
+top=2cm,bottom=2cm}
+
+\usepackage{mathtext}
+\usepackage[fleqn]{amsmath}
+
+\usepackage[utf8]{inputenc}
+\usepackage[english,russian]{babel}
+\usepackage{graphicx, float}
+\usepackage{tabularx, colortbl}
+\usepackage{caption}
+\usepackage{breqn}
+\captionsetup{labelsep=period}
+
+\newcommand{\parag}[1]{\paragraph*{#1:}}
+\DeclareSymbolFont{T2Aletters}{T2A}{cmr}{m}{it}
+\newcounter{Points}
+\setcounter{Points}{1}
+\newcommand{\point}{\arabic{Points}. \addtocounter{Points}{1}}
+\newcolumntype{C}{>{\centering\arraybackslash}X}
+
+\author{Калинин Даниил, Б01-110}
+\date{\today}
+\title{Лабораторная работа 2.2.8\\Определение упругости anal через взятие производной и упрощение slave}
+
+\begin{document}
+\maketitle
+
+Сегодня мы будем дифференцировать выражение ниже. Штош, будем действовать постепенно.
