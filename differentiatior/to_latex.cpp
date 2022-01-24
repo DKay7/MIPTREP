@@ -347,6 +347,8 @@ void IsBracketsNedeed (Node* cur_node, bool* need_l_brackets, bool* need_r_brack
     return;
 }
 
+//flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
 int GetOperatorPriority (Node* node)
 {
     assert (node);
