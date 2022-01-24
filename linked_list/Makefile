@@ -8,9 +8,10 @@ EXECUTABLE=main
 
 
 
-all: $(SOURCES) $(EXECUTABLE)
+all: $(SOURCES)
+	$(CC) $(SOURCES) $(CFLAGS) -o $(EXECUTABLE)
 
-run: $(SOURCES)
+fast: $(SOURCES)
 		$(CC) $(SOURCES) $(CFLAGS) $(FASTFLAGS) -o $(EXECUTABLE)
 		./$(EXECUTABLE)
 	

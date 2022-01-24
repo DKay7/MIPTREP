@@ -4,6 +4,7 @@
 #include <malloc.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include "math.h"
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
@@ -62,7 +63,7 @@ void LLDtor (LinkedList* list)
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
-int LLDump (LinkedList* list)
+int LLDump (LinkedList* list, void (*DataPrinter)(FILE*, ll_type*))
 {   
     assert (list);
 
@@ -98,35 +99,39 @@ int LLDump (LinkedList* list)
                                 <td colspan="2">Node #%d</td>
                             </tr>
                             <tr>
-                                <td> data: </td>
-                                <td> %lf   </td>
+            )", i, (unsigned) list->list[i].status, i);
+
+        DataPrinter (file, &(list->list[i].data));
+        
+        fprintf(file, 
+            R"( 
                             </tr>
                             <tr>
-                                <td port="prev"> prev: </td>
-                                <td            > %d    </td>
+                                <td port="prev_out" > prev: </td>
+                                <td port="prev_in" > %d    </td>
                             </tr>
                             <tr>
-                                <td port="next"> next: </td>
-                                <td            > %d    </td>
+                                <td port="next_in" > next: </td>
+                                <td port="next_out"> %d    </td>
                             </tr>                            
                         </table>
                     >
                 ];
 
-            )", i, (unsigned) list->list[i].status, i, list->list[i].data, list->list[i].prev, list->list[i].next);
+            )", list->list[i].prev, list->list[i].next);
     }
 
     for (int i = 1; i < list->size; i++)
     {   
         if (list->list[i].next > 0)
         {
-            fprintf (file,  "\nnode_%02d:<next> -> node_%02d;\n", 
+            fprintf (file,  "\nnode_%02d:<next_out> -> node_%02d:<next_in>;\n", 
                     i, list->list[i].next);
         }
         
         if (list->list[i].prev > 0)
         {
-            fprintf (file,  "\n node_%02d:<prev> -> node_%02d;\n", 
+            fprintf (file,  "\n node_%02d:<prev_out> -> node_%02d:<prev_in>;\n", 
                     i, list->list[i].prev);
         }
     }
@@ -169,10 +174,9 @@ int LLDump (LinkedList* list)
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
-int LLInsertAfter (LinkedList* list, int addr,  ll_type data)
+int LLInsertAfter (LinkedList* list, int addr,  ll_type ll_data)
 {
     assert (list);
-    assert (isnan (data));
 
     if (list->list[addr].status == EMPTY)
     {
@@ -187,7 +191,7 @@ int LLInsertAfter (LinkedList* list, int addr,  ll_type data)
 
     list->list[insert_to].prev    = addr;
     list->list[insert_to].next    = list->list[addr].next;
-    list->list[insert_to].data    = data;
+    list->list[insert_to].data    = ll_data;
     list->list[insert_to].status  = NOT_EMPTY;
 
     list->list[list->list[addr].next].prev   = insert_to;
@@ -203,13 +207,12 @@ int LLInsertAfter (LinkedList* list, int addr,  ll_type data)
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
-int LLInsertBefore (LinkedList* list, int addr, ll_type data)
+int LLInsertBefore (LinkedList* list, int addr, ll_type ll_data)
 {
-    assert (ll);
-    assert (isnan (data));
+    assert (list);
     assert (addr >= 0);
 
-    return LLInsertAfter (list, list->list[addr].prev, data);    
+    return LLInsertAfter (list, list->list[addr].prev, ll_data);    
 }
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
@@ -243,10 +246,10 @@ void LLDelete (LinkedList* list, int addr)
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
-int LLSort (LinkedList*list)
+int LLSort (LinkedList* list)
 {   
 
-    assert (ll);
+    assert (list);
 
     Node* tmp_list = (Node*) calloc ((size_t)list->size, sizeof(Node));
 
@@ -321,48 +324,6 @@ int LLFindPhysicAdrres (LinkedList* list, int logical_adr)
     }
 
     return ll_ptr;
-}
-
-//flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-
-void UnitTest ()
-{
-    LinkedList list = {};
-    LLCtor (&list, 10);
-    LLDump(&list);
-
-    LLInsertAfter(&list, 0, 11);
-    LLInsertAfter(&list, 1, 12);
-
-    LLInsertAfter(&list, 2, 13);
-    LLInsertAfter(&list, 1, 14);
-    LLInsertAfter(&list, 1, 15);
-    // LLInsertAfter(&ll, 1, 16);
-    // LLInsertAfter(&ll, 1, 17);
-
-
-    printf("%d\n", LLFindPhysicAdrres (&list, 5));
-
-    //LLDump(&ll);
-
-    printf("%d\n", LLFindPhysicAdrres (&list, 5));
-
-    LLInsertAfter(&list, 7, 18);
-   // LLDump(&ll);
-
-    LLSort(&list);
-
-    LLInsertAfter(&list, 8, 19);
-    LLInsertAfter(&list, 8, 20);
-    LLInsertAfter(&list, 8, 21);
-  
-    //LLDump(&ll);
-    printf("%d\n", LLFindPhysicAdrres (&list, 5));
-
-
-    LLDtor (&list);
-
-    return;
 }
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx

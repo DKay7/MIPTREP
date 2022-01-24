@@ -1,4 +1,5 @@
 #include "math.h"
+#include <stdio.h>
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
@@ -20,18 +21,23 @@ enum NODE_STATUSES
 };
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+typedef struct 
+{
+    int mat;
+    int kanava;
+} data;
 
-typedef double ll_type;
+typedef data ll_type;
 
-#define LL_DATA_POISON NAN
+#define LL_DATA_POISON data {.mat = -1, .kanava = -1 }
 #define NOT_EXISTS 0
+
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
 #define CHECK_EMTY_NODES(list, ret)                     \
             if (list->empty_start == -1)                \
             {                                           \
                 fprintf (stderr, "No empty nodes\n");   \
-                LLDump ((list));                        \
                 LLDtor ((list));                        \
                 return   ((ret));                       \
             } 
@@ -82,7 +88,7 @@ void LLDelete (LinkedList* list, int addr);
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
-int LLDump (LinkedList* list);
+int LLDump (LinkedList* list, void (*DataPrinter)(FILE*, ll_type*));
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
@@ -91,9 +97,5 @@ int LLSort (LinkedList* list);
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
 int LLFindPhysicAdrres (LinkedList* list, int logical_adr);
-
-//flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-
-void UnitTest ();
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
