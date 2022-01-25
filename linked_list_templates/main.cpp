@@ -34,6 +34,8 @@ void DataPrinter (FILE* file, data* data_to_print)
     return;
 }
 
+//flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
 int main ()
 {   
     LinkedList<data> list = {};
@@ -42,33 +44,47 @@ int main ()
     data d3 = { .mat = 2, .kanava = 3};
     data d4 = { .mat = 12, .kanava = 13};
 
-    LLCtor (&list, 10);
+    LLCtor (&list, 2);
 
     int addr_d1 = LLInsertAfter(&list, 0, d1);
-    int addr_d2 = LLInsertAfter(&list, 1, d2);
+    printf ("SIZE %d, CAP: %d\n", list.size, list.capacity);
+    
+    int addr_d2 = LLInsertAfter(&list, addr_d1, d2);
+    printf ("SIZE %d, CAP: %d\n", list.size, list.capacity);
+    
     int addr_d3 = LLInsertAfter(&list, 2, d3);
+    LLInsertAfter (&list, addr_d3, d4);
+    printf ("SIZE %d, CAP: %d\n", list.size, list.capacity);
 
     LLDump(&list, DataPrinter);
 
+    // printf ("SIZE %d, CAP: %d\n", list.size, list.capacity);
 
-    printf("%d\n", LLFindPhysicAdrres (&list, 1));
-    printf("%d\n", LLFindPhysicAdrres (&list, 2));
-    printf("%d\n", LLFindPhysicAdrres (&list, 3));
+    // LLDump(&list, DataPrinter);
+
+    // // printf("%d\n", LLFindPhysicAdrres (&list, 1));
+    // // printf("%d\n", LLFindPhysicAdrres (&list, 2));
+    // // printf("%d\n", LLFindPhysicAdrres (&list, 3));
 
     LLDelete (&list, addr_d1);
+    printf ("SIZE %d, CAP: %d\n", list.size, list.capacity);
     LLDelete (&list, addr_d2);
+    printf ("SIZE %d, CAP: %d\n", list.size, list.capacity);
     LLDump(&list, DataPrinter);
 
     LLInsertAfter (&list, addr_d3, d4);
+    printf ("SIZE %d, CAP: %d\n", list.size, list.capacity);
     LLDelete (&list, addr_d3);
-    LLDump(&list, DataPrinter);
-
-    printf("%d\n", LLFindPhysicAdrres (&list, 1));
-    printf("%d\n", LLFindPhysicAdrres (&list, 2));
-    printf("%d\n", LLFindPhysicAdrres (&list, 3));
+    printf ("SIZE %d, CAP: %d\n", list.size, list.capacity);
 
     LLDump(&list, DataPrinter);
-    printf("%d\n", LLFindPhysicAdrres (&list, 3));
+
+    // printf("%d\n", LLFindPhysicAdrres (&list, 1));
+    // printf("%d\n", LLFindPhysicAdrres (&list, 2));
+    // printf("%d\n", LLFindPhysicAdrres (&list, 3));
+
+    // LLDump(&list, DataPrinter);
+    // printf("%d\n", LLFindPhysicAdrres (&list, 3));
 
     LLDtor (&list);
 

@@ -11,6 +11,39 @@
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
+#define CHECK_EMTY_NODES(list, ret)                     \
+            if (list->empty_start == NOT_EXISTS_EMPTY)  \
+            {                                           \
+                fprintf (stderr, "No empty nodes\n");   \
+                LLDtor ((list));                        \
+                return   ((ret));                       \
+            } 
+ 
+#define MOVE_EMPTY_PTR(list)                                        \
+            list->empty_start = list->list[list->empty_start].next; \
+
+#define ASS_ERR(cond, list, error, ret)                                 \
+    if(!(cond))                                                         \
+    {                                                                   \
+        list->errno |= error;                                           \
+        fprintf (stderr, "Soft assertation ( " #cond " ) has failed "   \
+                         "in file %s:%d \n", __FILE__, __LINE__);       \
+        return ret;                                                     \
+    }
+
+//poison for empty elements DE(A)D( PRESS)F
+#define POISON 0xDEDF
+
+// terminating node for non-empty elements
+#define NOT_EXISTS 0
+
+// terminating node for empty elements
+#define NOT_EXISTS_EMPTY -1
+
+#define INCREASE_COEF 2
+
+//flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
 enum LL_ERRORS
 {
     LL_OK                                       = 0x01,
@@ -30,24 +63,6 @@ enum NODE_STATUSES
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
-#define POISON 0xDEDF
-#define NOT_EXISTS 0
-#define NOT_EXISTS_EMPTY -1
-
-//flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-
-#define CHECK_EMTY_NODES(list, ret)                     \
-            if (list->empty_start == NOT_EXISTS_EMPTY)                \
-            {                                           \
-                fprintf (stderr, "No empty nodes\n");   \
-                LLDtor ((list));                        \
-                return   ((ret));                       \
-            } 
- 
-#define MOVE_EMPTY_PTR(list)                                        \
-            list->empty_start = list->list[list->empty_start].next; \
-
-//flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
 template <typename T>
 struct Node
@@ -65,9 +80,12 @@ struct LinkedList
 {
     Node<T>* list;
     int empty_start;
+    // empty end is used for increasing list 
+    int empty_end;
     int size;
+    int capacity;
     int errno;
-    int sorted;
+    bool sorted;
 };
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
@@ -87,21 +105,19 @@ template <typename T>
 int LLCtor (LinkedList<T>* list, int size)
 {
     assert (list);
-    assert (size > 0);
+    assert (size > 1);
 
     list->size = size;
+    list->capacity = 0;
 
-    Node<T>* tmp = (Node<T>*) calloc ((size_t) size, sizeof (*tmp));
+    list->list = (Node<T>*) calloc ((size_t) size, sizeof (*list->list));
 
-    if (!tmp)
-    {
-        list->errno |= LL_MEM_ALLOC_ERROR;
-        return list->errno; 
-    }
+    ASS_ERR(list->list, list, LL_MEM_ALLOC_ERROR, list->errno);
 
-    list->list = tmp;
     list->empty_start = 1;
-    list->sorted = 1;
+    list->empty_end = list->size - 1;
+
+    list->sorted = true;
     list->errno = LL_OK;
 
     list->list[0].next = 0;
@@ -119,7 +135,7 @@ int LLCtor (LinkedList<T>* list, int size)
     }
 
     list->list[list->empty_start].prev = NOT_EXISTS_EMPTY;
-    list->list[list->size - 1].next = NOT_EXISTS_EMPTY;
+    list->list[list->empty_end  ].next = NOT_EXISTS_EMPTY;
 
     return list->errno;
 }
@@ -133,9 +149,205 @@ void LLDtor (LinkedList<T>* list)
     list->list = NULL;
     list->size = -1;
     list->empty_start = -1;
-    list->sorted = -1;
+    list->empty_end   = -1;
+    list->sorted   = false;
+    list->capacity = -1;
+    
+    return;
+}
+
+//flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+template <typename T>
+int LLInsertAfter (LinkedList<T>* list, int addr,  T ll_data)
+{
+    assert (list);
+
+    if (list->list[addr].status == EMPTY)
+    {
+        addr = list->list[0].prev;
+    }
+
+
+    CHECK_EMTY_NODES(list, 0);
+    list->capacity += 1;
+    
+    LLIncreaseSize (list);
+    int insert_to = list->empty_start;
+    
+    MOVE_EMPTY_PTR (list);
+
+    list->list[insert_to].prev    = addr;
+    list->list[insert_to].next    = list->list[addr].next;
+    list->list[insert_to].data    = ll_data;
+    list->list[insert_to].status  = NOT_EMPTY;
+
+    list->list[list->list[addr].next].prev   = insert_to;
+    list->list[addr].next                    = insert_to;
+
+
+    if (insert_to != addr + 1)
+    {
+       list->sorted = true;
+    }
+
+
+    return insert_to;
+}
+
+//flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+template <typename T>
+int LLInsertBefore (LinkedList<T>* list, int addr, T ll_data)
+{
+    assert (list);
+    assert (addr >= 0);
+
+    return LLInsertAfter (list, list->list[addr].prev, ll_data);    
+}
+
+//flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+template <typename T>
+void LLIncreaseSize (LinkedList<T>* list)
+{   
+    assert (list);
+
+    if (list->capacity * INCREASE_COEF >= list->size)
+    {   
+        list->list = (Node<T>*) realloc (list->list, (size_t) (list->size * INCREASE_COEF + 1)* sizeof (*list->list));
+        ASS_ERR (list->list, list, LL_MEM_ALLOC_ERROR, (void) 0);
+        list->size =  list->size * INCREASE_COEF;
+
+        for (int i = 0; i < list->size; i++)
+        {   
+            if (list->list[i].status != EMPTY && list->list[i].status != NOT_EMPTY)
+            {
+                list->list[list->empty_end].next   = i;
+                list->list[i].prev   = NOT_EXISTS_EMPTY;
+                list->list[i].status = EMPTY;
+                list->empty_end = i;
+            }
+        }
+
+        list->list[list->empty_end].next = NOT_EXISTS_EMPTY;
+
+        list->sorted = false;
+    }
+}
+
+//flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+template <typename T>
+void LLDelete (LinkedList<T>* list, int addr)
+{
+    assert (list);
+    assert (addr > 0);
+
+    if (list->list[addr].status == EMPTY)
+    {   
+        return;
+    }
+
+    list->list[list->list[addr].prev].next = list->list[addr].next;
+    list->list[list->list[addr].next].prev = list->list[addr].prev;
+
+    PoisonData<T> (&(list->list[addr].data), sizeof (list->list[addr].data));
+
+    list->list[addr].prev = NOT_EXISTS;
+    list->list[addr].next = list->empty_start;
+    list->list[addr].status = EMPTY;
+    list->empty_start = addr;
+
+    list->capacity -= 1;
+
+    if (addr != list->empty_start - 1)
+    {
+       list->sorted = false;
+    }
 
     return;
+}
+
+//flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+template <typename T>
+int LLSort (LinkedList<T>* list)
+{   
+
+    assert (list);
+
+    Node<T>* tmp_list = (Node<T>*) calloc ((size_t) list->size, sizeof(*tmp_list));
+
+    ASS_ERR(tmp_list, list, LL_MEM_ALLOC_ERROR, list->errno);
+    
+    int ll_ptr = 0;
+    int i = 1;
+    for (; i < list->size; i++)
+    {   
+       ll_ptr = list->list[ll_ptr].next;
+
+        tmp_list[i]         = list->list[ll_ptr];
+        tmp_list[i].prev    = i - 1;
+        tmp_list[i].next    = i + 1;
+
+        if (ll_ptr == 0)
+        {   
+            break;
+        }
+    }
+
+    tmp_list[i - 1].next = 0;
+    tmp_list[0].next = 1;
+    tmp_list[0].prev = i - 1;
+
+    ll_ptr = list->empty_start;
+    list->empty_start = i;
+    list->empty_end = list->size - 1;
+
+    for (; i < list->size; i++)
+    {   
+        tmp_list[i]         = list->list[ll_ptr];
+        tmp_list[i].prev    = NOT_EXISTS_EMPTY;
+        tmp_list[i].next    = i + 1;
+
+        ll_ptr = list->list[ll_ptr].next;
+
+        if (ll_ptr == NOT_EXISTS_EMPTY)
+        {
+            break;
+        }
+    }
+    
+    tmp_list[i].next = NOT_EXISTS_EMPTY;
+
+    free (list->list);
+    list->list = tmp_list;
+    list->sorted = true;
+
+    return list->errno;
+}
+
+//flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+template <typename T>
+int LLFindPhysicAdrres (LinkedList<T>* list, int logical_adr)
+{   
+    assert (list);
+    assert (logical_adr > 0);
+    
+    if (list->sorted)
+    {
+        return (logical_adr < list->empty_start) ? logical_adr : 0;
+    }
+
+    int ll_ptr = 0;
+    for (int i = 0; i < logical_adr; i++)
+    {
+        ll_ptr = list->list[ll_ptr].next;
+    }
+
+    return ll_ptr;
 }
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
@@ -153,11 +365,7 @@ int LLDump (LinkedList<T>* list, void (*DataPrinter)(FILE*, T*))
 
     FILE* file = fdopen (dot_fd, "w");
     
-    if (file == NULL)
-    {
-        list->errno |= CANT_OPEN_DUMP_FILE;
-        return list->errno;
-    }
+    ASS_ERR(file, list, CANT_OPEN_DUMP_FILE, list->errno);
 
     fprintf (file,  "digraph { subgraph { rank=same \n");
 
@@ -223,14 +431,17 @@ int LLDump (LinkedList<T>* list, void (*DataPrinter)(FILE*, T*))
     
     if (list->empty_start <= 0)
     {
-        fprintf (file, "node_empty_start [shape=rectangle, label=\"Terminating free elements node\n(Node #-1)\", style=\"filled\", fillcolor=grey];\n"
-        "empty_start [shape=rectangle]; empty_start  -> node_empty_start;\n");
+        fprintf (file, "term_free_node [shape=rectangle, label=\"Terminating free elements node\n(Node #-1)\", style=\"filled\", fillcolor=grey];\n"
+        "empty_start [shape=rectangle]; empty_start  -> term_free_node;\n");
     }
 
     else
     {
         fprintf (file, "empty_start [shape=rectangle]; empty_start -> node_%02d;\n", list->empty_start);
     }
+
+
+    fprintf (file, "empty_end [shape=rectangle]; empty_end -> node_%02d;\n", list->empty_end);
 
     fprintf (file,  "head [shape=rectangle]; head -> node_%02d;\n"
                     "tail [shape=rectangle]; tail -> node_%02d;\n}",
@@ -248,167 +459,6 @@ int LLDump (LinkedList<T>* list, void (*DataPrinter)(FILE*, T*))
     system (open_cmd);
 
     return list->errno;
-}
-
-//flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-
-template <typename T>
-int LLInsertAfter (LinkedList<T>* list, int addr,  T ll_data)
-{
-    assert (list);
-
-    if (list->list[addr].status == EMPTY)
-    {
-        addr = list->list[0].prev;
-    }
-
-    CHECK_EMTY_NODES(list, 0);
-    
-    int insert_to = list->empty_start;
-    
-    MOVE_EMPTY_PTR (list);
-
-    list->list[insert_to].prev    = addr;
-    list->list[insert_to].next    = list->list[addr].next;
-    list->list[insert_to].data    = ll_data;
-    list->list[insert_to].status  = NOT_EMPTY;
-
-    list->list[list->list[addr].next].prev   = insert_to;
-    list->list[addr].next                    = insert_to;
-
-    if (insert_to != addr + 1)
-    {
-       list->sorted = 0;
-    }
-
-    return insert_to;
-}
-
-//flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-
-template <typename T>
-int LLInsertBefore (LinkedList<T>* list, int addr, T ll_data)
-{
-    assert (list);
-    assert (addr >= 0);
-
-    return LLInsertAfter (list, list->list[addr].prev, ll_data);    
-}
-
-
-//flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-
-template <typename T>
-void LLDelete (LinkedList<T>* list, int addr)
-{
-    assert (list);
-    assert (addr > 0);
-
-    if (list->list[addr].status == EMPTY)
-    {   
-        return;
-    }
-
-    list->list[list->list[addr].prev].next = list->list[addr].next;
-    list->list[list->list[addr].next].prev = list->list[addr].prev;
-
-    PoisonData<T> (&(list->list[addr].data), sizeof (list->list[addr].data));
-
-    list->list[addr].prev = NOT_EXISTS;
-    list->list[addr].next = list->empty_start;
-    list->list[addr].status = EMPTY;
-    list->empty_start = addr;
-
-    if (addr != list->empty_start - 1)
-    {
-       list->sorted = 0;
-    }
-
-    return;
-}
-
-//flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-
-template <typename T>
-int LLSort (LinkedList<T>* list)
-{   
-
-    assert (list);
-
-    Node<T>* tmp_list = (Node<T>*) calloc ((size_t) list->size, sizeof(*tmp_list));
-
-    if (!tmp_list)
-    {
-       list->errno |= LL_MEM_ALLOC_ERROR;
-        return list->errno; 
-    }
-    
-    int ll_ptr = 0;
-    int i = 1;
-    for (; i < list->size; i++)
-    {   
-       ll_ptr = list->list[ll_ptr].next;
-
-        tmp_list[i]         = list->list[ll_ptr];
-        tmp_list[i].prev    = i - 1;
-        tmp_list[i].next    = i + 1;
-
-        if (ll_ptr == 0)
-        {   
-            break;
-        }
-    }
-
-    tmp_list[i - 1].next = 0;
-    tmp_list[0].next = 1;
-    tmp_list[0].prev = i - 1;
-
-    ll_ptr = list->empty_start;
-    list->empty_start = i;
-
-    for (; i < list->size; i++)
-    {   
-        tmp_list[i]         = list->list[ll_ptr];
-        tmp_list[i].prev    = NOT_EXISTS_EMPTY;
-        tmp_list[i].next    = i + 1;
-
-        ll_ptr = list->list[ll_ptr].next;
-
-        if (ll_ptr == NOT_EXISTS_EMPTY)
-        {
-            break;
-        }
-    }
-    
-    tmp_list[i].next = NOT_EXISTS_EMPTY;
-
-    free (list->list);
-    list->list = tmp_list;
-    list->sorted = 1;
-
-    return list->errno;
-}
-
-//flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-
-template <typename T>
-int LLFindPhysicAdrres (LinkedList<T>* list, int logical_adr)
-{   
-    assert (list);
-    assert (logical_adr > 0);
-    
-    if (list->sorted)
-    {
-        return (logical_adr < list->empty_start) ? logical_adr : 0;
-    }
-
-    int ll_ptr = 0;
-    for (int i = 0; i < logical_adr; i++)
-    {
-        ll_ptr = list->list[ll_ptr].next;
-    }
-
-    return ll_ptr;
 }
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
