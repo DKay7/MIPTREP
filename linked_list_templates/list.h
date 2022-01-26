@@ -367,7 +367,31 @@ int LLDump (LinkedList<T>* list, void (*DataPrinter)(FILE*, T*))
     
     ASS_ERR(file, list, CANT_OPEN_DUMP_FILE, list->errno);
 
-    fprintf (file,  "digraph { subgraph { rank=same \n");
+    fprintf (file,  "digraph {\n");
+    __LLDrowSubgraph (file, list, DataPrinter);
+    fprintf (file, "}\n");
+
+    fclose (file);
+
+    char compile_cmd[2*16 + 14];
+    char open_cmd[16 + 9];
+
+    sprintf (compile_cmd, "dot -Tpng %s -o %s", filename_dot, filename_out);
+    sprintf (open_cmd, "xdg-open %s", filename_out);
+
+    system (compile_cmd);
+    system (open_cmd);
+
+    return list->errno;
+}
+
+//flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+template <typename T>
+void __LLDrowSubgraph (FILE* file, LinkedList<T>* list, void (*DataPrinter)(FILE*, T*))
+{
+
+    fprintf (file, "subgraph { rank=same;\n");
 
     for (int i = 1; i < list->size; i++)
     {   
@@ -422,6 +446,7 @@ int LLDump (LinkedList<T>* list, void (*DataPrinter)(FILE*, T*))
                     i, list->list[i].prev);
         }
     }
+
     fprintf (file, "}\n");
 
     if (list->list[0].next == 0 || list->list[0].prev == 0)
@@ -444,21 +469,8 @@ int LLDump (LinkedList<T>* list, void (*DataPrinter)(FILE*, T*))
     fprintf (file, "empty_end [shape=rectangle]; empty_end -> node_%02d;\n", list->empty_end);
 
     fprintf (file,  "head [shape=rectangle]; head -> node_%02d;\n"
-                    "tail [shape=rectangle]; tail -> node_%02d;\n}",
+                    "tail [shape=rectangle]; tail -> node_%02d;\n",
            list->list[0].next, list->list[0].prev);
 
-    fclose (file);
-
-    char compile_cmd[2*16 + 14];
-    char open_cmd[16 + 9];
-
-    sprintf (compile_cmd, "dot -Tpng %s -o %s", filename_dot, filename_out);
-    sprintf (open_cmd, "xdg-open %s", filename_out);
-
-    system (compile_cmd);
-    system (open_cmd);
-
-    return list->errno;
+    return;
 }
-
-//flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
