@@ -1,41 +1,42 @@
 #include "hashtable.h"
 #include <stdio.h>
+#include "default_hash_funtions.h"
 
-void data_printer (FILE* file, HT_Pair<int, char*>* data_)
+void data_printer (FILE* file, HT_Pair<char*, int>* data_)
 {
     fprintf (file, "<table border=\"0\" cellborder=\"1\" cellspacing=\"0\">"
-                   "<tr><td>KEY:</td><td>%d [%c]</td></tr>"
-                   "<tr><td>VALUE:</td><td>%s</td></tr></table>", 
-                   data_->key, 'A' - 1 +data_->key, data_->value);
+                   "<tr><td>KEY:</td><td>%s</td></tr>"
+                   "<tr><td>VALUE:</td><td>%d [%c]</td></tr></table>", 
+                   data_->key, data_->value, 'A' - 1 +data_->value);
 }
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
-uint64_t int_hash (int value)
-{
-    return (uint64_t) abs (value) % 5;
-}
+// uint64_t int_hash (int value)
+// {
+//     return (uint64_t) abs (value) % 5;
+// }
 
-bool key_equality (int* first, int* second)
+bool key_equality (char* first, char* second)
 {   
-    return (*first) == (*second);
+    return (strcmp (first, second) == 0);
 }
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
 int main ()
 {
-    HashTable<int, char*> ht = {};
-    HashTableCtor<int, char*> (&ht, 2, int_hash, key_equality);
+    HashTable<char*, int> ht = {};
+    HashTableCtor<char*, int> (&ht, 2, str_hash, key_equality);
 
-    const int size = 5;
-    int keys[size] = {};
-    char vals[size][5 * size] = {};
+    const int size = 15;
+    int vals[size] = {};
+    char keys[size][5 * size] = {};
 
     for (int i = 0; i < size; i++)
     {   
-        keys[i] = 1 + i % 3;
-        sprintf (vals[i], "square of %d is %d", keys[i], keys[i] * keys[i]);
+        vals[i] = 1 + i;
+        sprintf (keys[i], "square of %d is %d", vals[i], vals[i] * vals[i]);
 
         printf ("insert %c: %d\n", 'A' + i, HashTableInsert (&ht, keys[i], vals[i]));
 
@@ -50,7 +51,7 @@ int main ()
         printf ("Delete %c: %d\n", 'A' + i, HashTableDelete (&ht, keys[i]));
     }
 
-    // printf ("Delete B: %d\n", HashTableDelete (&ht, keys[2]));
+    // printf ("Delete B: %d\n", HashTableDelete (&ht, vals[2]));
     printf ("SIZE: %d\n", ht.values->size);
     HashTableDump (&ht, data_printer);
 

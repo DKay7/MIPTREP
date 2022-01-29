@@ -1,3 +1,5 @@
+#pragma once
+
 #include "libs/linked_list_templates/list.h"
 #include <assert.h>
 #include <malloc.h>
@@ -53,7 +55,7 @@ template <typename K, typename V>
 struct HashTable
 {
     uint64_t (*hash_function)(K key);
-    bool     (*key_equality_func)(K* first, K* second);
+    bool     (*key_equality_func)(K first, K second);
 
     HT_Bucket*  buckets;
     LinkedList<HT_Pair<K, V>>* values;
@@ -90,7 +92,7 @@ HT_Bucket* HashTableBucketsArrayCtor (uint64_t size)
 
 template <typename K, typename V>
 void HashTableCtor (HashTable<K, V>* hash_table, size_t table_size, 
-                    uint64_t (*HashFunction)(K), bool (*KeyEqualityFunc)(K*, K*))
+                    uint64_t (*HashFunction)(K), bool (*KeyEqualityFunc)(K, K))
 {
     assert (hash_table);
     assert (HashFunction);
@@ -166,7 +168,7 @@ uint64_t __HashTableSearchForKey (HashTable<K, V>* hash_table, K key)
 
         for (uint64_t i = 0; i < bucket_size; i++)
         {   
-            if (hash_table->key_equality_func (&hash_table->values->list[val_pos].data.key, &key))
+            if (hash_table->key_equality_func (hash_table->values->list[val_pos].data.key, key))
                 return val_pos;
 
             val_pos = (uint64_t) hash_table->values->list[val_pos].next;
@@ -239,7 +241,7 @@ uint64_t HashTableFind (HashTable<K, V>* hash_table, K key)
 
     for (uint64_t i = 0; i < bucket_size; i++)
     {      
-        if (hash_table->key_equality_func (&hash_table->values->list[val_pos].data.key, &key))
+        if (hash_table->key_equality_func (hash_table->values->list[val_pos].data.key, key))
         {
             found = true;
             break;
