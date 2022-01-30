@@ -479,3 +479,13 @@ void __LLDrowSubgraph (FILE* file, LinkedList<T>* list, void (*DataPrinter)(FILE
 
     return;
 }
+
+//flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+#undef CHECK_EMTY_NODES
+#undef MOVE_EMPTY_PTR
+#undef ASS_ERR
+#undef POISON
+#undef NOT_EXISTS
+#undef NOT_EXISTS_EMPTY
+#undef INCREASE_COEF
