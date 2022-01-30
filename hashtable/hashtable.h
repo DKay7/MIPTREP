@@ -1,6 +1,6 @@
 #pragma once
 
-#include "libs/linked_list_templates/list.h"
+#include "linked_list_templates/list.h"
 #include <assert.h>
 #include <malloc.h>
 #include <inttypes.h>
@@ -106,7 +106,7 @@ void HashTableCtor (HashTable<K, V>* hash_table, size_t table_size,
     assert (hash_table);
     assert (HashFunction);
 
-    ASS (size > 1 && "size should be bigger than 1", (void) 0);
+    ASS (table_size > 1 && "size should be bigger than 1", (void) 0);
 
     hash_table->hash_function = HashFunction;
     hash_table->key_equality_func = KeyEqualityFunc;
@@ -602,5 +602,14 @@ void __HashTableDrowMinSubgraph (FILE* file, HashTable<K, V>* hash_table,  void 
     
     return;
 }
+
+//flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+#undef ASS
+#undef POISON
+#undef MAX_LIST_ELEMENT
+#undef MAX_HT_ELEMENT
+#undef HT_SIZE_INCREASE_COEF
+#undef HT_INCREASE_DECISION_COEF
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx

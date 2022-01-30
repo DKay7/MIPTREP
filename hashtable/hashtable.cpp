@@ -40,7 +40,7 @@ int main ()
     }
     
     HashTableDump (&ht, data_printer);
-    printf ("SIZE: %d; CAP: %d\n", ht.values->size, ht.buckets_capacity);
+    printf ("SIZE: %d; CAP: %lu\n", ht.values->size, ht.buckets_capacity);
 
     for (int i = 0; i < size; i++)
     {   
@@ -53,7 +53,7 @@ int main ()
         printf ("Delete %c: %d\n", 'A' + i, HashTableDelete (&ht, keys[i]));
     }
 
-    printf ("SIZE: %d; CAP: %d\n", ht.values->size, ht.buckets_capacity);
+    printf ("SIZE: %d; CAP: %lu\n", ht.values->size, ht.buckets_capacity);
 
     HashTableDtor (&ht);
     return 0;
