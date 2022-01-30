@@ -1,12 +1,12 @@
 #include <inttypes.h>
-#include "default_hash_funtions.h"
+#include "default_hash_functions.h"
 
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
 uint64_t int_hash (int x)
 {
-    return (uint64_t) ((x * 2654435761) % (2 << 32))
+    return (uint64_t) ((x * 2654435761) % (2L << 32));
 }
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx

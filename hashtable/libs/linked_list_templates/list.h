@@ -392,7 +392,7 @@ void __LLDrowSubgraph (FILE* file, LinkedList<T>* list, void (*DataPrinter)(FILE
 {
 
     fprintf (file, "subgraph { rank=same;\n");
-
+    
     for (int i = 1; i < list->size; i++)
     {   
         fprintf (file, 
@@ -412,8 +412,11 @@ void __LLDrowSubgraph (FILE* file, LinkedList<T>* list, void (*DataPrinter)(FILE
                     <td colspan="2">
             )", i, (unsigned) list->list[i].status, i);
 
-        DataPrinter (file, &(list->list[i].data));
-        
+        if (list->list[i].status == NOT_EMPTY)
+            DataPrinter (file, &(list->list[i].data));
+        else
+            fprintf(file, "EMPTY NODE");
+
         fprintf(file, 
             R"( 
                 </td>

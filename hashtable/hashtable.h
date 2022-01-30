@@ -76,11 +76,19 @@ HT_Pair<K, V> HashTablePairCtor (K key, V value)
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
+template <typename K>
+bool SimpleKeyEqualityFunction (K first, K second)
+{
+    return (first == second);
+}
+
+//flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
 HT_Bucket* HashTableBucketsArrayCtor (uint64_t size)
 {
     HT_Bucket* buckets = (HT_Bucket*) calloc (size, sizeof (*buckets));
     ASS (buckets, NULL);
-    memset (buckets, POISON, size * sizeof (*buckets));
+    memset (buckets, POISON,  size * sizeof (*buckets));
 
     for (size_t i = 0; i < size; i++)
         buckets[i].status = BUCKET_EMPTY;
@@ -92,7 +100,8 @@ HT_Bucket* HashTableBucketsArrayCtor (uint64_t size)
 
 template <typename K, typename V>
 void HashTableCtor (HashTable<K, V>* hash_table, size_t table_size, 
-                    uint64_t (*HashFunction)(K), bool (*KeyEqualityFunc)(K, K))
+                    uint64_t (*HashFunction)(K), 
+                    bool (*KeyEqualityFunc)(K, K) = SimpleKeyEqualityFunction)
 {
     assert (hash_table);
     assert (HashFunction);
@@ -123,10 +132,10 @@ void HashTableDtor (HashTable<K, V>* hash_table)
     assert (hash_table);
 
     LLDtor (hash_table->values);
-
     free (hash_table->values);
     hash_table->values  = NULL;
 
+    memset (hash_table->buckets, POISON,  hash_table->size * sizeof (*hash_table->buckets));
     free (hash_table->buckets);
     hash_table->buckets = NULL;
 
@@ -200,7 +209,10 @@ bool HashTableInsert (HashTable<K, V>* hash_table, K key, V value)
         // just insert
         int list_position = LLInsertAfter (hash_table->values, hash_table->values->list[0].prev, pair);
         ASS (list_position > 0, false);
-        hash_table->buckets[position] = { .start_index = (uint64_t) list_position, .len = 1, .status = BUCKET_NOT_EMPTY };
+        hash_table->buckets[position] = { .start_index = (uint64_t) list_position, 
+                                          .len = 1, 
+                                          .status = BUCKET_NOT_EMPTY };
+
         hash_table->buckets_capacity += 1;
         return true;
     }
