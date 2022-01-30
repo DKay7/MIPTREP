@@ -1,13 +1,23 @@
 #include <inttypes.h>
 #include "default_hash_funtions.h"
 
-uint64_t int_hash(const int x)
+
+//flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+uint64_t int_hash (int x)
 {
-    uint64_t hash = (uint64_t) x;
+    return (uint64_t) ((x * 2654435761) % (2 << 32))
+}
+
+//flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+uint64_t long_hash(uint64_t x)
+{
+    uint64_t hash = x;
      
     hash = (hash ^ (hash >> 30)) * UINT64_C(0xbf58476d1ce4e5b9);
     hash = (hash ^ (hash >> 27)) * UINT64_C(0xbf58476d1ce4e5b9);
-    hash = hash ^ (hash >> 31);
+    hash = (hash ^ (hash >> 31));
 
     return hash;
 }
@@ -28,7 +38,7 @@ uint64_t str_hash(char* str)
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
-uint64_t char_hash(unsigned char x)
+uint64_t char_hash(char x)
 {
     return int_hash ((int) x);
 }
