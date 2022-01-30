@@ -106,6 +106,8 @@ void HashTableCtor (HashTable<K, V>* hash_table, size_t table_size,
     assert (hash_table);
     assert (HashFunction);
 
+    ASS (size > 1 && "size should be bigger than 1", (void) 0);
+
     hash_table->hash_function = HashFunction;
     hash_table->key_equality_func = KeyEqualityFunc;
 
