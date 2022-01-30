@@ -32,6 +32,13 @@ int main ()
     printf ("CHECK ABOBA:  %d; %lu\n", HashSetIn (&set, "aboba" ), HashSetFind (&set, "aboba" ));
 
     HashSetDump (&set, data_printer);
+
+    printf ("CHECK SABOBA DELTING: %d;\n", HashSetDelete (&set, "saboba"));
+    printf ("CHECK ABOBAS DELTING: %d;\n", HashSetDelete (&set, "abobas"));
+    printf ("CHECK ABOBA  DELTING: %d;\n", HashSetDelete (&set, "aboba" ));
+
+    HashSetDump (&set, data_printer);
+
     HashSetDtor (&set);
 
     return 0;
