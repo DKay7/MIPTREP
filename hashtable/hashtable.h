@@ -155,10 +155,8 @@ uint64_t __HashTableGetPosition (HashTable<K, V>* hash_table, K key)
 {
     uint64_t key_hash = hash_table->hash_function (key);
 
-    // TODO ask Sasha about faster way to calculate "%"
     // it should be like hash & (hash_table->size - 1);
-    // but only if size is power of 2 (?)
-
+    // return key_hash & (hash_table->size - 1);
     return key_hash % hash_table->size;
 }
 
