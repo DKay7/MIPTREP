@@ -99,8 +99,6 @@ uint64_t HashSetFind (HashSet<K>* hash_set, K key)
 {   
     assert (hash_set);
     uint64_t position = __HashTableSearchForKey (hash_set->hash_table, key);
-    // TODO do we really need next line? maybe we should find another way
-    ASS (position != INCORRECT_FIND_OUTPUT && "element not in hash set!", INCORRECT_FIND_OUTPUT);
     
     return position;
 }
