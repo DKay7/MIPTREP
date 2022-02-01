@@ -155,7 +155,7 @@ uint64_t __HashTableGetPosition (HashTable<K, V>* hash_table, K key)
 {
     uint64_t key_hash = hash_table->hash_function (key);
 
-    // it should be like hash & (hash_table->size - 1);
+    // it works only if hash table's sise is the power of 2
     // return key_hash & (hash_table->size - 1);
     return key_hash % hash_table->size;
 }
@@ -222,11 +222,6 @@ bool HashTableInsert (HashTable<K, V>* hash_table, K key, V value)
         // check size and go through list
         uint64_t block_size = hash_table->buckets[position].len;
         uint64_t index_to_insert_after = hash_table->buckets[position].start_index;
-
-        for (uint64_t i = 0; i < block_size - 1; i++)
-        {
-            index_to_insert_after = (uint64_t) hash_table->values->list[index_to_insert_after].next;
-        }
 
         int list_position = LLInsertAfter (hash_table->values, (int) index_to_insert_after, pair);
         ASS (list_position > 0, false);

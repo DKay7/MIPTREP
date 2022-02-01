@@ -5,9 +5,9 @@
 void data_printer (FILE* file, HT_Pair<char*, int>* data_)
 {   
     fprintf (file, "<table border=\"0\" cellborder=\"1\" cellspacing=\"0\">"
-                   "<tr><td>KEY:</td><td>KEY</td></tr>"
+                   "<tr><td>KEY:</td><td>%s</td></tr>"
                    "<tr><td>VALUE:</td><td>%d [%c]</td></tr></table>", 
-                   data_->value, 'A' - 1 +data_->value);
+                   data_->key, data_->value, 'A' - 1 +data_->value);
 }
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
@@ -35,7 +35,7 @@ int main ()
 
         printf ("insert %c: %d\n", 'A' + i, HashTableInsert (&ht, keys[i], vals[i]));
         printf ("INDEX OF %s IS %lu\n", keys[i], HashTableFind (&ht, keys[i]));
-        HashTableDump (&ht, data_printer, true);
+        // HashTableDump (&ht, data_printer, true);
 
     }
     
