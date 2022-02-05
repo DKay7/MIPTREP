@@ -220,7 +220,6 @@ bool HashTableInsert (HashTable<K, V>* hash_table, K key, V value)
     else 
     {
         // check size and go through list
-        uint64_t block_size = hash_table->buckets[position].len;
         uint64_t index_to_insert_after = hash_table->buckets[position].start_index;
 
         int list_position = LLInsertAfter (hash_table->values, (int) index_to_insert_after, pair);
@@ -370,7 +369,7 @@ void HashTableCompileDump (const char* filename_dot, const char* filename_out, c
     char* compile_cmd = (char*) calloc (2 * filename_size + compile_cmd_len, sizeof (*compile_cmd));
     char* open_cmd =    (char*) calloc (filename_size + open_cmd_len,        sizeof (*open_cmd));
     
-    sprintf (compile_cmd, "dot -Tpng %s -o %s 2> /dev/null", filename_dot, filename_out);
+    sprintf (compile_cmd, "dot -Tpng %s -o %s", filename_dot, filename_out);
     sprintf (open_cmd, "xdg-open %s 2> /dev/null", filename_out);
 
     //printf ("\nCOMPILING %s\n", compile_cmd);

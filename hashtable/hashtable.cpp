@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include "default_hash_functions.h"
 
-void data_printer (FILE* file, HT_Pair<char*, int>* data_)
+void data_printer (FILE* file, HT_Pair<const char*, int>* data_)
 {   
     fprintf (file, "<table border=\"0\" cellborder=\"1\" cellspacing=\"0\">"
                    "<tr><td>KEY:</td><td>%s</td></tr>"
@@ -12,7 +12,7 @@ void data_printer (FILE* file, HT_Pair<char*, int>* data_)
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
-bool key_equality (char* first, char* second)
+bool key_equality (const char* first, const char* second)
 {   
     return (strcmp (first, second) == 0);
 }
@@ -21,17 +21,17 @@ bool key_equality (char* first, char* second)
 
 int main ()
 {
-    HashTable<char*, int> ht = {};
-    HashTableCtor<char*, int> (&ht, 2, str_hash, key_equality);
+    HashTable<const char*, int> ht = {};
+    HashTableCtor<const char*, int> (&ht, 2, const_str_hash, key_equality);
 
     const int size = 7;
     int vals[size] = {};
-    char keys[size][5 * size] = {};
+    const char keys[size][5 * size] = {"ABOBA 1", "ABOBA 2", "ABOBA 3", "ABOBA 4", "ABOBA 5", "ABOBA 7", "ABOBA 6"};
 
     for (int i = 0; i < size; i++)
     {   
         vals[i] = 1 + i;
-        sprintf (keys[i], "square of %d is %d", vals[i], vals[i] * vals[i]);
+        // sprintf (keys[i], "square of %d is %d", vals[i], vals[i] * vals[i]);
 
         printf ("insert %c: %d\n", 'A' + i, HashTableInsert (&ht, keys[i], vals[i]));
         printf ("INDEX OF %s IS %lu\n", keys[i], HashTableFind (&ht, keys[i]));
