@@ -74,8 +74,6 @@ struct lexer
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
-//flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-
 bool LexicalAnalysis (lexer* lexer);
 token CheckAllLexems (lexer* lexer);
 token CheckNameAndNumberLexem (lexer* lexer);
@@ -87,8 +85,6 @@ void FillStrToToken (HashTable<const char*, token>* str_to_token);
 char get_current_char (lexer* lexer);
 char get_ith_char (lexer* lexer, int i);
 char* get_cur_str_pointer (lexer* lexer);
-
-LexemTokens get_last_token (lexer* lexer);
 
 void token_printer (FILE* file, token token);
 void token_ht_printer (FILE* file, HT_Pair<const char*, token>* pair);

@@ -73,6 +73,8 @@ token CheckAllLexems (lexer* lexer)
     return CheckNameAndNumberLexem (lexer);
 }
 
+//flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
 token CheckNameAndNumberLexem (lexer* lexer)
 {
     assert (lexer);
@@ -226,16 +228,6 @@ char* get_cur_str_pointer (lexer* lexer)
     assert (lexer->str_pointer);
 
     return &lexer->str_pointer [lexer->current_index];
-}
-
-//flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-
-LexemTokens get_last_token (lexer* lexer)
-{   
-    assert (lexer);
-    assert (lexer->stack);
-
-    return StackPeek (lexer->stack).token;
 }
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
