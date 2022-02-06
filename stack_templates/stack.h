@@ -183,7 +183,7 @@ void StackDump (Stack<T>* stack, FILE* logfile = stdout)
         "\n{\n"
         " size = %lu \n"    
         " capacity = %lu\n"
-        "\t{\n);", 
+        "\t{\n", 
         stack->size, stack->capacity);
 
     for (size_t i = 0; i < stack->capacity; i++)
