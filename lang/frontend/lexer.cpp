@@ -6,8 +6,11 @@
 
 int main ()
 {   
-    char* code_str = (char*) calloc (120, sizeof (char));
-    sprintf (code_str, R"(ABOBAS x120 times yamete kudasai baka senpai <3)");
+    char* code_str = (char*) calloc (1200, sizeof (char));
+    sprintf (code_str, R"(ABOBAS x120 times yamete kudasai  put it outta me  yamete 
+    kudasai baka senpai <3 
+                        
+                        baka senpai)");
 
     lexer lexer = {};
     LexerCtor (&lexer, code_str);
@@ -48,7 +51,7 @@ token CheckAllLexems (lexer* lexer)
     assert (lexer->stack);
     assert (lexer->str_pointer);
     assert (lexer->str_to_token);
-
+    
     #define compare_token(pair, lexer)                                                     \
         if (strncmp (pair.key, get_cur_str_pointer (lexer), (size_t) pair.value.len) == 0) \
             return pair.value;  
@@ -69,13 +72,13 @@ token CheckAllLexems (lexer* lexer)
         }
     }
     
-    // if we are here than token is just a name, a digit or the wrong lexem. So we'
-    return CheckNameAndNumberLexem (lexer);
+    // if we are here than token is just a dinamic or the wrong lexem.
+    return CheckDinamicLexems (lexer);
 }
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
-token CheckNameAndNumberLexem (lexer* lexer)
+token CheckDinamicLexems (lexer* lexer)
 {
     assert (lexer);
     
@@ -95,6 +98,10 @@ token CheckNameAndNumberLexem (lexer* lexer)
         result.len = index - lexer->current_index;      \
         return result;                                  \
     }
+
+    // check for comment
+    if (get_last_token (lexer) == KWORD_COMMENT)
+        collect_and_return_token (COMMENT_STR, get_ith_char (lexer, index) != '\n');
 
     // skip spaces
     if (isspace (get_current_char (lexer)))
@@ -189,10 +196,11 @@ void FillStrToToken (HashTable<const char*, token>* str_to_token)
     ins_token (KWORD_WHILE,         "yamenaide");
     ins_token (KWORD_FUNC_DEF,      "onichan whats this");
     ins_token (KWORD_RETURN,        "kane");
+    ins_token (KWORD_FUNC_PREPARAM, "baka");
+    ins_token (KWORD_COMMENT,       "put it outta me");
 
     ins_token (COMMA,               "senpai");
     ins_token (LINE_END,            "ehhh");
-    ins_token (KWORD_FUNC_PREPARAM, "baka");
 
     #undef ins_token
 
@@ -228,6 +236,20 @@ char* get_cur_str_pointer (lexer* lexer)
     assert (lexer->str_pointer);
 
     return &lexer->str_pointer [lexer->current_index];
+}
+
+//flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+LexemTokens get_last_token (lexer* lexer)
+{
+    assert (lexer);
+    assert (lexer->stack);
+
+    if (lexer->stack->size >= 1)
+        return StackPeek (lexer->stack).token;
+    
+    else
+        return WRONG_LEXEM;
 }
 
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx

@@ -46,12 +46,14 @@ enum LexemTokens
     KWORD_FUNC_PREPARAM,
     KWORD_VAR_DEF,
     KWORD_RETURN,
+    KWORD_COMMENT,
 
     COMMA,
     LINE_END,
 
     NAME,
     NUMBER,
+    COMMENT_STR,
     SPACE,
 };
 
@@ -76,7 +78,8 @@ struct lexer
 
 bool LexicalAnalysis (lexer* lexer);
 token CheckAllLexems (lexer* lexer);
-token CheckNameAndNumberLexem (lexer* lexer);
+token CheckComments(lexer* lexer);
+token CheckDinamicLexems (lexer* lexer);
 
 void LexerCtor (lexer* lexer, char* code_str);
 void LexerDtor (lexer* lexer);
@@ -85,6 +88,7 @@ void FillStrToToken (HashTable<const char*, token>* str_to_token);
 char get_current_char (lexer* lexer);
 char get_ith_char (lexer* lexer, int i);
 char* get_cur_str_pointer (lexer* lexer);
+LexemTokens get_last_token (lexer* lexer);
 
 void token_printer (FILE* file, token token);
 void token_ht_printer (FILE* file, HT_Pair<const char*, token>* pair);
