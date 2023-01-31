@@ -278,7 +278,7 @@ void GameMode (Tree* tree, Node* current_node)
 
 bool FindDefinitionForNode (Node* current_node, Stack* stack, const wchar_t* node_data_to_find)
 {   
-    assert (stack);
+    assert (Stack);
     assert (current_node);
     assert (node_data_to_find);
 

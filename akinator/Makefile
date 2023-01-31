@@ -10,7 +10,7 @@ EXECUTABLE=main
 
 
 
-all: $(SOURCES)
+all: $(SOURCES) $(EXECUTABLE)
 
 run: $(SOURCES)
 		$(CC) $(SOURCES) $(CFLAGS) $(FASTFLAGS) $(IFLAGS) -o $(EXECUTABLE)

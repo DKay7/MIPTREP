@@ -77,7 +77,6 @@ DEF_COMMAND (JMP, 1, "jmp",
 	ARG (0, (IMMEDIATE_CONST))
 )
 
-
 //flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
 DEF_COMMAND (JEQ, 1, "je",

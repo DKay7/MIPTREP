@@ -21,7 +21,7 @@ int main ()
     TreeDump (&tree);
 
     InitTexPrint (&latex, tree.root);
-// 
+
     DiffTree (&tree, &diff_tree, &latex);
     TreeDump (&diff_tree);
 

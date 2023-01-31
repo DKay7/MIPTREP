@@ -162,6 +162,7 @@ int LLDump (LinkedList* list, void (*DataPrinter)(FILE*, ll_type*))
     char compile_cmd[2*16 + 14];
     char open_cmd[16 + 9];
 
+
     sprintf (compile_cmd, "dot -Tpng %s -o %s", filename_dot, filename_out);
     sprintf (open_cmd, "xdg-open %s", filename_out);
 
