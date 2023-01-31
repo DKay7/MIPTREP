@@ -1,0 +1,132 @@
+#include <iostream.h>
+#include <stdlib.h>
+
+struct Node {
+    int inf;
+    Node *next;
+};
+
+//flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+void push(Node * &st, int dat)
+{
+
+    Node *el = new Node;
+    el->inf = dat;
+    el->next = st;
+    st = el;
+}
+
+int pop(Node * &st)
+{
+
+    int value = st->inf;
+    Node *temp = st;
+    st = st->next;
+    delete temp;
+
+    return value;
+}
+
+//flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+int peek(Node * st)
+{
+    return st->inf;
+}
+
+//flexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+Node **graph;
+const int vertex = 1;
+
+void add(Node * &list, int data)
+{
+
+    if (!list) {
+        list = new Node;
+        list->inf = data;
+        list->next = 0;
+        return;
+    }
+
+    Node *temp = list;
+
+    while (temp->next)
+        temp = temp->next;
+
+    Node *elem = new Node;
+
+    elem->inf = data;
+    elem->next = NULL;
+    temp->next = elem;
+}
+
+void del(Node * &l, int key)
+{
+
+    if (l->inf == key) {
+        Node *tmp = l;
+        l = l->next;
+        delete tmp;
+    } else {
+        Node *tmp = l;
+        while (tmp) {
+            if (tmp->next)
+                if (tmp->next->inf == key) {
+                    Node *tmp2 = tmp->next;
+                    tmp->next = tmp->next->next;
+                    delete tmp2;
+                }
+            tmp = tmp->next;
+        }
+    }
+}
+
+int eiler(Node ** gr, int num)
+{
+
+    int count;
+    for (int i = 0; i < num; i++) {
+
+        count = 0;
+        Node *tmp = gr[i];
+
+        while (tmp) {
+            count++;
+            tmp = tmp->next;
+        }
+        if (count % 2 == 1)
+            return 0;
+    }
+    return 1;
+}
+
+int main()
+{
+    int n;
+    cin >> n;
+    int zn;
+
+    graph = new Node *[n];
+    for (int i = 0; i < n; i++)
+        graph[i] = NULL;
+    for (i = 0; i < n; i++)
+
+        for (int j = 0; j < n; j++) {
+            cin >> zn;
+            if (zn)
+                add(graph[i], j);
+        }
+
+    cout << "\n\nРЕЗУЛЬТАТ  ";
+
+    if (eiler(graph, n))
+        cout << "YES";
+
+    else
+        cout << "NO";
+
+    return 0;
+
+}
